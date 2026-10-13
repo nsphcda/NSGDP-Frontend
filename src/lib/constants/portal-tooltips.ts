@@ -92,7 +92,7 @@ export const PORTAL_PROGRAM_REPORTS_TIP =
   "Reports and documents uploaded against this programme. Download opens a signed link in a new tab.";
 
 export const PORTAL_PROGRAM_UPLOAD_TIP =
-  "Attach a monitoring report, evaluation brief, or other document to this programme. Files are submitted for admin review and appear on the programme page once approved.";
+  "Attach a monitoring report, evaluation brief, or other document to this programme. Reports appear on the programme page as soon as the upload finishes.";
 
 export const PORTAL_PROGRAM_LGA_TIP =
   "Target local government areas for this programme. Highlighted badges show LGAs already marked as covered.";

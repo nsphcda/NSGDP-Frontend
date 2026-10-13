@@ -34,7 +34,6 @@ import { FileUploadArea, type UploadedFile } from "@/components/forms/file-uploa
 import { FormError } from "@/components/forms/form-error";
 import { useOrganizationProgram, useCreateProgramReport } from "@/lib/hooks/usePrograms";
 import { uploadFile } from "@/lib/api/uploads";
-import { submitDocumentForReview } from "@/lib/api/documents";
 import { useProgramPermissions } from "@/lib/hooks/useProgramPermissions";
 import { programReportSchema, type ProgramReportFormData } from "@/lib/schemas/program";
 import { PORTAL_PROGRAM_UPLOAD_TIP } from "@/lib/constants/portal-tooltips";
@@ -137,16 +136,9 @@ export default function UploadProgrammeReportPage() {
         },
       });
       await uploadFile(file.file, undefined, report.id);
-      try {
-        await submitDocumentForReview(report.slug);
-        toast.success("Report submitted for admin review");
-      } catch {
-        toast.success(
-          "Report uploaded as draft — submit it from My documents once the file finishes processing",
-        );
-      }
+      toast.success("Report published to the programme");
       setIsRedirecting(true);
-      router.push(`/dashboard/documents/${report.slug}`);
+      router.push(`/my-programs/${programme.slug}`);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Failed to upload report");
     }
@@ -259,7 +251,7 @@ export default function UploadProgrammeReportPage() {
                 id="notes"
                 rows={3}
                 {...register("notes")}
-                placeholder="Brief context for reviewers — reporting period, audience, etc."
+                placeholder="Brief context for readers — reporting period, audience, etc."
                 disabled={isBusy}
               />
             </div>
