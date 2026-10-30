@@ -48,3 +48,21 @@ next-env.d.ts
 /e2e/.auth/
 /test-results/
 /playwright-report/
+
+# AI assistant / agent tooling (local only, not part of the project)
+/CLAUDE.md
+/AGENTS.md
+/GEMINI.md
+/.claude/
+/.cursor/
+/.cursorignore
+/.cursorindexingignore
+/.kiro/
+/.amp/
+/.agents/
+/.windsurf/
+/.codex/
+/graphify-out/
+/.graphify/
+/docs/CLAUDE.md
+/docs/AGENTS.md
