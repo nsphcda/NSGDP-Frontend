@@ -216,7 +216,7 @@ function SidebarNavContent({
 
           {workspaceLinks.length > 0 ? (
             <>
-              <p className="px-3 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Workspace
               </p>
               {workspaceLinks.map((link) => (
@@ -233,7 +233,7 @@ function SidebarNavContent({
 
           {accountLinks.length > 0 ? (
             <>
-              <p className="px-3 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="px-3 pb-1 pt-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Account
               </p>
               {accountLinks.map((link) => (
@@ -333,7 +333,7 @@ export function DashboardMobileSidebar({ open, onClose }: DashboardMobileSidebar
       >
         <div className="flex shrink-0 items-center justify-between border-b px-4 py-3">
           <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Navigation
             </p>
             <h2 className="truncate text-base font-semibold">Dashboard</h2>

@@ -40,7 +40,7 @@ export function Autocomplete({
         <BaseAutocomplete.Input
           id={id}
           placeholder={placeholder}
-          className="h-full w-full min-w-0 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+          className="h-full w-full min-w-0 bg-transparent text-base outline-none placeholder:text-muted-foreground md:text-sm"
         />
         <BaseAutocomplete.Trigger className="shrink-0 text-muted-foreground" aria-label="Toggle suggestions">
           <ChevronDown className="size-4" />

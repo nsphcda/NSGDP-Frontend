@@ -68,7 +68,7 @@ export default function DownloadsPage() {
         <div className="min-w-0">
           <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-info/25 bg-info/[0.06] px-2.5 py-1">
             <Download className="size-3.5 text-info" aria-hidden />
-            <span className="text-[11px] font-semibold uppercase tracking-wide text-info">
+            <span className="text-xs font-semibold uppercase tracking-wide text-info">
               Account
             </span>
           </div>

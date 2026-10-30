@@ -61,7 +61,7 @@ function AlertItem({ alert }: { alert: OutbreakAlert }) {
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {config.label}
             </span>
             <span className="text-xs text-muted-foreground">·</span>

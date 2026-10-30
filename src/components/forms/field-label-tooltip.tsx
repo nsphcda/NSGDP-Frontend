@@ -31,7 +31,7 @@ export function FieldLabelTooltip({
         <Tooltip>
           <TooltipTrigger
             type="button"
-            className="text-muted-foreground hover:text-foreground"
+            className="inline-flex text-muted-foreground hover:text-foreground max-md:-m-3.5 max-md:p-3.5"
             aria-label={`Help: ${label}`}
           >
             <HelpCircle className="size-3.5" />

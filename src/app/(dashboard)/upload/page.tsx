@@ -377,7 +377,7 @@ export default function UploadDatasetPage() {
             <div className="min-w-0">
               <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-success/25 bg-success/[0.06] px-2.5 py-1">
                 <Upload className="size-3.5 text-success" aria-hidden />
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-success">
+                <span className="text-xs font-semibold uppercase tracking-wide text-success">
                   New dataset
                 </span>
               </div>
@@ -391,13 +391,13 @@ export default function UploadDatasetPage() {
               </p>
               <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
                 <GraduationCap className="size-3.5 text-muted-foreground" aria-hidden />
-                <Link href="/dashboard/learning/upload-your-first-dataset" className="text-primary hover:underline">
+                <Link href="/dashboard/learning/upload-your-first-dataset" className="text-primary hover:underline max-md:py-3">
                   Upload guide
                 </Link>
-                <Link href="/dashboard/learning/metadata-field-guide" className="text-primary hover:underline">
+                <Link href="/dashboard/learning/metadata-field-guide" className="text-primary hover:underline max-md:py-3">
                   Field-by-field help
                 </Link>
-                <Link href="/dashboard/learning?tab=self-check" className="text-primary hover:underline">
+                <Link href="/dashboard/learning?tab=self-check" className="text-primary hover:underline max-md:py-3">
                   Pre-submission checklist
                 </Link>
               </p>

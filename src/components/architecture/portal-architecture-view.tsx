@@ -412,7 +412,7 @@ export default function PortalArchitectureView() {
               )}
             >
               <div className="truncate text-xs font-semibold">{role.label}</div>
-              <div className={cn("mt-0.5 truncate text-[10px]", tierGateClass[role.tier])}>
+              <div className={cn("mt-0.5 truncate text-xs", tierGateClass[role.tier])}>
                 {role.gate}
               </div>
             </div>
@@ -431,7 +431,7 @@ export default function PortalArchitectureView() {
             key={role.id}
             className={cn("flex flex-col overflow-hidden rounded-lg border", tierColumnClass[role.tier])}
           >
-            <div className={cn("border-b px-3 py-2 text-[10px] font-medium", tierHeaderClass[role.tier])}>
+            <div className={cn("border-b px-3 py-2 text-xs font-medium", tierHeaderClass[role.tier])}>
               <div className="font-semibold xl:hidden">{role.label}</div>
               <span className={tierGateClass[role.tier]}>{role.sub}</span>
             </div>
@@ -442,7 +442,7 @@ export default function PortalArchitectureView() {
                   className={cn(fi < role.features.length - 1 && "mb-2 border-b border-border pb-2")}
                 >
                   <div className="text-xs font-medium leading-snug">{page}</div>
-                  <div className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">{desc}</div>
+                  <div className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{desc}</div>
                 </div>
               ))}
             </div>
@@ -465,8 +465,8 @@ export default function PortalArchitectureView() {
                 {app.name}{" "}
                 <span className="font-mono text-xs font-normal text-muted-foreground">:{app.port}</span>
               </div>
-              <div className="mt-0.5 text-[11px] text-muted-foreground">{app.role}</div>
-              <div className="mt-1 text-[10px] leading-relaxed text-muted-foreground">{app.stack}</div>
+              <div className="mt-0.5 text-xs text-muted-foreground">{app.role}</div>
+              <div className="mt-1 text-xs leading-relaxed text-muted-foreground">{app.stack}</div>
             </div>
             <div className="flex flex-wrap gap-1.5 p-3">
               {app.items.map((item) => (
@@ -493,7 +493,7 @@ export default function PortalArchitectureView() {
         {gisSurfaces.map((g) => (
           <div key={g.href} className="rounded-lg border border-border bg-card px-4 py-3">
             <div className="text-sm font-semibold">{g.title}</div>
-            <code className="mt-0.5 block text-[10px] text-primary">{g.href}</code>
+            <code className="mt-0.5 block text-xs text-primary">{g.href}</code>
             <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{g.desc}</p>
           </div>
         ))}
@@ -505,8 +505,8 @@ export default function PortalArchitectureView() {
       <p className="mt-1 mb-4 text-sm text-muted-foreground">
         Staff capability comes from permission groups — not from a fixed &quot;repo admin&quot;
         role. Keys below match{" "}
-        <code className="text-[11px]">PERMISSION_ACTION_MAP</code> in the backend. Deactivate users,
-        platform role changes, and staff revoke stay hardcoded <code className="text-[11px]">super_admin</code>{" "}
+        <code className="text-xs">PERMISSION_ACTION_MAP</code> in the backend. Deactivate users,
+        platform role changes, and staff revoke stay hardcoded <code className="text-xs">super_admin</code>{" "}
         only.
       </p>
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
@@ -519,7 +519,7 @@ export default function PortalArchitectureView() {
               {group.perms.map((perm) => (
                 <code
                   key={perm}
-                  className="rounded border border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-primary"
+                  className="rounded border border-border bg-muted px-2 py-0.5 text-xs font-medium text-primary"
                 >
                   {perm}
                 </code>
@@ -535,13 +535,13 @@ export default function PortalArchitectureView() {
           <div key={group.name} className="overflow-hidden rounded-lg border border-border bg-card">
             <div className="border-b border-border bg-muted/60 px-4 py-2.5">
               <div className="text-sm font-semibold">{group.name}</div>
-              <div className="mt-0.5 text-[11px] text-muted-foreground">{group.description}</div>
+              <div className="mt-0.5 text-xs text-muted-foreground">{group.description}</div>
             </div>
             <div className="flex flex-wrap gap-1.5 px-4 py-3">
               {group.permissions.map((perm) => (
                 <code
                   key={perm}
-                  className="rounded border border-border bg-muted px-2 py-0.5 text-[10px] font-medium text-primary"
+                  className="rounded border border-border bg-muted px-2 py-0.5 text-xs font-medium text-primary"
                 >
                   {perm}
                 </code>
@@ -559,9 +559,9 @@ export default function PortalArchitectureView() {
         Review Queue in nsgdp-admin is split by scope:{" "}
         <strong className="text-foreground">Development Partners</strong> vs{" "}
         <strong className="text-foreground">Agency</strong> (platform-owner). Editorial{" "}
-        <code className="text-[11px]">DatasetStatus</code> is separate from catalogue{" "}
-        <code className="text-[11px]">published_at</code> and from warehouse{" "}
-        <code className="text-[11px]">ingestion_status</code>.
+        <code className="text-xs">DatasetStatus</code> is separate from catalogue{" "}
+        <code className="text-xs">published_at</code> and from warehouse{" "}
+        <code className="text-xs">ingestion_status</code>.
       </p>
 
       <div className="relative">
@@ -581,12 +581,12 @@ export default function PortalArchitectureView() {
                 {i + 1}
               </div>
               <div>
-                <div className="text-[11px] leading-snug font-semibold">{label}</div>
-                <div className="mt-0.5 text-[10px] leading-snug text-muted-foreground">{role}</div>
+                <div className="text-xs leading-snug font-semibold">{label}</div>
+                <div className="mt-0.5 text-xs leading-snug text-muted-foreground">{role}</div>
                 {permission ? (
-                  <code className="mt-1 block text-[9px] text-primary">{permission}</code>
+                  <code className="mt-1 block text-xs text-primary">{permission}</code>
                 ) : null}
-                <div className="mt-1 hidden text-[10px] leading-snug text-muted-foreground/80 xl:block">
+                <div className="mt-1 hidden text-xs leading-snug text-muted-foreground/80 xl:block">
                   {description}
                 </div>
               </div>
@@ -598,20 +598,20 @@ export default function PortalArchitectureView() {
       <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
         <div className="rounded-lg border border-border bg-muted/30 px-4 py-3">
           <p className="mb-2 text-xs font-semibold">QA checklist (8 dimensions)</p>
-          <ul className="space-y-1 text-[11px] text-muted-foreground">
+          <ul className="space-y-1 text-xs text-muted-foreground">
             {LIFECYCLE_RATIONALE.checklistReplaces.map((item) => (
               <li key={item}>· {item}</li>
             ))}
           </ul>
-          <p className="mt-2 text-[11px] text-muted-foreground">
+          <p className="mt-2 text-xs text-muted-foreground">
             Completeness · Accuracy · Consistency · Timeliness · Validity · Uniqueness ·
             Geo-References · Documentation — all must pass before{" "}
-            <code className="text-[10px]">validateDataset</code>.
+            <code className="text-xs">validateDataset</code>.
           </p>
         </div>
         <div className="rounded-lg border border-border bg-muted/30 px-4 py-3">
           <p className="mb-2 text-xs font-semibold">Side paths (not pipeline steps)</p>
-          <ul className="space-y-1 text-[11px] text-muted-foreground">
+          <ul className="space-y-1 text-xs text-muted-foreground">
             {LIFECYCLE_RATIONALE.sidePaths.map((item) => (
               <li key={item}>· {item}</li>
             ))}
@@ -623,15 +623,15 @@ export default function PortalArchitectureView() {
       <p className="mt-1 mb-3 text-xs text-muted-foreground">
         Warehouse load does not replace catalogue publish. A dataset can be catalogue-published
         while aliases are still pending; analytics waits until staging is clear. Optional LLM
-        alias suggestions stay <code className="text-[10px]">pending</code> until a human confirms
+        alias suggestions stay <code className="text-xs">pending</code> until a human confirms
         them in Ingestion Ops.
       </p>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {INGESTION_PIPELINE.map((step) => (
           <div key={step.status} className="rounded-lg border border-border bg-card px-3 py-2.5">
             <div className="text-xs font-semibold">{step.label}</div>
-            <code className="mt-0.5 block text-[9px] text-muted-foreground">{step.status}</code>
-            <p className="mt-1.5 text-[10px] leading-relaxed text-muted-foreground">{step.description}</p>
+            <code className="mt-0.5 block text-xs text-muted-foreground">{step.status}</code>
+            <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{step.description}</p>
           </div>
         ))}
       </div>
@@ -666,7 +666,7 @@ export default function PortalArchitectureView() {
           >
             <div className="shrink-0 border-b border-border bg-muted/60 px-4 py-3 sm:w-52 sm:border-r sm:border-b-0">
               <div className="text-sm font-semibold">{layer.label}</div>
-              <div className="mt-1 text-[11px] leading-relaxed text-muted-foreground">{layer.tech}</div>
+              <div className="mt-1 text-xs leading-relaxed text-muted-foreground">{layer.tech}</div>
             </div>
             <div className="flex flex-1 flex-wrap gap-1.5 p-3">
               {layer.items.map((item) => (
@@ -682,7 +682,7 @@ export default function PortalArchitectureView() {
         ))}
       </div>
 
-      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 pl-0 text-[10px] text-muted-foreground sm:pl-52">
+      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 pl-0 text-xs text-muted-foreground sm:pl-52">
         {[
           "Upload → validation / upload-processing",
           "Spatial → geo-extraction → PostGIS",
@@ -730,7 +730,7 @@ export default function PortalArchitectureView() {
 
       <SectionDivider />
 
-      <p className="mt-8 text-[11px] text-muted-foreground/70">
+      <p className="mt-8 text-xs text-muted-foreground/70">
         Source of truth: live routes in nsgdp-frontend / nsgdp-admin · NestJS modules ·{" "}
         <code>UserRole</code> · <code>PERMISSION_ACTION_MAP</code> · <code>KNOWN_GAPS.md</code> ·
         dataset-lifecycle constants

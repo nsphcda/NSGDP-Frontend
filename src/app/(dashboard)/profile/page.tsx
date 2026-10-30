@@ -48,7 +48,7 @@ export default function ProfilePage() {
         <div className="min-w-0">
           <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-muted-foreground/20 bg-muted/30 px-2.5 py-1">
             <Settings className="size-3.5 text-muted-foreground" aria-hidden />
-            <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Account
             </span>
           </div>
@@ -336,7 +336,7 @@ function PasswordForm({
           <button
             type="button"
             onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="absolute right-0 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center text-muted-foreground hover:text-foreground md:right-1 md:size-9"
             aria-label={showCurrentPassword ? "Hide password" : "Show password"}
           >
             {showCurrentPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
@@ -360,7 +360,7 @@ function PasswordForm({
           <button
             type="button"
             onClick={() => setShowNewPassword(!showNewPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="absolute right-0 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center text-muted-foreground hover:text-foreground md:right-1 md:size-9"
             aria-label={showNewPassword ? "Hide password" : "Show password"}
           >
             {showNewPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
@@ -385,7 +385,7 @@ function PasswordForm({
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="absolute right-0 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center text-muted-foreground hover:text-foreground md:right-1 md:size-9"
             aria-label={showConfirmPassword ? "Hide password" : "Show password"}
           >
             {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}

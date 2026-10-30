@@ -307,7 +307,7 @@ export default function EditDatasetPage({
           <div className="min-w-0">
             <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-warning/30 bg-warning/[0.08] px-2.5 py-1">
               <FileText className="size-3.5 text-amber-700 dark:text-warning" aria-hidden />
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-amber-800 dark:text-warning">
+              <span className="text-xs font-semibold uppercase tracking-wide text-amber-800 dark:text-warning">
                 Edit dataset
               </span>
             </div>

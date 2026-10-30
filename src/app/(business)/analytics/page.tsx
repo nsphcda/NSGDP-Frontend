@@ -195,7 +195,7 @@ function MetricCard({
   return (
     <div className={cn("rounded-2xl border p-4", t.card)}>
       <div className="flex items-start justify-between gap-3">
-        <p className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {label}
           {tip ? <HelpTooltip content={tip} /> : null}
         </p>
@@ -565,7 +565,7 @@ function HealthAnalyticsContent() {
           <div className="space-y-1">
             <div className="mb-1 inline-flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/10 px-2.5 py-1">
               <Activity className="size-3.5 text-primary" aria-hidden />
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-primary">
+              <span className="text-xs font-semibold uppercase tracking-wide text-primary">
                 Surveillance
               </span>
             </div>
@@ -894,19 +894,19 @@ function HealthAnalyticsContent() {
                 <table className="w-full text-[13px]">
                   <thead>
                     <tr className="border-b bg-muted/30 text-left">
-                      <th className="h-11 px-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      <th className="h-11 px-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         Ward
                       </th>
-                      <th className="h-11 px-4 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      <th className="h-11 px-4 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         Cases
                       </th>
-                      <th className="h-11 px-4 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      <th className="h-11 px-4 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         Population
                       </th>
-                      <th className="h-11 px-4 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      <th className="h-11 px-4 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         Incidence / 1k
                       </th>
-                      <th className="h-11 px-4 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      <th className="h-11 px-4 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         Missing
                       </th>
                     </tr>
@@ -1233,8 +1233,8 @@ function HealthAnalyticsContent() {
                         margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                        <YAxis tick={{ fontSize: 11 }} />
+                        <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+                        <YAxis tick={{ fontSize: 12 }} />
                         <Tooltip />
                         <Line
                           type="monotone"
@@ -1277,11 +1277,11 @@ function HealthAnalyticsContent() {
                         margin={{ top: 5, right: 20, left: 60, bottom: 5 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                        <XAxis type="number" tick={{ fontSize: 11 }} />
+                        <XAxis type="number" tick={{ fontSize: 12 }} />
                         <YAxis
                           type="category"
                           dataKey="lga"
-                          tick={{ fontSize: 10 }}
+                          tick={{ fontSize: 12 }}
                           width={55}
                         />
                         <Tooltip />
@@ -1329,7 +1329,7 @@ function HealthAnalyticsContent() {
                       ).map(([key, label]) => (
                         <th
                           key={key}
-                          className="h-11 px-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground"
+                          className="h-11 px-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                         >
                           <button
                             type="button"
@@ -1426,19 +1426,19 @@ function HealthAnalyticsContent() {
                   <table className="w-full text-[13px]">
                     <thead>
                       <tr className="border-b bg-muted/30 text-left">
-                        <th className="h-11 px-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        <th className="h-11 px-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                           Facility
                         </th>
-                        <th className="h-11 px-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        <th className="h-11 px-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                           LGA
                         </th>
-                        <th className="h-11 px-4 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        <th className="h-11 px-4 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                           Cases
                         </th>
-                        <th className="h-11 px-4 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        <th className="h-11 px-4 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                           Z-score
                         </th>
-                        <th className="h-11 px-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        <th className="h-11 px-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                           Interpretation
                         </th>
                       </tr>
@@ -1499,19 +1499,19 @@ function HealthAnalyticsContent() {
             <table className="w-full text-[13px]">
               <thead>
                 <tr className="border-b bg-muted/30 text-left">
-                  <th className="h-11 px-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <th className="h-11 px-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     LGA
                   </th>
-                  <th className="h-11 px-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <th className="h-11 px-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     Metric
                   </th>
-                  <th className="h-11 px-4 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <th className="h-11 px-4 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     Value
                   </th>
-                  <th className="h-11 px-4 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <th className="h-11 px-4 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     Z-score
                   </th>
-                  <th className="h-11 px-4 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <th className="h-11 px-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     Direction
                   </th>
                 </tr>

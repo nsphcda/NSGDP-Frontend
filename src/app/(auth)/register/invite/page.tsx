@@ -65,7 +65,7 @@ function InviteContextPanel({
         <div className="flex items-start gap-3 rounded-xl bg-amber-500/20 px-3.5 py-3 ring-1 ring-amber-200/30">
           <Clock className="mt-0.5 size-4 shrink-0 text-amber-100" />
           <div>
-            <p className="text-[11px] uppercase tracking-wide text-amber-100/80">Expires soon</p>
+            <p className="text-xs uppercase tracking-wide text-amber-100/80">Expires soon</p>
             <p className="font-medium text-amber-50">
               {daysUntilExpiry <= 0
                 ? "Expires today"
@@ -427,7 +427,7 @@ function InviteRegistrationForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-0 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center text-muted-foreground hover:text-foreground md:right-1 md:size-9"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
@@ -451,7 +451,7 @@ function InviteRegistrationForm() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-0 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center text-muted-foreground hover:text-foreground md:right-1 md:size-9"
                 aria-label={showConfirmPassword ? "Hide password" : "Show password"}
               >
                 {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}

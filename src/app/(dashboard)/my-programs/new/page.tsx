@@ -85,7 +85,7 @@ export default function NewProgrammePage() {
           <div className="min-w-0">
             <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-success/25 bg-success/[0.06] px-2.5 py-1">
               <ClipboardList className="size-3.5 text-success" aria-hidden />
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-success">
+              <span className="text-xs font-semibold uppercase tracking-wide text-success">
                 New programme
               </span>
             </div>

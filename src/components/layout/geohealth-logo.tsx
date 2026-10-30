@@ -12,7 +12,7 @@ export function GeoHealthLogo({ className, compact }: GeoHealthLogoProps) {
   return (
     <Link
       href="/"
-      className={cn("flex items-center gap-2.5 hover:opacity-90 transition-opacity", className)}
+      className={cn("flex min-h-10 items-center gap-2.5 hover:opacity-90 transition-opacity", className)}
       aria-label={BRAND.portalName}
     >
       {/* MOH logo — left */}
@@ -41,7 +41,7 @@ export function GeoHealthLogo({ className, compact }: GeoHealthLogoProps) {
       {!compact && (
         <div className="hidden sm:block leading-tight ml-1">
           <div className="text-sm font-bold text-foreground">{BRAND.portalName}</div>
-          <div className="text-[10px] font-semibold tracking-widest text-teal uppercase">
+          <div className="text-xs font-semibold tracking-widest text-teal uppercase">
             {BRAND.portalTagline}
           </div>
         </div>

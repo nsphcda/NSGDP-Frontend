@@ -6,7 +6,11 @@
     "dev": "node --max-old-space-size=1536 node_modules/next/dist/bin/next dev -p 3004",
     "build": "next build",
     "start": "next start -p 3004",
-    "lint": "eslint"
+    "lint": "eslint",
+    "e2e:login": "node e2e/login.mjs",
+    "e2e:login:demo": "node e2e/login-demo.mjs",
+    "e2e:responsive": "playwright test e2e/responsive.spec.ts",
+    "e2e:responsive:report": "node -e \"console.log(require('fs').readFileSync('e2e/results/report.md','utf8'))\""
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -44,6 +48,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/postcss": "^4",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^20",

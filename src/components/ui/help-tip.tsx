@@ -25,6 +25,8 @@ export function HelpTip({
         type="button"
         className={cn(
           "inline-flex shrink-0 text-muted-foreground hover:text-foreground focus-visible:outline-none",
+          // Keep the small icon but give touch a 40px hit area without shifting layout.
+          "max-md:-m-3.5 max-md:p-3.5",
           className,
         )}
         onClick={(e) => e.stopPropagation()}

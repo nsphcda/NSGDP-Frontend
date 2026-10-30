@@ -188,7 +188,7 @@ export default function EditProgrammePage() {
               />
               <span
                 className={cn(
-                  "text-[11px] font-semibold uppercase tracking-wide",
+                  "text-xs font-semibold uppercase tracking-wide",
                   badgeTone === "primary" ? "text-primary" : "text-success",
                 )}
               >
