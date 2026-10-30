@@ -274,7 +274,7 @@
   }
 
   .hero-stat-label {
-    @apply mt-0.5 text-[11px] font-semibold uppercase tracking-wide text-neutral-600;
+    @apply mt-0.5 text-xs font-semibold uppercase tracking-wide text-neutral-600;
   }
 
   .hero-control-outline {
@@ -350,6 +350,55 @@
   border-radius: 9999px;
 }
 
+/* Touch targets for controls that are plain markup rather than <Button>: filter chips and tabs
+   (36px), breadcrumbs (16px) and standalone text links (16-20px). Phones only. */
+@media (max-width: 767px) {
+  button:not([class*="size-"]):not([aria-hidden="true"]) {
+    min-height: 2.5rem;
+  }
+  nav[aria-label="Breadcrumb"] a,
+  nav[aria-label="breadcrumb"] a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+  }
+  main a.inline-flex,
+  main a.flex {
+    min-height: 2.5rem;
+  }
+  /* Standalone text links ("View all", "Forgot password?", list titles) */
+  main :is(div, section, li, td) > a:is(.text-xs.font-medium, .text-xs.text-primary, .mt-2.inline-block, .text-primary.hover:underline) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+  }
+  main a.font-medium.leading-snug {
+    padding-block: 0.6rem;
+  }
+  a.peer {
+    min-height: 2.5rem;
+  }
+  /* Ad-hoc breadcrumb links ("Home / Data Portal / ...") */
+  main a[class*="hover:text-foreground"]:not(.inline-flex):not(.flex):not(.block) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    min-width: 2.5rem;
+  }
+  main a.block.truncate {
+    padding-block: 0.7rem;
+  }
+}
+
+/* Touch targets: footer links are plain inline text (about 20px tall); give them a 40px row on phones. */
+@media (max-width: 767px) {
+  footer a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+  }
+}
+
 /* Leaflet mobile polish — keep attribution/zoom readable without covering FABs */
 @media (max-width: 767px) {
   .leaflet-control-attribution {
@@ -359,9 +408,9 @@
   }
 
   .leaflet-control-zoom a {
-    width: 30px !important;
-    height: 30px !important;
-    line-height: 30px !important;
+    width: 40px !important;
+    height: 40px !important;
+    line-height: 40px !important;
     font-size: 16px !important;
   }
 

@@ -179,7 +179,7 @@ export default function MyDatasetsPage() {
           <div className="min-w-0">
             <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-success/25 bg-success/[0.06] px-2.5 py-1">
               <Database className="size-3.5 text-success" aria-hidden />
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-success">
+              <span className="text-xs font-semibold uppercase tracking-wide text-success">
                 Development Partner
               </span>
             </div>
@@ -484,7 +484,7 @@ function DatasetMobileCard({
             {hasActions ? (
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="inline-flex size-9 shrink-0 items-center justify-center rounded-md hover:bg-muted"
+                  className="inline-flex size-9 max-md:size-11 shrink-0 items-center justify-center rounded-md hover:bg-muted"
                 >
                   <MoreHorizontal className="size-4" />
                   <span className="sr-only">Actions</span>
@@ -530,13 +530,13 @@ function DatasetMobileCard({
             <StatusBadge status={dataset.status} publishedAt={dataset.published_at} />
             <VisibilityBadge visibility={dataset.visibility} />
             {dataset.pending_archive_request_id ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
+              <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
                 <Clock3 className="size-3" />
                 Retract pending
               </span>
             ) : null}
           </div>
-          <p className="mt-2 text-[11px] text-muted-foreground">
+          <p className="mt-2 text-xs text-muted-foreground">
             {dataset.download_count?.toLocaleString() ?? 0} downloads · Updated{" "}
             {formatDate(dataset.updated_at)}
           </p>

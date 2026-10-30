@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Upload, FileText, MapPin, Scale, Settings, X, Search, Loader2, ArrowLeft, GraduationCap } from "lucide-react";
@@ -24,7 +24,7 @@ import { DashboardPanel } from "@/components/dashboard/portal-dashboard-ui";
 import { PORTAL_DATASET_UPLOAD_PAGE_TIP } from "@/lib/constants/portal-tooltips";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { useCreateDataset } from "@/lib/hooks/useDatasets";
+import { useCreateDataset, useSubmitDatasetForReview } from "@/lib/hooks/useDatasets";
 import { useCategories } from "@/lib/hooks/useCategories";
 import { uploadFile } from "@/lib/api/uploads";
 import { NIGER_STATE_LGAS } from "@/lib/constants/core";
@@ -61,6 +61,7 @@ export default function UploadDatasetPage() {
   const router = useRouter();
   const { user, isLoading } = useAuth();
   const createMutation = useCreateDataset();
+  const submitMutation = useSubmitDatasetForReview();
   const { data: categoriesData } = useCategories();
   const [currentStep, setCurrentStep] = useState(1);
   const [uploading, setUploading] = useState(false);
@@ -86,6 +87,14 @@ export default function UploadDatasetPage() {
   const [limitations, setLimitations] = useState("");
   const [visibility, setVisibility] = useState<DatasetVisibility>("public");
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  // The dataset row is created before its files are sent. Remember it, and
+  // which files the server has already accepted, so a retry after a failed
+  // upload continues on the same dataset instead of creating a duplicate.
+  const [createdDataset, setCreatedDataset] = useState<{
+    id: string;
+    slug: string;
+  } | null>(null);
+  const attachedFileKeys = useRef<Set<string>>(new Set());
   const [responsibleDept, setResponsibleDept] = useState("");
   const [contactPerson, setContactPerson] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -251,35 +260,68 @@ export default function UploadDatasetPage() {
         'gpkg': 'geopackage',
       };
 
-      // Step 1: Create dataset with appropriate status
-      // - Draft button: status = 'draft' (can be saved without file)
-      // - Submit for Review button: status = 'pending' (requires file)
-      const dataset = await createMutation.mutateAsync({
-        title,
-        description,
-        categoryId: categoryId || undefined,
-        format: formatMap[fileFormat] || 'csv',
-        visibility,
-        status: isDraft ? 'draft' : 'pending',
-        tags,
-        geographicCoverage: selectedLGAs.join(', '),
-        temporalCoverageStart: temporalCoverageStart || undefined,
-        temporalCoverageEnd: temporalCoverageEnd || undefined,
-        diseaseIndicators: diseaseIndicators.length > 0 ? diseaseIndicators : undefined,
-        license: DEFAULT_DATASET_LICENSE,
-        methodology: methodology || undefined,
-        limitations: limitations || undefined,
-        responsibleDept: responsibleDept || undefined,
-        contactPerson: contactPerson || undefined,
-        contactEmail: contactEmail || undefined,
-        updateFrequency: updateFrequency || undefined,
-      });
+      // Step 1: always create as a draft. Submission for review happens only
+      // after every file has been accepted by the server, so a failed upload
+      // can never leave a "pending" dataset with no file in the review queue.
+      let dataset = createdDataset;
+      if (!dataset) {
+        const created = await createMutation.mutateAsync({
+          title,
+          description,
+          categoryId: categoryId || undefined,
+          format: formatMap[fileFormat] || 'csv',
+          visibility,
+          status: 'draft',
+          tags,
+          geographicCoverage: selectedLGAs.join(', '),
+          temporalCoverageStart: temporalCoverageStart || undefined,
+          temporalCoverageEnd: temporalCoverageEnd || undefined,
+          diseaseIndicators: diseaseIndicators.length > 0 ? diseaseIndicators : undefined,
+          license: DEFAULT_DATASET_LICENSE,
+          methodology: methodology || undefined,
+          limitations: limitations || undefined,
+          responsibleDept: responsibleDept || undefined,
+          contactPerson: contactPerson || undefined,
+          contactEmail: contactEmail || undefined,
+          updateFrequency: updateFrequency || undefined,
+        });
+        dataset = { id: created.id, slug: created.slug };
+        setCreatedDataset(dataset);
+      }
 
-      // Step 2: Upload every selected file — a dataset can have more than
-      // one file attached to it, each tracked separately (not just the first)
+      // Step 2: upload every selected file. A dataset can have more than one
+      // file, each tracked separately. Files already accepted on an earlier
+      // attempt are skipped.
       for (const uploadedFile of uploadedFiles) {
-        if (uploadedFile.file) {
+        if (!uploadedFile.file) continue;
+        const key = `${uploadedFile.name}:${uploadedFile.size}:${uploadedFile.file.lastModified}`;
+        if (attachedFileKeys.current.has(key)) continue;
+        try {
           await uploadFile(uploadedFile.file, dataset.id);
+        } catch (uploadError) {
+          const reason =
+            uploadError instanceof Error ? uploadError.message : "upload failed";
+          toast.error(
+            `${uploadedFile.name}: ${reason}. Your dataset is saved as a draft and was not submitted. Fix the file and press the button again to retry.`,
+          );
+          return;
+        }
+        attachedFileKeys.current.add(key);
+      }
+
+      // Step 3: submit for review, only now that every file is attached.
+      if (!isDraft) {
+        try {
+          await submitMutation.mutateAsync(dataset.slug);
+        } catch (submitError) {
+          const reason =
+            submitError instanceof Error
+              ? submitError.message
+              : "could not submit for review";
+          toast.error(
+            `Files uploaded, but submitting failed: ${reason}. The dataset is saved as a draft with its files; press Submit again to retry.`,
+          );
+          return;
         }
       }
 
@@ -335,7 +377,7 @@ export default function UploadDatasetPage() {
             <div className="min-w-0">
               <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-success/25 bg-success/[0.06] px-2.5 py-1">
                 <Upload className="size-3.5 text-success" aria-hidden />
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-success">
+                <span className="text-xs font-semibold uppercase tracking-wide text-success">
                   New dataset
                 </span>
               </div>
@@ -349,13 +391,13 @@ export default function UploadDatasetPage() {
               </p>
               <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
                 <GraduationCap className="size-3.5 text-muted-foreground" aria-hidden />
-                <Link href="/dashboard/learning/upload-your-first-dataset" className="text-primary hover:underline">
+                <Link href="/dashboard/learning/upload-your-first-dataset" className="text-primary hover:underline max-md:py-3">
                   Upload guide
                 </Link>
-                <Link href="/dashboard/learning/metadata-field-guide" className="text-primary hover:underline">
+                <Link href="/dashboard/learning/metadata-field-guide" className="text-primary hover:underline max-md:py-3">
                   Field-by-field help
                 </Link>
-                <Link href="/dashboard/learning?tab=self-check" className="text-primary hover:underline">
+                <Link href="/dashboard/learning?tab=self-check" className="text-primary hover:underline max-md:py-3">
                   Pre-submission checklist
                 </Link>
               </p>

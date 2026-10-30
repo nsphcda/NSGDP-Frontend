@@ -69,7 +69,7 @@ export function MetricCard({
   return (
     <div className={cn("rounded-2xl border p-4", t.card)}>
       <div className="flex items-start justify-between gap-3">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {label}
         </p>
         {Icon ? (

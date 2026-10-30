@@ -52,7 +52,7 @@ export function CompactFooter() {
             <ul className="space-y-2 text-sm text-primary-foreground/85">
               <li className="flex items-center gap-2">
                 <Mail className="size-4 shrink-0" aria-hidden />
-                <a href="mailto:healthdata@nsphcda.ng.gov.ng" className="hover:text-white">
+                <a href="mailto:healthdata@nsphcda.ng.gov.ng" className="min-w-0 break-words hover:text-white [overflow-wrap:anywhere]">
                   healthdata@nsphcda.ng.gov.ng
                 </a>
               </li>

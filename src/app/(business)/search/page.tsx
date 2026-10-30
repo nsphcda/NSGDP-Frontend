@@ -54,13 +54,13 @@ function SearchContent() {
         data.results
           .filter(
             (result) =>
-              result.type === "development-partner" ||
+              result.type === "development_partner" ||
               (result.metadata?.status === "approved" &&
                 !!result.metadata.published_at &&
                 result.metadata.visibility !== "private"),
           )
           .map((r) =>
-            r.type === "development-partner"
+            r.type === "development_partner"
               ? { type: "development-partner" as const, item: adaptSearchResultToDevelopmentPartner(r) }
               : { type: "dataset" as const, item: adaptSearchResultToDataset(r) },
           )

@@ -1,8 +1,5 @@
 import type { UserRole } from "@/types";
-import { GUIDES, getGuide } from "./guides";
-import { LEARNING_PATHS } from "./paths";
-import { FAQS, GLOSSARY } from "./reference";
-import { VIDEOS } from "./videos";
+import type { LearningContent } from "./content";
 import type {
   AudienceFilter,
   FaqItem,
@@ -29,16 +26,27 @@ export function guideMatchesAudience(guide: Guide, audience: AudienceFilter): bo
   return audience === "all" || guide.audience.includes(audience);
 }
 
-export function pathForAudience(audience: AudienceFilter): LearningPath {
-  if (audience === "partner_admin") return LEARNING_PATHS[1];
-  if (audience === "viewer") return LEARNING_PATHS[2];
-  return LEARNING_PATHS[0];
+export function findGuide(guides: Guide[], slug: string): Guide | undefined {
+  return guides.find((g) => g.slug === slug);
+}
+
+/** The path for an audience; "all" (and anything without its own path) falls back to the contributor path, then the first path. */
+export function pathForAudience(
+  paths: LearningPath[],
+  audience: AudienceFilter,
+): LearningPath | undefined {
+  const want = audience === "all" ? "contributor" : audience;
+  return paths.find((p) => p.audience === want) ?? paths[0];
 }
 
 /** First guide in the path the reader has not completed yet. */
-export function nextGuideInPath(path: LearningPath, completed: string[]): Guide | undefined {
-  const slug = path.guides.find((s) => !completed.includes(s));
-  return slug ? getGuide(slug) : undefined;
+export function nextGuideInPath(
+  path: LearningPath | undefined,
+  completed: string[],
+  guides: Guide[],
+): Guide | undefined {
+  const slug = path?.guides.find((s) => !completed.includes(s));
+  return slug ? findGuide(guides, slug) : undefined;
 }
 
 export function pathProgress(path: LearningPath, completed: string[]) {
@@ -47,10 +55,14 @@ export function pathProgress(path: LearningPath, completed: string[]) {
   return { done, total, percent: total === 0 ? 0 : Math.round((done / total) * 100) };
 }
 
-export function remainingMinutes(path: LearningPath, completed: string[]): number {
+export function remainingMinutes(
+  path: LearningPath,
+  completed: string[],
+  guides: Guide[],
+): number {
   return path.guides
     .filter((s) => !completed.includes(s))
-    .reduce((sum, s) => sum + (getGuide(s)?.minutes ?? 0), 0);
+    .reduce((sum, s) => sum + (findGuide(guides, s)?.minutes ?? 0), 0);
 }
 
 export function formatMinutes(minutes: number): string {
@@ -97,13 +109,17 @@ function scoreText(haystack: string, tokens: string[]): number {
   return score;
 }
 
-export function searchLearning(query: string, audience: AudienceFilter): LearningSearchResults {
+export function searchLearning(
+  content: LearningContent,
+  query: string,
+  audience: AudienceFilter,
+): LearningSearchResults {
   const tokens = normalise(query).split(/\s+/).filter(Boolean);
   if (tokens.length === 0) {
     return { guides: [], videos: [], glossary: [], faqs: [], total: 0 };
   }
 
-  const guides = GUIDES.filter((g) => guideMatchesAudience(g, audience))
+  const guides = content.guides.filter((g) => guideMatchesAudience(g, audience))
     .map((g) => {
       const title = scoreText(g.title, tokens) * 5;
       const summary = scoreText(g.summary, tokens) * 3;
@@ -117,11 +133,11 @@ export function searchLearning(query: string, audience: AudienceFilter): Learnin
     .sort((a, b) => b.score - a.score)
     .map((x) => x.g);
 
-  const videos = VIDEOS.filter(
-    (v) => scoreText(`${v.title} ${v.description} ${v.chapters.map((c) => c.label).join(" ")}`, tokens) > 0,
+  const videos = content.videos.filter(
+    (v) => scoreText(`${v.title} ${v.description} ${(v.chapters ?? []).map((c) => c.label).join(" ")}`, tokens) > 0,
   );
-  const glossary = GLOSSARY.filter((t) => scoreText(`${t.term} ${t.definition}`, tokens) > 0);
-  const faqs = FAQS.filter((f) => scoreText(`${f.question} ${f.answer}`, tokens) > 0);
+  const glossary = content.glossary.filter((t) => scoreText(`${t.term} ${t.definition}`, tokens) > 0);
+  const faqs = content.faqs.filter((f) => scoreText(`${f.question} ${f.answer}`, tokens) > 0);
 
   return {
     guides,

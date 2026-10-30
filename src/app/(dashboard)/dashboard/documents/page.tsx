@@ -152,7 +152,7 @@ export default function MyDocumentsPage() {
           <div className="min-w-0">
             <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-success/25 bg-success/[0.06] px-2.5 py-1">
               <FileText className="size-3.5 text-success" aria-hidden />
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-success">
+              <span className="text-xs font-semibold uppercase tracking-wide text-success">
                 Development Partner
               </span>
             </div>
@@ -388,7 +388,7 @@ function DocumentMobileCard({
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger
-                className="inline-flex size-9 shrink-0 items-center justify-center rounded-md hover:bg-muted"
+                className="inline-flex size-9 max-md:size-11 shrink-0 items-center justify-center rounded-md hover:bg-muted"
               >
                 <MoreHorizontal className="size-4" />
                 <span className="sr-only">Actions</span>
@@ -415,7 +415,7 @@ function DocumentMobileCard({
           <div className="mt-3">
             <DocumentStatusBadge status={document.status} />
           </div>
-          <p className="mt-2 text-[11px] text-muted-foreground">
+          <p className="mt-2 text-xs text-muted-foreground">
             Updated {formatDate(document.updatedAt)}
           </p>
         </div>

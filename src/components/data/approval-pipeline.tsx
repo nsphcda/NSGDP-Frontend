@@ -63,7 +63,7 @@ export function ApprovalPipeline({ currentStage, rejectedAt, className }: Approv
                   >
                     {label}
                   </p>
-                  <p className="text-[10px] text-muted-foreground/70 mt-0.5 leading-snug">{role}</p>
+                  <p className="text-xs text-muted-foreground/70 mt-0.5 leading-snug">{role}</p>
                 </div>
               </div>
 

@@ -269,17 +269,21 @@ export default function AboutPage() {
               <Button variant="outline" size="icon" onClick={prev} aria-label="Previous testimonial">
                 <ChevronLeft className="size-4" />
               </Button>
-              <div className="flex gap-2">
+              <div className="flex gap-0">
                 {testimonials.map((_, i) => (
                   <button
                     key={i}
                     type="button"
                     onClick={() => setSlide(i)}
-                    className={`size-2.5 rounded-full transition-colors ${
-                      i === slide ? "bg-primary" : "bg-muted-foreground/30"
-                    }`}
+                    className="group flex size-10 items-center justify-center"
                     aria-label={`Go to testimonial ${i + 1}`}
-                  />
+                  >
+                    <span
+                      className={`size-2.5 rounded-full transition-colors ${
+                        i === slide ? "bg-primary" : "bg-muted-foreground/30"
+                      }`}
+                    />
+                  </button>
                 ))}
               </div>
               <Button variant="outline" size="icon" onClick={next} aria-label="Next testimonial">

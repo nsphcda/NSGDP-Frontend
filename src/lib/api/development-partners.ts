@@ -120,13 +120,13 @@ export async function getDevelopmentPartnerBySlug(
 ): Promise<DevelopmentPartnerWithDatasets> {
   const response = await apiClient.get<
     ApiResponse<{
-      organisation: DevelopmentPartnerApiPayload;
+      developmentPartner: DevelopmentPartnerApiPayload;
       datasets: DevelopmentPartnerWithDatasets['datasets'];
       datasetCount: number;
     }>
   >(`/development-partners/${slug}`);
-  const { organisation, datasets, datasetCount } = response.data.data;
-  return { ...mapDevelopmentPartner(organisation), datasets, datasetCount };
+  const { developmentPartner, datasets, datasetCount } = response.data.data;
+  return { ...mapDevelopmentPartner(developmentPartner), datasets, datasetCount };
 }
 
 export interface CreateDevelopmentPartnerPayload {

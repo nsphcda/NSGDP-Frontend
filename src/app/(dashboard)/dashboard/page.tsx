@@ -100,7 +100,7 @@ export default function DashboardPage() {
           {user?.organisationName && isMember ? (
             <div className="inline-flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-2.5 py-1">
               <Building2 className="size-3.5 text-primary" aria-hidden />
-              <span className="truncate text-[11px] font-semibold uppercase tracking-wide text-primary">
+              <span className="truncate text-xs font-semibold uppercase tracking-wide text-primary">
                 {user.organisationName}
               </span>
             </div>
@@ -306,7 +306,7 @@ export default function DashboardPage() {
                             <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
                               {dataset.description}
                             </p>
-                            <p className="mt-1.5 text-[11px] text-muted-foreground">
+                            <p className="mt-1.5 text-xs text-muted-foreground">
                               {dataset.download_count} downloads · Updated{" "}
                               {formatDate(dataset.updated_at)}
                             </p>
@@ -414,7 +414,7 @@ export default function DashboardPage() {
               tone="primary"
               action={
                 summary && summary.unreadNotifications > 0 ? (
-                  <span className="rounded-full bg-destructive px-2 py-0.5 text-[11px] font-semibold text-white">
+                  <span className="rounded-full bg-destructive px-2 py-0.5 text-xs font-semibold text-white">
                     {summary.unreadNotifications} new
                   </span>
                 ) : (
@@ -526,7 +526,7 @@ function NotificationItem({
         {message ? (
           <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground">{message}</p>
         ) : null}
-        <p className="mt-1 text-[11px] text-muted-foreground/80">{time}</p>
+        <p className="mt-1 text-xs text-muted-foreground/80">{time}</p>
       </div>
     </div>
   );

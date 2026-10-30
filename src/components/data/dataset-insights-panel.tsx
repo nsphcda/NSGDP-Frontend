@@ -67,8 +67,8 @@ function MetricChart({ metric }: { metric: DatasetMetricInsight }) {
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={metric.series} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis dataKey="period" tick={{ fontSize: 10 }} />
-            <YAxis tick={{ fontSize: 10 }} width={40} />
+            <XAxis dataKey="period" tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} width={40} />
             <Tooltip />
             <Line
               type="monotone"

@@ -13,7 +13,6 @@ description: Which earlier specification and report files still match the code, 
 | Backend Architecture v1.1 | `src/content/archive/` | **Superseded** | Names Fastify and a separate worker design that differs from the build. Read for history. |
 | Data Ingestion and Canonicalisation Engine v1.1 | `src/content/archive/` | **Superseded in parts** | Describes a Python reader container and Bull v4. The reader is TypeScript inside the worker, and the queue library is BullMQ. Section 12 records implementation findings, but §12.8 is out of date too (the worker is a separate process now). |
 | Canonicalisation Engine implementation plan and audit | `src/content/archive/` | **Historical** | Planning material. Use the ingestion pages on this site. |
-| KNOWN_GAPS.md | Project root | **Partly stale** | MFA entry is out of date: it is now built (TOTP, SMS, and email codes, plus backup codes and lockout). |
 | API specification | `nsgdp-backend/docs/` | **Not re-checked** | Check each endpoint against the controllers, or use Swagger when enabled. |
 | Deployment guide | `nsgdp-backend/docs/` | **Not re-checked** | Compare with [Deployment](/docs/deployment) before following it. |
 | Penetration, security, and performance reports | Project root and `Final Reports/` | **Current** | Final versions are in `Final Reports/`. Fix documents are in the project root. |

@@ -209,7 +209,7 @@ export const FAQS: FaqItem[] = [
     group: "Uploading",
     question: "Which file formats can I upload?",
     answer:
-      "CSV, Excel, JSON, GeoJSON, zipped Shapefile, GeoPackage, KML, and PDF documentation. You can attach several files to one dataset.",
+      "CSV, Excel, JSON, GeoJSON, GeoPackage, and KML. PDFs and other documents go through Documents. You can attach several files to one dataset.",
   },
   {
     id: "faq-draft-file",
@@ -251,7 +251,7 @@ export const FAQS: FaqItem[] = [
     group: "Review & publishing",
     question: "Can I edit a dataset while it's under review?",
     answer:
-      "Not while it is being reviewed. If reviewers request revisions it returns to you for editing; after publishing, admins can edit and trigger re-review.",
+      "Not while it is being reviewed. If reviewers request revisions it returns to you for editing.",
   },
   {
     id: "faq-versions",

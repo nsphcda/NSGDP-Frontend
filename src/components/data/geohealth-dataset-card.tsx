@@ -49,7 +49,7 @@ export function GeoHealthDatasetCard({
       <button
         type="button"
         onClick={() => onInfoClick(dataset)}
-        className="absolute right-3 top-3 z-10 flex size-8 items-center justify-center rounded-full border bg-background hover:bg-muted transition-colors"
+        className="absolute right-3 top-3 z-10 flex size-8 max-md:size-11 items-center justify-center rounded-full border bg-background hover:bg-muted transition-colors"
         aria-label={`More information about ${dataset.title}`}
       >
         <Info className="size-4 text-muted-foreground" />
@@ -82,7 +82,7 @@ export function GeoHealthDatasetCard({
         )}
         <div className="flex flex-wrap gap-1">
           {dataset.formats.slice(0, 3).map((f) => (
-            <Badge key={f} variant="outline" className="text-[10px] font-mono">
+            <Badge key={f} variant="outline" className="text-xs font-mono">
               {f}
             </Badge>
           ))}

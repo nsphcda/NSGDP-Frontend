@@ -240,6 +240,14 @@ export function ProgramDetailView({ slug, orgScope = false }: ProgramDetailViewP
                         {program.organisationName}
                       </span>
                     ) : null}
+                    {(program.partners ?? []).map((partner) => (
+                      <span
+                        key={partner.id}
+                        className="rounded-full bg-white/15 px-2.5 py-0.5 text-xs font-medium text-white/90"
+                      >
+                        {partner.name}
+                      </span>
+                    ))}
                   </div>
                   <h1 className="text-3xl font-bold sm:text-5xl flex items-start gap-2">
                     <span className="min-w-0">{program.name}</span>

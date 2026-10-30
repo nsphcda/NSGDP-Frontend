@@ -67,7 +67,7 @@ export default function NotificationsPage() {
           <div className="min-w-0">
             <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-primary/25 bg-primary/[0.06] px-2.5 py-1">
               <Bell className="size-3.5 text-primary" aria-hidden />
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-primary">
+              <span className="text-xs font-semibold uppercase tracking-wide text-primary">
                 Account
               </span>
             </div>
@@ -196,7 +196,7 @@ export default function NotificationsPage() {
                               <div className="mb-1.5 flex flex-wrap items-center gap-2">
                                 <Badge
                                   variant="secondary"
-                                  className={cn("text-[10px] uppercase", TYPE_COLORS[displayType])}
+                                  className={cn("text-xs uppercase", TYPE_COLORS[displayType])}
                                 >
                                   {n.type.replace(/_/g, " ")}
                                 </Badge>

@@ -116,7 +116,7 @@ export function HomeHeroSection() {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search datasets by keyword, region, or topic..."
-                    className="h-11 pl-11 text-sm"
+                    className="h-11 pl-11 text-base md:text-sm"
                     aria-label="Search datasets"
                   />
                 </div>

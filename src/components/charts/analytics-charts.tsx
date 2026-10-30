@@ -22,8 +22,8 @@ export function UploadsOverTimeChart({ data }: UploadsChartProps) {
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-          <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-          <YAxis tick={{ fontSize: 11 }} />
+          <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+          <YAxis tick={{ fontSize: 12 }} />
           <Tooltip />
           <Line
             type="monotone"
@@ -48,8 +48,8 @@ export function DownloadsByDatasetChart({ data }: DownloadsChartProps) {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ top: 5, right: 20, left: 80, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-          <XAxis type="number" tick={{ fontSize: 11 }} />
-          <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={75} />
+          <XAxis type="number" tick={{ fontSize: 12 }} />
+          <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={75} />
           <Tooltip />
           <Bar dataKey="downloads" fill="hsl(var(--primary))" name="Downloads" radius={[0, 4, 4, 0]} />
         </BarChart>
@@ -68,8 +68,8 @@ export function NewUsersOverTimeChart({ data }: UsersChartProps) {
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-          <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-          <YAxis tick={{ fontSize: 11 }} />
+          <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+          <YAxis tick={{ fontSize: 12 }} />
           <Tooltip />
           <Line
             type="monotone"

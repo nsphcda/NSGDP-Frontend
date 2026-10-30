@@ -186,7 +186,7 @@ export default function MyProgrammesPage() {
           <div className="min-w-0">
             <div className="mb-2 inline-flex items-center gap-2 rounded-lg border border-success/25 bg-success/[0.06] px-2.5 py-1">
               <ClipboardList className="size-3.5 text-success" aria-hidden />
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-success">
+              <span className="text-xs font-semibold uppercase tracking-wide text-success">
                 Development Partner
               </span>
             </div>
@@ -538,7 +538,7 @@ function ProgrammeMobileCard({
             {showActions ? (
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="inline-flex size-9 shrink-0 items-center justify-center rounded-md hover:bg-muted"
+                  className="inline-flex size-9 max-md:size-11 shrink-0 items-center justify-center rounded-md hover:bg-muted"
                 >
                   <MoreHorizontal className="size-4" />
                   <span className="sr-only">Actions</span>
@@ -599,7 +599,7 @@ function ProgrammeMobileCard({
               {programme.type}
             </Badge>
           </div>
-          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
+          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
             {progress.percent !== null ? (
               <span>
                 Progress {progress.percent}%

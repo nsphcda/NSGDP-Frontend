@@ -80,7 +80,7 @@ const GENERATORS: Record<string, () => string> = {
 };
 
 export function downloadTemplate(asset: TemplateAsset) {
-  const generate = GENERATORS[asset.id];
+  const generate = GENERATORS[asset.generatorKey ?? asset.id];
   if (!generate) return;
   const content = generate();
   const type = asset.format === "CSV" ? "text/csv;charset=utf-8" : "text/plain;charset=utf-8";

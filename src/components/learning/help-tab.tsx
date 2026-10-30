@@ -8,7 +8,8 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { METRIC_TONE } from "@/components/data/metric-card";
 import { cn } from "@/lib/utils";
 import { AUDIENCE_LABEL, learningHref } from "@/lib/learning/helpers";
-import { PLATFORM_UPDATES, TRAINING_SESSIONS } from "@/lib/learning/support";
+import { TRAINING_SESSIONS } from "@/lib/learning/support";
+import { useLearningContent } from "@/lib/learning/content";
 import type { AudienceFilter, PlatformUpdate } from "@/lib/learning/types";
 
 const TAG_TONE: Record<PlatformUpdate["tag"], "success" | "info" | "warning"> = {
@@ -43,6 +44,7 @@ const SUPPORT_LINKS = [
 ];
 
 export function HelpTab({ audience, basePath }: { audience: AudienceFilter; basePath: string }) {
+  const { content } = useLearningContent();
   // Registration is a demo interaction until a real sign-up endpoint exists.
   const [requested, setRequested] = useState<string[]>([]);
 
@@ -102,7 +104,7 @@ export function HelpTab({ audience, basePath }: { audience: AudienceFilter; base
               return (
                 <article key={s.id} className="flex gap-4 rounded-2xl border bg-card p-4 sm:p-5">
                   <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl border bg-muted/40">
-                    <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                       {formatDate(s.date, { month: "short" })}
                     </span>
                     <span className="text-lg font-bold leading-none tabular-nums">
@@ -112,7 +114,7 @@ export function HelpTab({ audience, basePath }: { audience: AudienceFilter; base
                   <div className="flex min-w-0 flex-1 flex-col">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="text-sm font-semibold">{s.title}</h3>
-                      <Badge variant="secondary" className="h-5 text-[11px]">
+                      <Badge variant="secondary" className="h-5 text-xs">
                         {s.format}
                       </Badge>
                     </div>
@@ -167,12 +169,12 @@ export function HelpTab({ audience, basePath }: { audience: AudienceFilter; base
           What&apos;s new on the portal
         </h2>
         <ol className="divide-y rounded-2xl border bg-card">
-          {PLATFORM_UPDATES.map((u) => {
+          {content.updates.map((u) => {
             const tone = METRIC_TONE[TAG_TONE[u.tag]];
             return (
               <li key={u.id} className="flex flex-col gap-2 px-4 py-4 sm:flex-row sm:gap-4 sm:px-5">
                 <div className="flex shrink-0 items-center gap-2 sm:w-40 sm:flex-col sm:items-start">
-                  <span className={cn("rounded-md border px-1.5 py-0.5 text-[11px] font-medium", tone.well, tone.icon)}>
+                  <span className={cn("rounded-md border px-1.5 py-0.5 text-xs font-medium", tone.well, tone.icon)}>
                     {u.tag}
                   </span>
                   <time className="text-xs text-muted-foreground" dateTime={u.date}>

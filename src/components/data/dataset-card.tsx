@@ -29,7 +29,7 @@ export function DatasetCard({ dataset, className }: DatasetCardProps) {
           {dataset.lifecycleStage &&
             dataset.lifecycleStage !== "approved" &&
             dataset.lifecycleStage !== "published" && (
-            <LifecycleBadge stage={dataset.lifecycleStage} showDot={false} className="text-[10px] px-1.5 py-px" />
+            <LifecycleBadge stage={dataset.lifecycleStage} showDot={false} className="text-xs px-1.5 py-px" />
           )}
         </div>
 

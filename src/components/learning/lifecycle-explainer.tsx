@@ -59,7 +59,7 @@ export function LifecycleExplainer() {
                   </span>
                   {stage.label}
                 </span>
-                <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   {view?.who}
                 </span>
               </div>
@@ -70,7 +70,7 @@ export function LifecycleExplainer() {
       </ol>
 
       <div className="rounded-xl border bg-muted/20 p-4">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Other outcomes
         </p>
         <ul className="mt-2 space-y-1.5 text-[13px] text-muted-foreground">

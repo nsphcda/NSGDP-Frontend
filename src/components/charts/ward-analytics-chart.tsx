@@ -55,12 +55,12 @@ export function WardAnalyticsChart({
     <ResponsiveContainer width="100%" height={280}>
       <BarChart data={sorted} layout="vertical" margin={{ left: 8, right: 12 }}>
         <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-        <XAxis type="number" tick={{ fontSize: 11 }} />
+        <XAxis type="number" tick={{ fontSize: 12 }} />
         <YAxis
           dataKey="ward"
           type="category"
           width={110}
-          tick={{ fontSize: 11 }}
+          tick={{ fontSize: 12 }}
         />
         <Tooltip
           formatter={(val: number) => [val.toLocaleString(), label]}

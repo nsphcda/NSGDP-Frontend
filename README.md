@@ -28,6 +28,8 @@ npm run dev                  # http://localhost:3000
 | `npm run start` | Serve production build |
 | `npm run lint` | ESLint |
 | `npx tsc --noEmit` | Type-check |
+| `npm run e2e:login:demo` | Sign in the demo accounts for the mobile audit (needs `npm run seed:demo` in the backend) |
+| `npm run e2e:responsive` | Mobile responsiveness audit of every page (see [`e2e/README.md`](e2e/README.md)) |
 
 ## Structure
 

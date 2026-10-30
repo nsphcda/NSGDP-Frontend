@@ -172,7 +172,7 @@ export default function ProgramsPage() {
             <Filter className="size-4 text-muted-foreground" />
             Filter programs
             {(statusFilter !== "all" || typeFilter !== "all") && (
-              <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold text-primary-foreground">
+              <span className="rounded-full bg-primary px-1.5 py-0.5 text-xs font-bold text-primary-foreground">
                 {[statusFilter !== "all" ? 1 : 0, typeFilter !== "all" ? 1 : 0].reduce((a, b) => a + b)}
               </span>
             )}
@@ -295,7 +295,7 @@ export default function ProgramsPage() {
                             <p className="text-lg font-bold text-primary tabular-nums leading-tight sm:text-2xl">
                               {program.completionPercent}%
                             </p>
-                            <p className="text-[10px] text-muted-foreground mt-0.5 sm:text-xs">Completion</p>
+                            <p className="text-xs text-muted-foreground mt-0.5 sm:text-xs">Completion</p>
                           </div>
                           <div className="px-1 sm:px-2">
                             <p className="text-lg font-bold tabular-nums leading-tight sm:text-2xl break-all">
@@ -303,7 +303,7 @@ export default function ProgramsPage() {
                                 ? `${(program.reachCount / 1000).toFixed(0)}K`
                                 : program.reachCount.toLocaleString()}
                             </p>
-                            <p className="text-[10px] text-muted-foreground mt-0.5 sm:text-xs">Reached</p>
+                            <p className="text-xs text-muted-foreground mt-0.5 sm:text-xs">Reached</p>
                           </div>
                           <div className="px-1 sm:px-2">
                             <p className="text-lg font-bold tabular-nums leading-tight sm:text-2xl break-all">
@@ -311,7 +311,7 @@ export default function ProgramsPage() {
                                 ? `${(program.targetCount / 1000).toFixed(0)}K`
                                 : program.targetCount.toLocaleString()}
                             </p>
-                            <p className="text-[10px] text-muted-foreground mt-0.5 sm:text-xs">Target</p>
+                            <p className="text-xs text-muted-foreground mt-0.5 sm:text-xs">Target</p>
                           </div>
                         </div>
 

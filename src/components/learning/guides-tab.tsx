@@ -2,7 +2,8 @@
 
 import { useMemo } from "react";
 import { FilterChip } from "@/components/dashboard/portal-dashboard-ui";
-import { GUIDE_CATEGORIES, GUIDES } from "@/lib/learning/guides";
+import { GUIDE_CATEGORIES } from "@/lib/learning/guides";
+import { useLearningContent } from "@/lib/learning/content";
 import { guideMatchesAudience } from "@/lib/learning/helpers";
 import type { AudienceFilter } from "@/lib/learning/types";
 import type { CategoryFilter } from "./learning-hub-types";
@@ -26,9 +27,10 @@ export function GuidesTab({
   category: CategoryFilter;
   onCategoryChange: (category: CategoryFilter) => void;
 }) {
+  const { content } = useLearningContent();
   const audienceGuides = useMemo(
-    () => GUIDES.filter((g) => guideMatchesAudience(g, audience)),
-    [audience],
+    () => content.guides.filter((g) => guideMatchesAudience(g, audience)),
+    [content.guides, audience],
   );
 
   const visible = useMemo(() => {

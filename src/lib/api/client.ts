@@ -6,6 +6,9 @@ import { getAccessToken, getRefreshToken, updateAccessToken, clearTokens } from 
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
+/** API origin + prefix, for building absolute URLs to API-served media. */
+export const API_BASE_URL = BASE_URL;
+
 export class ApiError extends Error {
   constructor(
     public status: number,

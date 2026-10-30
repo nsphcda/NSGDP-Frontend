@@ -647,7 +647,7 @@ export default function GisMappingPage() {
                       }}
                       className="w-full accent-primary"
                     />
-                    <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
+                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
                       <span>{burdenYearOptions[0]}</span>
                       <span>{burdenYearOptions[burdenYearOptions.length - 1]}</span>
                     </div>

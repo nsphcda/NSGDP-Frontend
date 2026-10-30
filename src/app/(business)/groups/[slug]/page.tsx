@@ -107,7 +107,7 @@ export default function GroupPage({ params }: GroupPageProps) {
                   <Card className="h-full transition-colors hover:border-primary">
                     <CardContent className="flex h-full flex-col gap-2 pt-6">
                       <p className="line-clamp-2 font-medium leading-snug">{dataset.title}</p>
-                      <Badge variant="secondary" className="w-fit text-[11px] uppercase">
+                      <Badge variant="secondary" className="w-fit text-xs uppercase">
                         {dataset.format}
                       </Badge>
                     </CardContent>
@@ -128,7 +128,7 @@ export default function GroupPage({ params }: GroupPageProps) {
                 <Card key={doc.id}>
                   <CardContent className="flex flex-col gap-2 pt-6">
                     <p className="line-clamp-2 font-medium leading-snug">{doc.title}</p>
-                    <Badge variant="secondary" className="w-fit text-[11px] uppercase">
+                    <Badge variant="secondary" className="w-fit text-xs uppercase">
                       {doc.type}
                     </Badge>
                   </CardContent>

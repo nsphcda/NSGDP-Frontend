@@ -104,7 +104,7 @@ export function AuthBrandPanel({
 
       <div className="relative space-y-2.5 sm:space-y-3">
         {eyebrow ? (
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/70">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
             {eyebrow}
           </p>
         ) : null}
@@ -134,7 +134,7 @@ export function AuthBrandMeta({
         {icon}
       </span>
       <div className="min-w-0">
-        <p className="text-[11px] uppercase tracking-wide text-white/60">{label}</p>
+        <p className="text-xs uppercase tracking-wide text-white/60">{label}</p>
         <p className="truncate font-medium text-white">{value}</p>
       </div>
     </div>

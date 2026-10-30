@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { BookOpen, Clock, Play } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { BookOpen, Play } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,44 +14,76 @@ import {
 import { FilterChip } from "@/components/dashboard/portal-dashboard-ui";
 import { METRIC_TONE } from "@/components/data/metric-card";
 import { cn } from "@/lib/utils";
-import { GUIDE_CATEGORIES, getGuide } from "@/lib/learning/guides";
+import { GUIDE_CATEGORIES } from "@/lib/learning/guides";
+import { mediaUrl, useLearningContent } from "@/lib/learning/content";
 import { learningHref } from "@/lib/learning/helpers";
-import { VIDEOS } from "@/lib/learning/videos";
 import type { GuideCategory, VideoTutorial } from "@/lib/learning/types";
 import { CATEGORY_TONE } from "./learning-icons";
+import { EmptyNote } from "./learning-primitives";
 
-function Thumbnail({ video, large = false }: { video: VideoTutorial; large?: boolean }) {
+/**
+ * Card thumbnail: the poster image when one is uploaded, otherwise the first
+ * frame of the video itself (the browser renders it from the metadata request).
+ * A shimmer shows while it loads.
+ */
+function Thumbnail({ video }: { video: VideoTutorial }) {
   const tone = METRIC_TONE[CATEGORY_TONE[video.category]];
-  const soon = video.status === "coming-soon";
+  const [ready, setReady] = useState(false);
+  const hasFrame = Boolean(video.posterUrl || video.src);
+
   return (
     <div
       className={cn(
-        "relative flex items-center justify-center overflow-hidden rounded-xl border",
+        "relative flex aspect-video items-center justify-center overflow-hidden rounded-xl border",
         tone.card,
-        large ? "aspect-video" : "aspect-video",
       )}
     >
       <div
         className="absolute inset-0 opacity-60 [background-image:radial-gradient(circle_at_1px_1px,currentColor_1px,transparent_0)] [background-size:16px_16px] text-muted-foreground/20"
         aria-hidden
       />
-      <span
-        className={cn(
-          "relative flex items-center justify-center rounded-full border bg-background/90 shadow-sm",
-          large ? "size-16" : "size-11",
-          soon && "opacity-60",
-        )}
-      >
-        <Play className={cn("fill-current", large ? "size-6" : "size-4", tone.icon)} aria-hidden />
+
+      {hasFrame && !ready ? (
+        <div className="absolute inset-0 animate-pulse bg-muted/50" aria-hidden />
+      ) : null}
+
+      {video.posterUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element -- API-served media with a signed redirect
+        <img
+          src={mediaUrl(video.posterUrl)}
+          alt=""
+          decoding="async"
+          onLoad={() => setReady(true)}
+          onError={() => setReady(true)}
+          className={cn(
+            "absolute inset-0 size-full object-cover transition-opacity duration-300",
+            ready ? "opacity-100" : "opacity-0",
+          )}
+        />
+      ) : video.src ? (
+        <video
+          // #t asks for a frame slightly in, so the thumbnail is not a black first frame.
+          src={`${mediaUrl(video.src)}#t=1`}
+          muted
+          playsInline
+          preload="metadata"
+          tabIndex={-1}
+          aria-hidden
+          onLoadedData={() => setReady(true)}
+          onError={() => setReady(true)}
+          className={cn(
+            "pointer-events-none absolute inset-0 size-full object-cover transition-opacity duration-300",
+            ready ? "opacity-100" : "opacity-0",
+          )}
+        />
+      ) : null}
+
+      <span className="relative flex size-12 items-center justify-center rounded-full border bg-background/90 shadow-sm transition-transform group-hover:scale-105">
+        <Play className={cn("size-5 fill-current", tone.icon)} aria-hidden />
       </span>
-      <span className="absolute bottom-2 right-2 rounded-md bg-foreground/80 px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-background">
+      <span className="absolute bottom-2 right-2 rounded-md bg-foreground/80 px-1.5 py-0.5 text-xs font-medium tabular-nums text-background">
         {video.duration}
       </span>
-      {soon ? (
-        <Badge variant="secondary" className="absolute left-2 top-2 h-5 text-[11px]">
-          Coming soon
-        </Badge>
-      ) : null}
     </div>
   );
 }
@@ -61,10 +92,14 @@ export function VideosTab({ basePath }: { basePath: string }) {
   const [category, setCategory] = useState<GuideCategory | "all">("all");
   const [active, setActive] = useState<VideoTutorial | null>(null);
 
+  const { content } = useLearningContent();
+  const VIDEOS = content.videos;
   const list = VIDEOS.filter((v) => category === "all" || v.category === category);
   const featured = category === "all" ? VIDEOS.filter((v) => v.featured) : [];
   const rest = category === "all" ? list.filter((v) => !v.featured) : list;
-  const activeGuide = active?.guide ? getGuide(active.guide) : undefined;
+  const activeGuide = active?.guide
+    ? content.guides.find((g) => g.slug === active.guide)
+    : undefined;
 
   const VideoCard = ({ video }: { video: VideoTutorial }) => (
     <button
@@ -74,7 +109,7 @@ export function VideosTab({ basePath }: { basePath: string }) {
     >
       <Thumbnail video={video} />
       <div className="mt-3 min-w-0">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {GUIDE_CATEGORIES.find((c) => c.id === video.category)?.label}
         </p>
         <h3 className="mt-1 text-sm font-semibold leading-5">{video.title}</h3>
@@ -92,27 +127,31 @@ export function VideosTab({ basePath }: { basePath: string }) {
         </p>
       </div>
 
-      <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <FilterChip
-          active={category === "all"}
-          label="All videos"
-          count={VIDEOS.length}
-          onClick={() => setCategory("all")}
-        />
-        {GUIDE_CATEGORIES.map((c) => {
-          const count = VIDEOS.filter((v) => v.category === c.id).length;
-          if (count === 0) return null;
-          return (
-            <FilterChip
-              key={c.id}
-              active={category === c.id}
-              label={c.label}
-              count={count}
-              onClick={() => setCategory(c.id)}
-            />
-          );
-        })}
-      </div>
+      {VIDEOS.length === 0 ? <EmptyNote>No videos have been published yet.</EmptyNote> : null}
+
+      {VIDEOS.length > 0 ? (
+        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <FilterChip
+            active={category === "all"}
+            label="All videos"
+            count={VIDEOS.length}
+            onClick={() => setCategory("all")}
+          />
+          {GUIDE_CATEGORIES.map((c) => {
+            const count = VIDEOS.filter((v) => v.category === c.id).length;
+            if (count === 0) return null;
+            return (
+              <FilterChip
+                key={c.id}
+                active={category === c.id}
+                label={c.label}
+                count={count}
+                onClick={() => setCategory(c.id)}
+              />
+            );
+          })}
+        </div>
+      ) : null}
 
       {featured.length > 0 ? (
         <div className="grid gap-3 lg:grid-cols-2">
@@ -137,37 +176,27 @@ export function VideosTab({ basePath }: { basePath: string }) {
                 <DialogDescription>{active.description}</DialogDescription>
               </DialogHeader>
 
-              <div className="relative flex aspect-video items-center justify-center rounded-xl border bg-muted/40">
-                <div className="text-center">
-                  <div className="mx-auto flex size-14 items-center justify-center rounded-full border bg-background shadow-sm">
-                    <Play className="size-6 fill-current text-primary" aria-hidden />
-                  </div>
-                  <p className="mt-3 text-sm font-medium">
-                    {active.status === "coming-soon" ? "Recording coming soon" : "Video player placeholder"}
-                  </p>
-                  <p className="mt-0.5 text-xs text-muted-foreground">
-                    The recording will play here once published.
-                  </p>
-                </div>
-                <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-md bg-foreground/80 px-1.5 py-0.5 text-[11px] tabular-nums text-background">
-                  <Clock className="size-3" aria-hidden />
-                  {active.duration}
-                </span>
-              </div>
-
-              <div>
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                  Chapters
-                </p>
-                <ul className="divide-y rounded-xl border">
-                  {active.chapters.map((c) => (
-                    <li key={c.time} className="flex items-center gap-3 px-3 py-2 text-[13px]">
-                      <span className="w-10 shrink-0 tabular-nums text-muted-foreground">{c.time}</span>
-                      <span>{c.label}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {active.src ? (
+                <video
+                  key={active.id}
+                  controls
+                  autoPlay
+                  playsInline
+                  preload="metadata"
+                  poster={active.posterUrl ? mediaUrl(active.posterUrl) : undefined}
+                  src={mediaUrl(active.src)}
+                  className="aspect-video w-full rounded-xl border bg-black"
+                />
+              ) : active.externalUrl ? (
+                <a
+                  href={active.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex aspect-video items-center justify-center rounded-xl border bg-muted/40 text-sm font-medium text-primary hover:underline"
+                >
+                  Watch this video
+                </a>
+              ) : null}
 
               {activeGuide ? (
                 <Link

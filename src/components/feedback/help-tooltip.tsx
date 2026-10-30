@@ -17,7 +17,7 @@ export function HelpTooltip({ content, className, side = "top" }: HelpTooltipPro
   return (
     <TooltipProvider delay={150}>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger className="inline-flex max-md:-m-3.5 max-md:p-3.5">
           <HelpCircle
             className={cn(
               "size-3.5 text-muted-foreground/60 hover:text-muted-foreground cursor-help shrink-0",

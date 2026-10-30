@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { FAQ_GROUPS, FAQS, GLOSSARY } from "@/lib/learning/reference";
+import { FAQ_GROUPS } from "@/lib/learning/reference";
+import { useLearningContent } from "@/lib/learning/content";
 import { Disclosure, EmptyNote, SegmentedTabs } from "./learning-primitives";
 import { LifecycleExplainer } from "./lifecycle-explainer";
 
@@ -17,14 +18,15 @@ const SECTIONS: Array<{ id: Section; label: string }> = [
 ];
 
 function GlossaryList() {
+  const { content } = useLearningContent();
   const [query, setQuery] = useState("");
 
   const terms = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return [...GLOSSARY]
+    return [...content.glossary]
       .sort((a, b) => a.term.localeCompare(b.term))
       .filter((t) => !q || `${t.term} ${t.definition}`.toLowerCase().includes(q));
-  }, [query]);
+  }, [query, content.glossary]);
 
   return (
     <div className="space-y-4">
@@ -50,7 +52,7 @@ function GlossaryList() {
             <div key={t.term} className="grid gap-1 px-4 py-3 sm:grid-cols-[14rem_1fr] sm:gap-4 sm:px-5">
               <dt className="flex items-center gap-2 text-sm font-medium">
                 {t.term}
-                <Badge variant="outline" className="h-5 text-[10px] font-normal">
+                <Badge variant="outline" className="h-5 text-xs font-normal">
                   {t.category}
                 </Badge>
               </dt>
@@ -64,10 +66,11 @@ function GlossaryList() {
 }
 
 function FaqList() {
+  const { content } = useLearningContent();
   return (
     <div className="space-y-6">
       {FAQ_GROUPS.map((group) => {
-        const items = FAQS.filter((f) => f.group === group);
+        const items = content.faqs.filter((f) => f.group === group);
         if (items.length === 0) return null;
         return (
           <section key={group} className="space-y-2">

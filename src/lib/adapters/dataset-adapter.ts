@@ -17,7 +17,7 @@ export function transformDataset(
   const category = categories?.find((c) => c.id === backendDataset.category_id);
   
   // Find related organisation
-  const organisation = organisations?.find((o) => o.id === backendDataset.organisation_id);
+  const organisation = organisations?.find((o) => o.id === backendDataset.development_partner_id);
 
   // Map backend category to frontend health category
   // Backend uses category slugs, frontend uses health category enum
@@ -44,7 +44,7 @@ export function transformDataset(
           logoUrl: organisation.logoUrl || undefined,
         }
       : {
-          id: backendDataset.organisation_id || '',
+          id: backendDataset.development_partner_id || '',
           slug: 'unknown',
           name: 'Unknown Development Partner',
           logoUrl: undefined,
