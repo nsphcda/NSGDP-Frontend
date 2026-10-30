@@ -1,41 +1,30 @@
 import type { UserRole } from "@/types";
 import type { ProgramPermissionAction } from "@/types/permissions";
 
-/** Org-group capability that unlocks full My Programmes management. */
-export const ORG_PROGRAM_MANAGE_CAPABILITY = "manage:programs" as const;
+/**
+ * Programmes are created and assigned by the agency (admin portal). A user of a
+ * development partner (contributor or partner admin) can open the programmes the
+ * partner is listed on, update their progress and upload reports. Who may do what
+ * on a given programme is enforced by the API: it returns only programmes the
+ * partner is assigned to, and answers 404 for the rest.
+ */
+const PARTNER_ACTIONS: ProgramPermissionAction[] = ["edit:programs", "upload:programs"];
 
-const FULL_PROGRAM_ACTIONS: Record<
-  Extract<UserRole, "contributor" | "admin" | "super_admin">,
-  ProgramPermissionAction[]
-> = {
-  contributor: ["manage:programs"],
-  admin: ["manage:programs"],
-  super_admin: ["manage:programs", "delete:programs"],
-};
-
-function orgCapabilities(
-  organisationCapabilities: string[] | undefined,
-): string[] {
-  return organisationCapabilities ?? [];
-}
-
-function orgHasManageAccess(caps: string[]): boolean {
-  return caps.includes(ORG_PROGRAM_MANAGE_CAPABILITY);
-}
+const SUPER_ADMIN_ACTIONS: ProgramPermissionAction[] = [
+  "create:programs",
+  "edit:programs",
+  "upload:programs",
+  "delete:programs",
+];
 
 export function getEffectiveProgramPermissions(
   role: UserRole,
-  organisationCapabilities?: string[],
+  // Kept for call-site compatibility: the old organisation capability no longer matters.
+  _organisationCapabilities?: string[],
 ): ProgramPermissionAction[] {
-  if (role === "super_admin") {
-    return FULL_PROGRAM_ACTIONS.super_admin;
-  }
-
-  const caps = orgCapabilities(organisationCapabilities);
-  if ((role === "contributor" || role === "admin") && orgHasManageAccess(caps)) {
-    return FULL_PROGRAM_ACTIONS[role];
-  }
-
+  void _organisationCapabilities;
+  if (role === "super_admin") return SUPER_ADMIN_ACTIONS;
+  if (role === "contributor" || role === "admin") return PARTNER_ACTIONS;
   return [];
 }
 
@@ -44,18 +33,16 @@ export function hasProgramPermission(
   action: ProgramPermissionAction,
   organisationCapabilities?: string[],
 ): boolean {
-  return getEffectiveProgramPermissions(role, organisationCapabilities).includes(
-    action,
-  );
+  return getEffectiveProgramPermissions(role, organisationCapabilities).includes(action);
 }
 
 export type ProgramCapability = "create" | "edit" | "delete" | "upload";
 
 const CAPABILITY_ACTION: Record<ProgramCapability, ProgramPermissionAction> = {
-  create: "manage:programs",
-  edit: "manage:programs",
+  create: "create:programs",
+  edit: "edit:programs",
   delete: "delete:programs",
-  upload: "manage:programs",
+  upload: "upload:programs",
 };
 
 export function canProgram(
@@ -63,20 +50,14 @@ export function canProgram(
   capability: ProgramCapability,
   organisationCapabilities?: string[],
 ): boolean {
-  return hasProgramPermission(
-    role,
-    CAPABILITY_ACTION[capability],
-    organisationCapabilities,
-  );
+  return hasProgramPermission(role, CAPABILITY_ACTION[capability], organisationCapabilities);
 }
 
-/** True when the user may open My Programmes (manage org grant). */
+/** True when the user may open My Programmes. The list is empty until the agency assigns a programme. */
 export function canAccessPrograms(
   role: UserRole,
-  organisationCapabilities?: string[],
+  _organisationCapabilities?: string[],
 ): boolean {
-  if (role === "super_admin") return true;
-  if (role !== "contributor" && role !== "admin") return false;
-  const caps = orgCapabilities(organisationCapabilities);
-  return orgHasManageAccess(caps);
+  void _organisationCapabilities;
+  return role === "super_admin" || role === "contributor" || role === "admin";
 }

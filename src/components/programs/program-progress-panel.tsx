@@ -4,13 +4,6 @@ import { useState } from "react";
 import { Loader2, Save, TrendingUp, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useUpdateProgramProgress } from "@/lib/hooks/usePrograms";
 import type { Program } from "@/types";
 import { LgaCoverageChecklist } from "@/components/programs/lga-coverage-checklist";
@@ -72,11 +65,6 @@ export function ProgramProgressPanel({
   const [coveredLgas, setCoveredLgas] = useState<string[]>(
     programme.coveredLgas ?? [],
   );
-  const [status, setStatus] = useState<"active" | "completed" | "suspended">(
-    programme.rawStatus === "completed" || programme.rawStatus === "suspended"
-      ? programme.rawStatus
-      : "active",
-  );
 
   const targetLgas = programme.targetLgas ?? [];
   const lgaCounts = lgaCoverageCounts({ ...programme, coveredLgas });
@@ -93,7 +81,6 @@ export function ProgramProgressPanel({
         data: {
           coveredLgas: showLga ? coveredLgas : undefined,
           reachCount: showOutcome ? parseOptionalInt(reachCount) : undefined,
-          status: programme.rawStatus === "archived" ? undefined : status,
         },
       });
       toast.success("Programme progress updated");
@@ -157,25 +144,6 @@ export function ProgramProgressPanel({
               Target: {programme.targetCount.toLocaleString()}
             </p>
           )}
-        </div>
-      )}
-
-      {programme.rawStatus !== "archived" && (
-        <div>
-          <label className="text-sm font-medium">Status</label>
-          <Select
-            value={status}
-            onValueChange={(v) => setStatus(v as "active" | "completed" | "suspended")}
-          >
-            <SelectTrigger className="mt-1.5">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-              <SelectItem value="suspended">Suspended</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
       )}
 

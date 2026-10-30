@@ -28,6 +28,7 @@ interface ProgrammeApiPayload {
   start_date: string | null;
   end_date: string | null;
   development_partner_id: string | null;
+  partners?: Array<{ id: string; name: string; slug: string }>;
   manager_id: string | null;
   target_lgas: string[] | null;
   covered_lgas: string[] | null;
@@ -107,6 +108,7 @@ function mapProgramme(raw: ProgrammeApiPayload): Program {
     activeDays: daysActiveSince(raw.start_date ?? raw.created_at),
     lgasCovered: raw.lgas_covered_count ?? coveredLgas.length,
     developmentPartnerId: raw.development_partner_id ?? undefined,
+    partners: raw.partners ?? [],
     updatedAt: raw.updated_at,
   };
 }

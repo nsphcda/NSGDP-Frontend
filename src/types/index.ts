@@ -260,6 +260,8 @@ export interface Program {
   /** Owning organisation (data source / programme owner) */
   developmentPartnerId?: string;
   organisationName?: string;
+  /** Development partners assigned to run the programme */
+  partners?: Array<{ id: string; name: string; slug: string }>;
   updatedAt?: string;
   /** Reports are only visible when completionPercent === 100 */
   reports?: ProgramReport[];
