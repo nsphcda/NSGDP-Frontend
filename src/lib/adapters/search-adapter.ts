@@ -7,8 +7,8 @@ import type { Dataset, DevelopmentPartner } from '@/types';
 /** Shape of the `metadata` object search.service.ts attaches to a dataset hit */
 interface SearchDatasetMetadata {
   category_id?: string | null;
-  organisation_id?: string | null;
-  organisation?: { name: string; slug: string; logoUrl?: string | null };
+  development_partner_id?: string | null;
+  developmentPartner?: { name: string; slug: string; logoUrl?: string | null };
   visibility?: DatasetVisibility;
   status?: DatasetStatus;
   created_at?: string;
@@ -49,7 +49,7 @@ export function adaptSearchResultToDataset(result: BackendSearchResult): Dataset
     slug: result.slug ?? result.id,
     description: result.description ?? '',
     category_id: m.category_id ?? null,
-    organisation_id: m.organisation_id ?? null,
+    development_partner_id: m.development_partner_id ?? null,
     owner_id: '',
     format: m.format ?? 'other',
     visibility: m.visibility ?? 'public',
@@ -90,13 +90,13 @@ export function adaptSearchResultToDataset(result: BackendSearchResult): Dataset
     published_at: null,
   };
 
-  const organisations: BackendDevelopmentPartner[] | undefined = m.organisation
+  const organisations: BackendDevelopmentPartner[] | undefined = m.developmentPartner
     ? [
         {
-          id: m.organisation_id ?? '',
-          slug: m.organisation.slug,
-          name: m.organisation.name,
-          logoUrl: m.organisation.logoUrl ?? undefined,
+          id: m.development_partner_id ?? '',
+          slug: m.developmentPartner.slug,
+          name: m.developmentPartner.name,
+          logoUrl: m.developmentPartner.logoUrl ?? undefined,
         } as BackendDevelopmentPartner,
       ]
     : undefined;

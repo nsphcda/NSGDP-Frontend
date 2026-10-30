@@ -10,7 +10,7 @@ interface ApiResponse<T> {
 }
 
 export interface BackendSearchResult {
-  type: 'dataset' | 'development-partner' | 'user';
+  type: 'dataset' | 'development_partner' | 'user';
   id: string;
   title: string;
   description?: string;
@@ -42,7 +42,7 @@ export async function searchAll(
       q: query,
       page,
       limit,
-      types: 'dataset,development-partner',
+      types: 'dataset,development_partner',
       catalogue: true,
     },
   });

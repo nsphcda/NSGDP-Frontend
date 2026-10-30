@@ -55,7 +55,7 @@ interface DocumentApiPayload {
   mime_type: string | null;
   version: string | null;
   author: string | null;
-  organisation_id: string | null;
+  development_partner_id: string | null;
   programme_id: string | null;
   tags: string[] | null;
   download_count: number;

@@ -39,7 +39,7 @@ export interface Dataset {
   slug: string;
   description: string;
   category_id: string | null;
-  organisation_id: string | null;
+  development_partner_id: string | null;
   owner_id: string;
   format: DatasetFormat;
   visibility: DatasetVisibility;
