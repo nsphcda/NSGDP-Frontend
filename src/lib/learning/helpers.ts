@@ -134,7 +134,7 @@ export function searchLearning(
     .map((x) => x.g);
 
   const videos = content.videos.filter(
-    (v) => scoreText(`${v.title} ${v.description} ${v.chapters.map((c) => c.label).join(" ")}`, tokens) > 0,
+    (v) => scoreText(`${v.title} ${v.description} ${(v.chapters ?? []).map((c) => c.label).join(" ")}`, tokens) > 0,
   );
   const glossary = content.glossary.filter((t) => scoreText(`${t.term} ${t.definition}`, tokens) > 0);
   const faqs = content.faqs.filter((f) => scoreText(`${f.question} ${f.answer}`, tokens) > 0);

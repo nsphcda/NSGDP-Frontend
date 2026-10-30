@@ -89,7 +89,8 @@ export interface VideoTutorial {
   duration: string;
   category: GuideCategory;
   guide?: string;
-  chapters: Array<{ time: string; label: string }>;
+  /** No longer shown or edited; kept so older content still loads. */
+  chapters?: Array<{ time: string; label: string }>;
   featured?: boolean;
   status: "available" | "coming-soon";
   /** Uploaded recording (API path) and its poster; or an external player link. */

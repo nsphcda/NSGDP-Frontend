@@ -20,7 +20,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { GUIDE_CATEGORIES } from "@/lib/learning/guides";
-import { mediaUrl, useLearningContent } from "@/lib/learning/content";
+import { useLearningContent } from "@/lib/learning/content";
+import { StepImage } from "./step-image";
 import { AUDIENCE_LABEL, learningHref, resolveLearningHref } from "@/lib/learning/helpers";
 import { useLearningProgress } from "@/lib/learning/progress";
 import type { Guide, GuideCallout } from "@/lib/learning/types";
@@ -163,20 +164,7 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
                     ) : null}
 
                     {step.image ? (
-                      <figure className="mt-3">
-                        {/* eslint-disable-next-line @next/next/no-img-element -- API-served media with a signed redirect; next/image would proxy it */}
-                        <img
-                          src={mediaUrl(step.image.url)}
-                          alt={step.image.alt}
-                          loading="lazy"
-                          className="w-full rounded-xl border"
-                        />
-                        {step.image.caption ? (
-                          <figcaption className="mt-1.5 text-xs text-muted-foreground">
-                            {step.image.caption}
-                          </figcaption>
-                        ) : null}
-                      </figure>
+                      <StepImage image={step.image} />
                     ) : step.screenshot ? (
                       <figure className="mt-3">
                         <div className="flex aspect-[16/7] items-center justify-center rounded-xl border border-dashed bg-muted/30">

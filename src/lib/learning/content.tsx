@@ -54,6 +54,11 @@ export async function fetchLearningContent(): Promise<LearningContent> {
   return res.data.data;
 }
 
+/** Videos without a recording are not shown: readers only see videos they can watch. */
+function withPlayableVideos(content: LearningContent): LearningContent {
+  return { ...content, videos: content.videos.filter((v) => v.status === "available") };
+}
+
 interface LearningContentState {
   content: LearningContent;
   isLoading: boolean;
@@ -73,7 +78,7 @@ export function LearningContentProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<LearningContentState>(
     () => ({
-      content: query.data ?? STATIC_CONTENT,
+      content: withPlayableVideos(query.data ?? STATIC_CONTENT),
       isLoading: query.isLoading,
       isFallback: !query.data && query.isError,
     }),
