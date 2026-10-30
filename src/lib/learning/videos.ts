@@ -11,7 +11,7 @@ export const VIDEOS: VideoTutorial[] = [
     category: "getting-started",
     guide: "welcome-to-the-portal",
     featured: true,
-    status: "available",
+    status: "coming-soon",
     chapters: [
       { time: "0:00", label: "What the portal is for" },
       { time: "2:10", label: "The public site" },
@@ -26,7 +26,7 @@ export const VIDEOS: VideoTutorial[] = [
     duration: "3:15",
     category: "getting-started",
     guide: "accept-your-invite",
-    status: "available",
+    status: "coming-soon",
     chapters: [
       { time: "0:00", label: "The invite email" },
       { time: "1:05", label: "Consent agreement" },
@@ -42,7 +42,7 @@ export const VIDEOS: VideoTutorial[] = [
     category: "contribute",
     guide: "upload-your-first-dataset",
     featured: true,
-    status: "available",
+    status: "coming-soon",
     chapters: [
       { time: "0:00", label: "Before you start" },
       { time: "1:30", label: "Basic info and tags" },
@@ -59,7 +59,7 @@ export const VIDEOS: VideoTutorial[] = [
     duration: "11:05",
     category: "contribute",
     guide: "metadata-field-guide",
-    status: "available",
+    status: "coming-soon",
     chapters: [
       { time: "0:00", label: "Titles and descriptions" },
       { time: "3:20", label: "Methodology and limitations" },
@@ -73,7 +73,7 @@ export const VIDEOS: VideoTutorial[] = [
     duration: "7:30",
     category: "contribute",
     guide: "after-you-submit",
-    status: "available",
+    status: "coming-soon",
     chapters: [
       { time: "0:00", label: "The pipeline" },
       { time: "2:40", label: "The 8-dimension QA checklist" },
@@ -87,7 +87,7 @@ export const VIDEOS: VideoTutorial[] = [
     duration: "8:10",
     category: "manage",
     guide: "invite-your-team",
-    status: "available",
+    status: "coming-soon",
     chapters: [
       { time: "0:00", label: "Inviting members" },
       { time: "3:00", label: "Roles" },
@@ -102,7 +102,7 @@ export const VIDEOS: VideoTutorial[] = [
     duration: "16:45",
     category: "explore",
     guide: "read-the-analytics-dashboard",
-    status: "available",
+    status: "coming-soon",
     chapters: [
       { time: "0:00", label: "Choosing an indicator" },
       { time: "4:20", label: "Trends and seasonality" },
@@ -117,7 +117,7 @@ export const VIDEOS: VideoTutorial[] = [
     duration: "10:25",
     category: "explore",
     guide: "use-the-maps",
-    status: "available",
+    status: "coming-soon",
     chapters: [
       { time: "0:00", label: "Coverage map" },
       { time: "2:30", label: "Population, facility, disease layers" },

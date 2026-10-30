@@ -7,16 +7,22 @@ import { Button } from "@/components/ui/button";
 import { METRIC_TONE } from "@/components/data/metric-card";
 import { cn } from "@/lib/utils";
 import { AUDIENCE_LABEL } from "@/lib/learning/helpers";
-import { TEMPLATES } from "@/lib/learning/support";
+import { mediaUrl, useLearningContent } from "@/lib/learning/content";
 import { downloadTemplate } from "@/lib/learning/templates";
 import type { AudienceFilter } from "@/lib/learning/types";
 import { EmptyNote } from "./learning-primitives";
 
 export function TemplatesTab({ audience }: { audience: AudienceFilter }) {
   const [downloaded, setDownloaded] = useState<string | null>(null);
-  const list = TEMPLATES.filter(
+  const { content } = useLearningContent();
+  const TEMPLATES = content.templates;
+  const audienceMatches = TEMPLATES.filter(
     (t) => audience === "all" || t.audience.includes(audience),
   );
+  // Templates are blank starter files, so an audience with none of its own
+  // (e.g. Public) still sees all of them, each badged with who it is for.
+  const showingAll = audienceMatches.length === 0;
+  const list = showingAll ? TEMPLATES : audienceMatches;
 
   return (
     <div className="space-y-4">
@@ -24,9 +30,14 @@ export function TemplatesTab({ audience }: { audience: AudienceFilter }) {
         Starter files that match what the portal expects. They download straight to your device, so
         you can fill them in before you start an upload.
       </p>
+      {showingAll && list.length > 0 ? (
+        <p className="text-[13px] text-muted-foreground">
+          No templates are written for this audience. Showing all templates.
+        </p>
+      ) : null}
 
       {list.length === 0 ? (
-        <EmptyNote>No templates for this audience.</EmptyNote>
+        <EmptyNote>No templates available.</EmptyNote>
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
           {list.map((t) => {
@@ -50,11 +61,11 @@ export function TemplatesTab({ audience }: { audience: AudienceFilter }) {
                 </div>
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t pt-3">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <Badge variant="secondary" className="h-5 text-[11px]">
+                    <Badge variant="secondary" className="h-5 text-xs">
                       {t.format}
                     </Badge>
                     {t.audience.map((a) => (
-                      <Badge key={a} variant="outline" className="h-5 text-[11px] font-normal">
+                      <Badge key={a} variant="outline" className="h-5 text-xs font-normal">
                         {AUDIENCE_LABEL[a]}
                       </Badge>
                     ))}
@@ -65,7 +76,12 @@ export function TemplatesTab({ audience }: { audience: AudienceFilter }) {
                     variant="outline"
                     className="h-9 gap-2"
                     onClick={() => {
-                      downloadTemplate(t);
+                      if (t.fileUrl) {
+                        // Admin-uploaded file: the API redirects to a signed URL.
+                        window.open(mediaUrl(t.fileUrl), "_blank", "noopener");
+                      } else {
+                        downloadTemplate(t);
+                      }
                       setDownloaded(t.id);
                     }}
                   >

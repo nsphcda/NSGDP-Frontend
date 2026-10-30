@@ -48,55 +48,8 @@ export const TEMPLATES: TemplateAsset[] = [
   },
 ];
 
-export const TRAINING_SESSIONS: TrainingSession[] = [
-  {
-    id: "ts-onboarding",
-    title: "Contributor onboarding",
-    description:
-      "A live walk-through of the upload wizard using your own sample file. Bring a CSV.",
-    date: "2026-10-08",
-    time: "10:00 – 12:00 WAT",
-    format: "Virtual",
-    location: "Video call — link sent on registration",
-    audience: ["contributor", "partner_admin"],
-    seatsLeft: 12,
-  },
-  {
-    id: "ts-metadata",
-    title: "Metadata clinic",
-    description:
-      "Bring a draft dataset and get direct feedback on your metadata from the data team.",
-    date: "2026-10-15",
-    time: "14:00 – 15:30 WAT",
-    format: "Virtual",
-    location: "Video call — link sent on registration",
-    audience: ["contributor", "partner_admin"],
-    seatsLeft: 8,
-  },
-  {
-    id: "ts-analytics",
-    title: "Analytics and maps workshop",
-    description:
-      "Hands-on with the analytics dashboard and all four maps, followed by an introduction to QGIS.",
-    date: "2026-10-22",
-    time: "09:00 – 16:00 WAT",
-    format: "In person",
-    location: "NSPHCDA, Minna",
-    audience: ["viewer", "contributor", "partner_admin"],
-    seatsLeft: 20,
-  },
-  {
-    id: "ts-admin",
-    title: "Partner admin office hours",
-    description:
-      "Open drop-in for questions on team management, access requests, and programmes.",
-    date: "2026-10-29",
-    time: "11:00 – 12:00 WAT",
-    format: "Virtual",
-    location: "Video call — link sent on registration",
-    audience: ["partner_admin"],
-  },
-];
+// Removed: no sign-up endpoint exists. Re-add sessions once registration is real.
+export const TRAINING_SESSIONS: TrainingSession[] = [];
 
 export const PLATFORM_UPDATES: PlatformUpdate[] = [
   {

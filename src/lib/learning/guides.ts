@@ -64,7 +64,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "See who is involved after you submit",
-        body: "Nothing you upload goes live immediately. Reviewers check quality first, a separate approver signs off, and a publisher releases it to the catalogue. You are notified at each stage.",
+        body: "Nothing you upload goes live immediately. Reviewers check quality first, a separate approver signs off, and a publisher releases it to the catalogue. You are notified when it is approved, published, rejected, or sent back for revisions.",
         tip: "Approved does not mean public — publishing is a separate step.",
       },
       {
@@ -73,7 +73,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Find help any time",
-        body: "The green assistant button (bottom-right) answers how-to questions instantly and looks up live data for the rest. This learning hub, the FAQ, and the contact form cover everything else.",
+        body: "The assistant chat button (bottom-right) answers how-to questions instantly and looks up live data for the rest. This learning hub, the FAQ, and the contact form cover everything else.",
       },
     ],
     callouts: [
@@ -119,7 +119,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Sign in and check your profile",
-        body: "After accepting, sign in and open Profile to confirm your details. Email and organisation membership are managed by admins — contact them if either needs to change.",
+        body: "After accepting, sign in and open Profile to confirm your details.",
         link: { label: "Open profile", href: "/profile" },
       },
       {
@@ -149,12 +149,12 @@ export const GUIDES: Guide[] = [
     steps: [
       {
         title: "Read the summary cards",
-        body: "The large card shows how many datasets your partner owns across every status. Smaller cards show datasets pending review, team members, your own contributions, and your downloads.",
+        body: "The large card shows your partner's datasets. Smaller cards show datasets pending review, team members, your own contributions, and your downloads.",
         screenshot: "Dashboard hero metric card and summary cards",
       },
       {
         title: "Use the quick-action chips",
-        body: "Chips under the welcome message take you straight to Browse data, Upload, Datasets, Programmes, Documents, and Team. They scroll sideways on small screens.",
+        body: "Chips under the welcome message take you straight to Browse data, Downloads, Upload, Datasets, Programmes, Documents, Team, and Learn.",
       },
       {
         title: "Watch for attention banners",
@@ -163,12 +163,12 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Check notifications",
-        body: "The Notifications panel lists review outcomes, invites, and system announcements. Unread items are bold with a dot; the bell in the top bar shows the count everywhere.",
+        body: "The Notifications page lists review outcomes and system announcements. The bell in the top bar gives quick access from any page.",
         link: { label: "Open notifications", href: "/notifications" },
       },
       {
         title: "Use the sidebar",
-        body: "Datasets, Documents, Programmes, and Dev Partner sit under Workspace. Downloads, Notifications, Learning, and Profile sit under Account. The Upload dataset button stays pinned at the bottom.",
+        body: "The sidebar links to Dashboard, Learning hub, Datasets, Documents, Programmes, Dev Partner, Downloads, Notifications, and Profile, with an Upload dataset button.",
       },
     ],
     cta: { label: "Open your dashboard", href: "/dashboard" },
@@ -195,8 +195,8 @@ export const GUIDES: Guide[] = [
     steps: [
       {
         title: "Choose a supported format",
-        body: "Tabular data: CSV or Excel (.xlsx/.xls). Structured exports: JSON. Spatial data: GeoJSON, Shapefile (zipped), GeoPackage, or KML. Reference documents can be PDF. You can attach more than one file to a dataset.",
-        tip: "Health data tables belong in Upload dataset. SOPs and reports belong in Documents.",
+        body: "Tabular data: CSV or Excel (.xlsx/.xls). Structured exports: JSON. Spatial data: GeoJSON, GeoPackage (.gpkg), or KML. You can attach more than one file to a dataset.",
+        tip: "Health data tables belong in Upload dataset. PDFs, SOPs, and reports belong in Documents.",
       },
       {
         title: "Keep tables tidy",
@@ -210,7 +210,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Check spatial data",
-        body: "Use WGS 84 (EPSG:4326). Points must fall inside Niger State. Polygons should close cleanly without gaps or overlaps. Reviewers check this in the Geo-References step of QA.",
+        body: "Reviewers check spatial files in the Geo-References step of QA. Open the file in a GIS tool before you upload to confirm the layers load cleanly.",
       },
       {
         title: "Bringing in DHIS2 data",
@@ -381,7 +381,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Change visibility later",
-        body: "Visibility can be adjusted after approval without reverting the review. NSPHCDA may also reclassify a dataset if there is a data-protection concern and will try to notify you.",
+        body: "You can change a dataset's visibility from Edit on the dataset page.",
       },
       {
         title: "Standard data licence",
@@ -411,7 +411,7 @@ export const GUIDES: Guide[] = [
     steps: [
       {
         title: "Pending",
-        body: "You submitted. The dataset is in the review queue for your scope (Development Partners or Agency). Reviewers are notified. You can view it but not edit it while it waits.",
+        body: "You submitted. The dataset is in the review queue. You can view it but not edit it while it waits.",
       },
       {
         title: "Under review",
@@ -432,14 +432,14 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Side paths",
-        body: "Reviewers can request revisions (the dataset returns to you) or reject it (final). Approvers can also send a validated dataset back to review — that is internal and you are not asked to do anything.",
+        body: "Reviewers can request revisions (the dataset returns to you) or reject it (final).",
       },
     ],
     callouts: [
       {
         tone: "info",
         title: "You are told at every step",
-        body: "Status changes appear in Notifications and by email. You never need to keep checking the queue.",
+        body: "Approvals, publication, rejections, and revision requests appear in Notifications. You do not need to keep checking the queue.",
       },
     ],
     cta: { label: "Check your dataset statuses", href: "/datasets" },
@@ -464,7 +464,7 @@ export const GUIDES: Guide[] = [
     steps: [
       {
         title: "Open the notification",
-        body: "A revision request arrives as a notification and an email with the reviewer's comment. Open the dataset from the notification to see the full feedback.",
+        body: "A revision request arrives as a notification with the reviewer's comment. Open the dataset from the notification to see the full feedback.",
         link: { label: "Open notifications", href: "/notifications" },
       },
       {
@@ -517,12 +517,12 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Upload against the same dataset",
-        body: "Add the file to the existing dataset rather than creating a new one. Each upload becomes a version; the history is kept and visible on the dataset page.",
-        screenshot: "Version history panel with three versions listed",
+        body: "Open the dataset, choose Edit, and add the file in the upload section. It adds to the dataset and does not replace existing files. Versions are listed in the version history in the data portal's dataset detail window.",
+        screenshot: "Data portal dataset detail window showing the version history panel",
       },
       {
         title: "Resubmit for review",
-        body: "A changed dataset goes back through review before the new data goes live. Watch Notifications for the outcome.",
+        body: "Use Submit for review on the dataset page and watch Notifications for the outcome.",
       },
       {
         title: "Set reminders",
@@ -559,7 +559,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Under review, approved, or published",
-        body: "A super admin must approve the withdrawal. Explain why (at least 10 characters) and send the request. The button changes to Request pending so you cannot send duplicates.",
+        body: "A super admin must approve the withdrawal. Explain why (at least 10 characters) and send the request. The button changes to Retract request pending so you cannot send duplicates.",
         screenshot: "Retract dialog asking for a reason",
       },
       {
@@ -702,11 +702,11 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Attach reports",
-        body: "Upload monitoring reports and evaluation briefs against the programme. They are submitted for admin review and appear on the programme page once approved.",
+        body: "Upload monitoring reports and evaluation briefs against the programme from its page.",
       },
       {
         title: "Close it out",
-        body: "Set the status to Completed when the programme ends. Completed programmes keep their final reports available for download.",
+        body: "Set the status to Completed when the programme ends.",
       },
     ],
     callouts: [
@@ -786,7 +786,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Sort results",
-        body: "Order by Most Recent, Most Downloaded, or Alphabetical to surface what matters. Your page and sort choice stay in the URL so you can share the view.",
+        body: "Order by Most Recent, Most Downloaded, or Alphabetical to surface what matters. Your sort choice stays in the URL so you can share the view.",
       },
       {
         title: "Open a dataset",
@@ -795,7 +795,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Download",
-        body: "Downloading requires a free account. Log in, then use Download dataset or Download all files as ZIP. Restricted datasets need an approved access request first.",
+        body: "Log in, then use the Download button or Download all files for a ZIP. Restricted datasets need an approved access request first.",
       },
       {
         title: "Bulk download",
@@ -844,7 +844,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Compare LGAs",
-        body: "The top-10 chart and the sortable LGA table rank areas. Incidence per 1,000 appears only for case-based measures and only where a population denominator exists. Rows above the threshold are tinted.",
+        body: "The top-10 chart and the sortable LGA table rank areas. Incidence per 1,000 appears only for case-based measures and only where a population denominator exists.",
         tip: "Click a table header to sort; click again to reverse.",
       },
       {
@@ -901,7 +901,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Facility Finder",
-        body: "Search the registry of more than 2,000 health facilities by name, and filter by LGA, ward, and level (Primary, Secondary, Tertiary). Markers cluster when zoomed out.",
+        body: "Search the registry of health facilities by name, and filter by LGA, ward, and level (Primary, Secondary, Tertiary). Markers cluster when zoomed out.",
         link: { label: "Open facility finder", href: "/facilities" },
       },
       {
@@ -911,7 +911,7 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Use the controls",
-        body: "The filter panel and legend can be collapsed to free up space on mobile. Colours follow the legend, and the reset button clears all filters.",
+        body: "The legend can be collapsed to free up space. Colours follow the legend, and the Reset button clears all filters.",
       },
     ],
     cta: { label: "Open a map", href: "/map" },
@@ -936,7 +936,7 @@ export const GUIDES: Guide[] = [
     steps: [
       {
         title: "Open the assistant",
-        body: "Click the green chat button at the bottom-right of any page. Quick-question chips get you started.",
+        body: "Click the chat button at the bottom-right of any page. Quick-question chips get you started.",
       },
       {
         title: "Ask how-to questions",
@@ -944,16 +944,16 @@ export const GUIDES: Guide[] = [
       },
       {
         title: "Ask data questions",
-        body: "Ask for datasets, facilities in an LGA, indicator trends, or LGA burden. It uses live portal tools and quotes the indicator and year it used.",
+        body: "Ask for datasets, facilities in an LGA, indicator trends, or LGA burden. It uses live portal data.",
         tip: "Be specific: Which LGAs had the highest malaria cases in 2025?",
       },
       {
         title: "Verify with source links",
-        body: "Answers end with Open: links to the analytics view or dataset it used. Follow them to check the numbers yourself.",
+        body: "Where available, answers include links to the analytics view or dataset used. Follow them to check the numbers yourself.",
       },
       {
         title: "Know the limits",
-        body: "Guests see published public data only; signed-in partner users can also see their own datasets. It never invents figures and never asks for passwords or patient records.",
+        body: "Check important figures against the linked analytics or dataset page before you rely on them.",
       },
     ],
     related: ["find-and-download-data", "read-the-analytics-dashboard"],

@@ -41,8 +41,10 @@ export interface GuideStep {
   title: string;
   body: string;
   tip?: string;
-  /** Caption for a screenshot placeholder shown under the step. */
+  /** Caption for a screenshot placeholder shown under the step (used when no image is uploaded). */
   screenshot?: string;
+  /** Uploaded screenshot; `url` is an API path, resolve it with mediaUrl(). */
+  image?: { url: string; alt: string; caption?: string };
   link?: { label: string; href: string };
 }
 
@@ -90,6 +92,10 @@ export interface VideoTutorial {
   chapters: Array<{ time: string; label: string }>;
   featured?: boolean;
   status: "available" | "coming-soon";
+  /** Uploaded recording (API path) and its poster; or an external player link. */
+  src?: string;
+  posterUrl?: string;
+  externalUrl?: string;
 }
 
 export interface GlossaryTerm {
@@ -133,6 +139,9 @@ export interface TemplateAsset {
   format: "CSV" | "TXT";
   filename: string;
   audience: LearningAudience[];
+  /** Admin-uploaded file (API path). When absent the built-in generator for `generatorKey` is used. */
+  fileUrl?: string;
+  generatorKey?: string;
 }
 
 export interface LearningProgressState {

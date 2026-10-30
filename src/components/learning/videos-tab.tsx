@@ -15,9 +15,9 @@ import {
 import { FilterChip } from "@/components/dashboard/portal-dashboard-ui";
 import { METRIC_TONE } from "@/components/data/metric-card";
 import { cn } from "@/lib/utils";
-import { GUIDE_CATEGORIES, getGuide } from "@/lib/learning/guides";
+import { GUIDE_CATEGORIES } from "@/lib/learning/guides";
+import { mediaUrl, useLearningContent } from "@/lib/learning/content";
 import { learningHref } from "@/lib/learning/helpers";
-import { VIDEOS } from "@/lib/learning/videos";
 import type { GuideCategory, VideoTutorial } from "@/lib/learning/types";
 import { CATEGORY_TONE } from "./learning-icons";
 
@@ -45,11 +45,11 @@ function Thumbnail({ video, large = false }: { video: VideoTutorial; large?: boo
       >
         <Play className={cn("fill-current", large ? "size-6" : "size-4", tone.icon)} aria-hidden />
       </span>
-      <span className="absolute bottom-2 right-2 rounded-md bg-foreground/80 px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-background">
+      <span className="absolute bottom-2 right-2 rounded-md bg-foreground/80 px-1.5 py-0.5 text-xs font-medium tabular-nums text-background">
         {video.duration}
       </span>
       {soon ? (
-        <Badge variant="secondary" className="absolute left-2 top-2 h-5 text-[11px]">
+        <Badge variant="secondary" className="absolute left-2 top-2 h-5 text-xs">
           Coming soon
         </Badge>
       ) : null}
@@ -61,10 +61,14 @@ export function VideosTab({ basePath }: { basePath: string }) {
   const [category, setCategory] = useState<GuideCategory | "all">("all");
   const [active, setActive] = useState<VideoTutorial | null>(null);
 
+  const { content } = useLearningContent();
+  const VIDEOS = content.videos;
   const list = VIDEOS.filter((v) => category === "all" || v.category === category);
   const featured = category === "all" ? VIDEOS.filter((v) => v.featured) : [];
   const rest = category === "all" ? list.filter((v) => !v.featured) : list;
-  const activeGuide = active?.guide ? getGuide(active.guide) : undefined;
+  const activeGuide = active?.guide
+    ? content.guides.find((g) => g.slug === active.guide)
+    : undefined;
 
   const VideoCard = ({ video }: { video: VideoTutorial }) => (
     <button
@@ -74,7 +78,7 @@ export function VideosTab({ basePath }: { basePath: string }) {
     >
       <Thumbnail video={video} />
       <div className="mt-3 min-w-0">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           {GUIDE_CATEGORIES.find((c) => c.id === video.category)?.label}
         </p>
         <h3 className="mt-1 text-sm font-semibold leading-5">{video.title}</h3>
@@ -137,6 +141,25 @@ export function VideosTab({ basePath }: { basePath: string }) {
                 <DialogDescription>{active.description}</DialogDescription>
               </DialogHeader>
 
+              {active.status === "available" && active.src ? (
+                <video
+                  key={active.id}
+                  controls
+                  preload="metadata"
+                  poster={active.posterUrl ? mediaUrl(active.posterUrl) : undefined}
+                  src={mediaUrl(active.src)}
+                  className="aspect-video w-full rounded-xl border bg-black"
+                />
+              ) : active.status === "available" && active.externalUrl ? (
+                <a
+                  href={active.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex aspect-video items-center justify-center rounded-xl border bg-muted/40 text-sm font-medium text-primary hover:underline"
+                >
+                  Watch this video
+                </a>
+              ) : (
               <div className="relative flex aspect-video items-center justify-center rounded-xl border bg-muted/40">
                 <div className="text-center">
                   <div className="mx-auto flex size-14 items-center justify-center rounded-full border bg-background shadow-sm">
@@ -149,14 +172,15 @@ export function VideosTab({ basePath }: { basePath: string }) {
                     The recording will play here once published.
                   </p>
                 </div>
-                <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-md bg-foreground/80 px-1.5 py-0.5 text-[11px] tabular-nums text-background">
+                <span className="absolute bottom-2 right-2 inline-flex items-center gap-1 rounded-md bg-foreground/80 px-1.5 py-0.5 text-xs tabular-nums text-background">
                   <Clock className="size-3" aria-hidden />
                   {active.duration}
                 </span>
               </div>
+              )}
 
               <div>
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   Chapters
                 </p>
                 <ul className="divide-y rounded-xl border">

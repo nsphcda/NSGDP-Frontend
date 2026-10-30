@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle2, Circle } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { METRIC_TONE } from "@/components/data/metric-card";
 import { cn } from "@/lib/utils";
-import { getGuide } from "@/lib/learning/guides";
+import { useLearningContent } from "@/lib/learning/content";
 import {
   AUDIENCE_LABEL,
   formatMinutes,
@@ -14,7 +14,6 @@ import {
   pathProgress,
   remainingMinutes,
 } from "@/lib/learning/helpers";
-import { LEARNING_PATHS } from "@/lib/learning/paths";
 import type { AudienceFilter } from "@/lib/learning/types";
 import { LEARNING_ICONS } from "./learning-icons";
 import { ProgressBar } from "./learning-primitives";
@@ -28,7 +27,8 @@ export function PathsTab({
   basePath: string;
   completed: string[];
 }) {
-  const paths = LEARNING_PATHS.filter((p) => audience === "all" || p.audience === audience);
+  const { content } = useLearningContent();
+  const paths = content.paths.filter((p) => audience === "all" || p.audience === audience);
 
   return (
     <div className="space-y-4">
@@ -41,8 +41,8 @@ export function PathsTab({
         const Icon = LEARNING_ICONS[path.icon];
         const tone = METRIC_TONE.primary;
         const progress = pathProgress(path, completed);
-        const next = nextGuideInPath(path, completed);
-        const left = remainingMinutes(path, completed);
+        const next = nextGuideInPath(path, completed, content.guides);
+        const left = remainingMinutes(path, completed, content.guides);
 
         return (
           <section key={path.id} className="rounded-2xl border bg-card">
@@ -57,7 +57,7 @@ export function PathsTab({
                   <Icon className={cn("size-5", tone.icon)} aria-hidden />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     {AUDIENCE_LABEL[path.audience]}
                   </p>
                   <h2 className="text-base font-semibold leading-6">{path.title}</h2>
@@ -90,7 +90,7 @@ export function PathsTab({
                   </p>
                 )}
                 {left > 0 ? (
-                  <p className="text-center text-[11px] text-muted-foreground">
+                  <p className="text-center text-xs text-muted-foreground">
                     About {formatMinutes(left)} left
                   </p>
                 ) : null}
@@ -99,7 +99,7 @@ export function PathsTab({
 
             <ol className="divide-y">
               {path.guides.map((slug, i) => {
-                const guide = getGuide(slug);
+                const guide = content.guides.find((g) => g.slug === slug);
                 if (!guide) return null;
                 const done = completed.includes(slug);
                 return (

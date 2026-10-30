@@ -14,7 +14,8 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { GUIDE_CATEGORIES, GUIDES } from "@/lib/learning/guides";
+import { GUIDE_CATEGORIES } from "@/lib/learning/guides";
+import { LearningContentProvider, useLearningContent } from "@/lib/learning/content";
 import {
   guideMatchesAudience,
   learningHref,
@@ -74,7 +75,11 @@ function SearchResults({
   progress: ReturnType<typeof useLearningProgress>;
   onClear: () => void;
 }) {
-  const results = useMemo(() => searchLearning(query, audience), [query, audience]);
+  const { content } = useLearningContent();
+  const results = useMemo(
+    () => searchLearning(content, query, audience),
+    [content, query, audience],
+  );
 
   return (
     <div className="space-y-6">
@@ -170,6 +175,7 @@ function LearningHubInner({ variant }: { variant: LearningVariant }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const progress = useLearningProgress();
+  const { content, isLoading } = useLearningContent();
 
   const [audienceOverride, setAudienceOverride] = useState<AudienceFilter | null>(null);
   const [query, setQuery] = useState("");
@@ -188,13 +194,15 @@ function LearningHubInner({ variant }: { variant: LearningVariant }) {
   };
 
   const audienceGuides = useMemo(
-    () => GUIDES.filter((g) => guideMatchesAudience(g, audience)),
-    [audience],
+    () => content.guides.filter((g) => guideMatchesAudience(g, audience)),
+    [content.guides, audience],
   );
 
-  const path = pathForAudience(audience);
-  const pathStats = pathProgress(path, progress.completed);
-  const nextGuide = nextGuideInPath(path, progress.completed);
+  const path = pathForAudience(content.paths, audience);
+  const pathStats = path
+    ? pathProgress(path, progress.completed)
+    : { done: 0, total: 0, percent: 0 };
+  const nextGuide = nextGuideInPath(path, progress.completed, content.guides);
 
   const searching = query.trim().length > 0;
 
@@ -215,6 +223,8 @@ function LearningHubInner({ variant }: { variant: LearningVariant }) {
           { id: "saved", label: "Saved", count: savedCount },
         ]
       : undefined;
+
+  if (isLoading) return <HubSkeleton />;
 
   return (
     <LearningShell
@@ -351,7 +361,9 @@ function HubSkeleton() {
 export function LearningHub({ variant }: { variant: LearningVariant }) {
   return (
     <Suspense fallback={<HubSkeleton />}>
-      <LearningHubInner variant={variant} />
+      <LearningContentProvider>
+        <LearningHubInner variant={variant} />
+      </LearningContentProvider>
     </Suspense>
   );
 }

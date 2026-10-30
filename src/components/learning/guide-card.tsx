@@ -40,7 +40,7 @@ export function GuideCard({
       <div className={cn("relative flex aspect-[4/3] items-center justify-center", tone.card)}>
         <Icon className={cn("size-11", tone.icon)} aria-hidden />
 
-        <span className="absolute left-2.5 top-2.5 rounded-full border bg-background/90 px-2 py-0.5 text-[11px] font-medium text-foreground shadow-sm">
+        <span className="absolute left-2.5 top-2.5 rounded-full border bg-background/90 px-2 py-0.5 text-xs font-medium text-foreground shadow-sm">
           {category?.label}
         </span>
 
@@ -49,7 +49,7 @@ export function GuideCard({
           onClick={() => onToggleBookmark(guide.slug)}
           aria-pressed={bookmarked}
           aria-label={bookmarked ? `Remove ${guide.title} from saved` : `Save ${guide.title}`}
-          className="absolute right-2.5 top-2.5 z-10 flex size-7 items-center justify-center rounded-full border bg-background/90 text-muted-foreground shadow-sm transition-colors hover:text-foreground"
+          className="absolute right-2.5 top-2.5 z-10 flex size-7 max-md:size-10 items-center justify-center rounded-full border bg-background/90 text-muted-foreground shadow-sm transition-colors hover:text-foreground"
         >
           {bookmarked ? (
             <BookmarkCheck className="size-3.5 text-primary" aria-hidden />

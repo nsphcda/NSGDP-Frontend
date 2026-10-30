@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { GuidePage } from "@/components/learning/guide-page";
-import { GUIDES, getGuide } from "@/lib/learning/guides";
+import { getGuideForMetadata } from "@/lib/learning/content-server";
 
-export function generateStaticParams() {
-  return GUIDES.map((g) => ({ slug: g.slug }));
-}
+// Guides are edited in the admin portal, so slugs are not known at build time.
+export const dynamicParams = true;
 
 export async function generateMetadata({
   params,
@@ -13,8 +11,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const guide = getGuide(slug);
-  return guide ? { title: guide.title, description: guide.summary } : { title: "Guide not found" };
+  const guide = await getGuideForMetadata(slug);
+  return guide ? { title: guide.title, description: guide.summary } : { title: "Learning guide" };
 }
 
 export default async function DashboardLearningGuidePage({
@@ -23,7 +21,5 @@ export default async function DashboardLearningGuidePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const guide = getGuide(slug);
-  if (!guide) notFound();
-  return <GuidePage guide={guide} variant="dashboard" />;
+  return <GuidePage slug={slug} variant="dashboard" />;
 }

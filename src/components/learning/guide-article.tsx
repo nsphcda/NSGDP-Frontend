@@ -19,9 +19,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { GUIDE_CATEGORIES, getGuide } from "@/lib/learning/guides";
+import { GUIDE_CATEGORIES } from "@/lib/learning/guides";
+import { mediaUrl, useLearningContent } from "@/lib/learning/content";
 import { AUDIENCE_LABEL, learningHref, resolveLearningHref } from "@/lib/learning/helpers";
-import { LEARNING_PATHS } from "@/lib/learning/paths";
 import { useLearningProgress } from "@/lib/learning/progress";
 import type { Guide, GuideCallout } from "@/lib/learning/types";
 import { GuideCard } from "./guide-card";
@@ -47,6 +47,8 @@ function formatUpdated(iso: string) {
 
 export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: string }) {
   const progress = useLearningProgress();
+  const { content } = useLearningContent();
+  const getGuide = (slug: string) => content.guides.find((g) => g.slug === slug);
   const done = progress.completed.includes(guide.slug);
   const saved = progress.bookmarks.includes(guide.slug);
   const vote = progress.feedback[guide.slug];
@@ -54,7 +56,7 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
   const category = GUIDE_CATEGORIES.find((c) => c.id === guide.category);
   const Icon = LEARNING_ICONS[guide.icon];
 
-  const path = LEARNING_PATHS.find((p) => p.guides.includes(guide.slug));
+  const path = content.paths.find((p) => p.guides.includes(guide.slug));
   const index = path ? path.guides.indexOf(guide.slug) : -1;
   const prev = path && index > 0 ? getGuide(path.guides[index - 1]) : undefined;
   const next = path && index >= 0 ? getGuide(path.guides[index + 1] ?? "") : undefined;
@@ -89,7 +91,7 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
                 <Icon className="size-6 text-primary" aria-hidden />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   {category?.label}
                 </p>
                 <h2 className="mt-1 text-xl font-bold tracking-tight sm:text-2xl">{guide.title}</h2>
@@ -102,7 +104,7 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
                   <span>{guide.level}</span>
                   <span>Updated {formatUpdated(guide.updated)}</span>
                   {guide.audience.map((a) => (
-                    <Badge key={a} variant="outline" className="h-5 text-[11px] font-normal">
+                    <Badge key={a} variant="outline" className="h-5 text-xs font-normal">
                       {AUDIENCE_LABEL[a]}
                     </Badge>
                   ))}
@@ -111,7 +113,7 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
             </div>
 
             <div className="mt-5 rounded-xl border bg-muted/20 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 What you&apos;ll be able to do
               </p>
               <ul className="mt-2 space-y-1.5">
@@ -160,7 +162,22 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
                       </p>
                     ) : null}
 
-                    {step.screenshot ? (
+                    {step.image ? (
+                      <figure className="mt-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element -- API-served media with a signed redirect; next/image would proxy it */}
+                        <img
+                          src={mediaUrl(step.image.url)}
+                          alt={step.image.alt}
+                          loading="lazy"
+                          className="w-full rounded-xl border"
+                        />
+                        {step.image.caption ? (
+                          <figcaption className="mt-1.5 text-xs text-muted-foreground">
+                            {step.image.caption}
+                          </figcaption>
+                        ) : null}
+                      </figure>
+                    ) : step.screenshot ? (
                       <figure className="mt-3">
                         <div className="flex aspect-[16/7] items-center justify-center rounded-xl border border-dashed bg-muted/30">
                           <ImageIcon className="size-8 text-muted-foreground/40" aria-hidden />
@@ -267,11 +284,11 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
               {prev ? (
                 <Link
                   href={learningHref(basePath, prev.slug)}
-                  className="flex items-center gap-3 rounded-2xl border bg-card p-4 transition-colors hover:border-primary/40"
+                  className="flex min-w-0 items-center gap-3 rounded-2xl border bg-card p-4 transition-colors hover:border-primary/40"
                 >
                   <ArrowLeft className="size-4 shrink-0 text-muted-foreground" aria-hidden />
                   <span className="min-w-0">
-                    <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">Previous</span>
+                    <span className="block text-xs uppercase tracking-wide text-muted-foreground">Previous</span>
                     <span className="block truncate text-sm font-medium">{prev.title}</span>
                   </span>
                 </Link>
@@ -281,10 +298,10 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
               {next ? (
                 <Link
                   href={learningHref(basePath, next.slug)}
-                  className="flex items-center justify-end gap-3 rounded-2xl border bg-card p-4 text-right transition-colors hover:border-primary/40"
+                  className="flex min-w-0 items-center justify-end gap-3 rounded-2xl border bg-card p-4 text-right transition-colors hover:border-primary/40"
                 >
                   <span className="min-w-0">
-                    <span className="block text-[11px] uppercase tracking-wide text-muted-foreground">Next</span>
+                    <span className="block text-xs uppercase tracking-wide text-muted-foreground">Next</span>
                     <span className="block truncate text-sm font-medium">{next.title}</span>
                   </span>
                   <ArrowRight className="size-4 shrink-0 text-muted-foreground" aria-hidden />
@@ -315,7 +332,7 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
         <aside className="overflow-y-auto lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:self-start">
           <div className="space-y-4">
             <div className="rounded-2xl border bg-card p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 On this page
               </p>
               <ol className="mt-3 space-y-1">
