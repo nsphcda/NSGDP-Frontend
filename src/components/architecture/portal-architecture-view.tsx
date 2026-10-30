@@ -732,7 +732,7 @@ export default function PortalArchitectureView() {
 
       <p className="mt-8 text-xs text-muted-foreground/70">
         Source of truth: live routes in nsgdp-frontend / nsgdp-admin · NestJS modules ·{" "}
-        <code>UserRole</code> · <code>PERMISSION_ACTION_MAP</code> · <code>KNOWN_GAPS.md</code> ·
+        <code>UserRole</code> · <code>PERMISSION_ACTION_MAP</code> ·
         dataset-lifecycle constants
       </p>
     </div>
