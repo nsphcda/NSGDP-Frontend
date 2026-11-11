@@ -11,8 +11,8 @@ const partners = [
   { name: "NSPHCDA", role: "Project Lead & Data Governance" },
   { name: "Niger State Ministry of Health", role: "Health Data Owner" },
   { name: "Umbrella Fund", role: "Sponsor" },
-  { name: "Dev-Afrique", role: "Technical Partner" },
   { name: "FACT Foundation", role: "Implementation Partner" },
+  { name: "ZeraSage", role: "Technical Partner" },
 ];
 
 const whatWeDo = [
