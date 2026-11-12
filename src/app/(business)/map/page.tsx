@@ -115,8 +115,11 @@ const FlyToBounds = dynamic(
 
 // Shifted slightly east to account for left filter panel
 const NIGER_STATE_CENTER: [number, number] = [9.9319, 6.747];
+// Where the map opens: a little west of the state's centre, so the state sits clear of the
+// filter drawer on the left instead of tucked under it.
+const MAP_VIEW_CENTER: [number, number] = [9.9319, 5.65];
 const NIGER_STATE_BOUNDS: [[number, number], [number, number]] = [
-  [8.5, 3.5],
+  [8.5, 1.5],
   [11.5, 8.5],
 ];
 
@@ -419,7 +422,7 @@ export default function MapExplorePage() {
   return (
     <div className={MAP_VIEWPORT_CLASS}>
       <MapContainer
-        center={NIGER_STATE_CENTER}
+        center={MAP_VIEW_CENTER}
         zoom={8}
         minZoom={7}
         maxZoom={18}
@@ -439,7 +442,7 @@ export default function MapExplorePage() {
           geometry={flyGeometry}
           positions={flyGeometry ? null : flyToPositions}
           flyKey={`${lga}-${selectedId ?? "none"}-${spatial}-${topic}`}
-          fallbackCenter={NIGER_STATE_CENTER}
+          fallbackCenter={MAP_VIEW_CENTER}
           fallbackZoom={8}
         />
 

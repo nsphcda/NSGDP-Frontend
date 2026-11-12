@@ -505,3 +505,100 @@
   flex: 1;
   min-width: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Home page motion. Only transform and opacity animate, and everything is off
+   under prefers-reduced-motion.
+   --------------------------------------------------------------------------- */
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Hero text enters in sequence so the headline reads before the search box. */
+  .home-rise {
+    animation: home-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .home-rise-1 {
+    animation-delay: 90ms;
+  }
+  .home-rise-2 {
+    animation-delay: 180ms;
+  }
+  .home-rise-3 {
+    animation-delay: 270ms;
+  }
+
+  /* Set by <Reveal> on blocks that start below the fold. */
+  [data-reveal] {
+    transition:
+      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  [data-reveal='hidden'] {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  [data-reveal='shown'] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbars, in the brand green. The page scrollbar keeps the normal width so
+   it stays easy to grab; scrollable panels (menus, tables, side panels) get a
+   thinner one. The page track is white in the light theme and the page
+   background in the dark theme. Elements that set their own scrollbar
+   (.thin-scrollbar, the docs sidebar) are more specific and keep theirs.
+   --------------------------------------------------------------------------- */
+html {
+  scrollbar-width: auto;
+  scrollbar-color: rgb(27 94 32 / 0.55) #ffffff;
+}
+html.dark {
+  scrollbar-color: rgb(76 175 80 / 0.55) var(--background);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(27 94 32 / 0.45) transparent;
+}
+.dark * {
+  scrollbar-color: rgb(76 175 80 / 0.45) transparent;
+}
+/* Overrides above are for browsers that ignore ::-webkit-scrollbar once
+   scrollbar-color is set. The block below only runs on engines without it. */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(27 94 32 / 0.55);
+    border: 3px solid #ffffff;
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1b5e20;
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgb(76 175 80 / 0.55);
+    border-color: var(--background);
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #4caf50;
+  }
+}

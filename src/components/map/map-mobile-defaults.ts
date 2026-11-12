@@ -28,4 +28,6 @@ export function useMapZoomPosition(): "topleft" | "bottomright" {
   return isMobile === true ? "bottomright" : "topleft";
 }
 
-export const MAP_VIEWPORT_CLASS = "relative h-[calc(100dvh-4rem)] w-full overflow-hidden";
+// "isolate" keeps the map's own layers (Leaflet panes, legends, drawers use z-index up to 1101)
+// inside the map, so the site header and its dropdowns always stay above them.
+export const MAP_VIEWPORT_CLASS = "relative isolate h-[calc(100dvh-4rem)] w-full overflow-hidden";

@@ -1,15 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { Info } from "lucide-react";
+import { Download, Info, MapPin, RefreshCw } from "lucide-react";
 import type { Dataset } from "@/types";
 import { HEALTH_CATEGORY_LABELS } from "@/lib/constants/health";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { DISPLAY_SM } from "@/components/home/home-fonts";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { DatasetDownloadActions } from "@/components/data/dataset-download-actions";
 import { VisibilityBadge } from "@/components/data/visibility-badge";
+
+function shortDate(iso: string): string {
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime())
+    ? ""
+    : d.toLocaleDateString("en-NG", { month: "short", year: "numeric" });
+}
 
 interface GeoHealthDatasetCardProps {
   dataset: Dataset;
@@ -31,7 +39,7 @@ export function GeoHealthDatasetCard({
   return (
     <Card
       className={cn(
-        "group relative flex flex-col transition-all hover:shadow-lg hover:border-primary/30",
+        "group relative flex flex-col overflow-hidden rounded-2xl transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg",
         selectionMode && selected && "border-primary ring-1 ring-primary/40",
         className
       )}
@@ -64,12 +72,12 @@ export function GeoHealthDatasetCard({
             <VisibilityBadge visibility={dataset.visibility} />
           )}
         </div>
-        <CardTitle className="text-base line-clamp-2 leading-snug">
+        <CardTitle className={cn("text-base line-clamp-2 leading-snug", DISPLAY_SM)}>
           <Link href={`/dataportal/${dataset.slug}`} className="hover:text-primary">
             {dataset.title}
           </Link>
         </CardTitle>
-        <CardDescription className="text-xs line-clamp-2">
+        <CardDescription className="text-xs font-medium line-clamp-1">
           {dataset.organisation.name}
         </CardDescription>
       </CardHeader>
@@ -80,6 +88,33 @@ export function GeoHealthDatasetCard({
             {dataset.description}
           </p>
         )}
+        <dl className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          {dataset.lgaCoverage.length > 0 ? (
+            <div className="flex items-center gap-1">
+              <MapPin className="size-3.5" aria-hidden />
+              <dt className="sr-only">Coverage</dt>
+              <dd>
+                {dataset.lgaCoverage.length >= 25
+                  ? "Statewide"
+                  : `${dataset.lgaCoverage.length} LGA${dataset.lgaCoverage.length === 1 ? "" : "s"}`}
+              </dd>
+            </div>
+          ) : null}
+          {shortDate(dataset.updatedAt) ? (
+            <div className="flex items-center gap-1">
+              <RefreshCw className="size-3.5" aria-hidden />
+              <dt className="sr-only">Updated</dt>
+              <dd>{shortDate(dataset.updatedAt)}</dd>
+            </div>
+          ) : null}
+          {dataset.downloadCount > 0 ? (
+            <div className="flex items-center gap-1">
+              <Download className="size-3.5" aria-hidden />
+              <dt className="sr-only">Downloads</dt>
+              <dd className="tabular-nums">{dataset.downloadCount.toLocaleString()}</dd>
+            </div>
+          ) : null}
+        </dl>
         <div className="flex flex-wrap gap-1">
           {dataset.formats.slice(0, 3).map((f) => (
             <Badge key={f} variant="outline" className="text-xs font-mono">

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ChevronRight, ClipboardList, TrendingUp } from "lucide-react";
+import { ArrowLeft, ChevronRight, ClipboardList, ImageIcon, TrendingUp } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { HelpTip } from "@/components/ui/help-tip";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -13,6 +13,7 @@ import {
 } from "@/components/layout/dashboard-page-header";
 import { DashboardPanel, EmptyPanelState } from "@/components/dashboard/portal-dashboard-ui";
 import { ProgramProgressPanel } from "@/components/programs/program-progress-panel";
+import { ProgramImageManager } from "@/components/programs/program-image-manager";
 import { useOrganizationProgram } from "@/lib/hooks/usePrograms";
 import { useProgramPermissions } from "@/lib/hooks/useProgramPermissions";
 import { PORTAL_PROGRAM_PROGRESS_TIP } from "@/lib/constants/portal-tooltips";
@@ -144,6 +145,14 @@ export default function UpdateProgrammeProgressPage() {
               router.push(programmeHref);
             }}
           />
+        </DashboardPanel>
+        <DashboardPanel
+          title="Photos"
+          description="Pictures from this programme. They appear on the public Programs page."
+          icon={ImageIcon}
+          tone="primary"
+        >
+          <ProgramImageManager slug={programme.slug} images={programme.images ?? []} />
         </DashboardPanel>
         {isRedirecting ? (
           <p className="text-center text-sm text-muted-foreground">Saved. Returning to the programme…</p>

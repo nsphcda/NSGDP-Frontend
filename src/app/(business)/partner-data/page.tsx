@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Container } from "@/components/layout/container";
+import { DISPLAY_XL } from "@/components/home/home-fonts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +29,7 @@ const STEPS = [
   {
     num: 1,
     title: "Submit Interest",
-    description: "Complete the form below to express your organisation&apos;s interest in contributing data to the portal.",
+    description: "Complete the form below to express your organisation's interest in contributing data to the portal.",
     icon: Handshake,
   },
   {
@@ -112,34 +113,59 @@ export default function PartnerDataPage() {
 
   return (
     <main className="flex-1">
-      <div className="border-b bg-muted/40">
-        <Container className="py-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Handshake className="size-7 text-primary" />
-            <h1 className="text-3xl font-bold">Contribute Data</h1>
-          </div>
-          <p className="text-muted-foreground max-w-2xl">
-            Want your organisation to share health or geospatial datasets with NSPHCDA?
-            Start here to request access, get reviewed, and join the portal as a data partner.
+      <section className="relative isolate overflow-hidden bg-[#0D3B14] text-white">
+        <div
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_90%_at_85%_0%,rgba(46,125,50,0.5),transparent_65%)]"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+          aria-hidden
+        />
+        <Container size="wide" className="px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <p className="text-sm font-semibold uppercase tracking-widest text-teal">Partnerships</p>
+          <h1 className={`${DISPLAY_XL} mt-3 text-4xl font-bold sm:text-5xl`}>Contribute data</h1>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">
+            Want your organisation to share health or geospatial datasets with NSPHCDA? Start here
+            to request access, get reviewed, and join the portal as a data partner.
           </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a
+              href="#submit-interest"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[#0D3B14] transition-colors hover:bg-white/90"
+            >
+              Express interest
+              <ArrowRight className="size-4" aria-hidden />
+            </a>
+            {canUpload ? (
+              <Link
+                href="/upload"
+                className="inline-flex min-h-11 items-center rounded-full border border-white/25 px-5 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              >
+                Upload a dataset
+              </Link>
+            ) : null}
+          </div>
         </Container>
-      </div>
+      </section>
 
       <Container className="py-12 space-y-12">
         {/* How it works */}
         <section>
-          <h2 className="text-xl font-bold mb-6">How contributing works</h2>
+          <h2 className={`${DISPLAY_XL} mb-6 text-2xl font-bold sm:text-3xl`}>How contributing works</h2>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((step) => (
-              <Card key={step.num} className="relative overflow-hidden">
-                <div className="absolute top-3 right-3 text-5xl font-black text-muted/30 select-none leading-none">
-                  {step.num}
-                </div>
+              <Card key={step.num} className="relative overflow-hidden rounded-2xl">
                 <CardHeader>
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
-                    <step.icon className="size-5 text-primary" />
+                  <div className="flex items-center justify-between">
+                    <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10">
+                      <step.icon className="size-5 text-primary" />
+                    </div>
+                    <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                      Step {step.num}
+                    </span>
                   </div>
-                  <CardTitle className="text-base mt-2">{step.title}</CardTitle>
+                  <CardTitle className="mt-3 text-base">{step.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription>{step.description}</CardDescription>
@@ -151,7 +177,7 @@ export default function PartnerDataPage() {
 
         {/* Expression of Interest Form */}
         <section id="submit-interest">
-          <Card>
+          <Card className="rounded-2xl">
             <CardHeader>
               <CardTitle>Express Your Interest</CardTitle>
               <CardDescription>
@@ -328,7 +354,7 @@ export default function PartnerDataPage() {
 
         {/* Requirements */}
         <section className="grid gap-6 lg:grid-cols-2">
-          <Card>
+          <Card className="rounded-2xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <FileCheck className="size-5 text-primary" />
@@ -345,7 +371,7 @@ export default function PartnerDataPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="rounded-2xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Lock className="size-5 text-primary" />
@@ -363,11 +389,11 @@ export default function PartnerDataPage() {
 
         {/* Current partners */}
         <section>
-          <h2 className="text-xl font-bold mb-4">Current Data Partners</h2>
+          <h2 className={`${DISPLAY_XL} mb-5 text-2xl font-bold sm:text-3xl`}>Current data partners</h2>
           {orgsLoading ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="h-[72px] animate-pulse rounded-lg border bg-muted/40" />
+                <div key={i} className="h-[72px] animate-pulse rounded-2xl border bg-muted/40" />
               ))}
             </div>
           ) : partners.length === 0 ? (
@@ -375,7 +401,7 @@ export default function PartnerDataPage() {
           ) : (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {partners.map((org) => (
-                <div key={org.id} className="flex items-center gap-3 rounded-lg border bg-card p-4">
+                <div key={org.id} className="flex items-center gap-3 rounded-2xl border bg-card p-4 transition-shadow hover:shadow-md">
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-sm">
                     {org.name.charAt(0)}
                   </div>
@@ -393,29 +419,31 @@ export default function PartnerDataPage() {
         </section>
 
         {/* Existing contributor CTA */}
-        <section className="rounded-xl border bg-muted/40 p-8 text-center space-y-4">
-          <h2 className="text-2xl font-bold">Already approved to contribute?</h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+        <section className="relative isolate overflow-hidden rounded-2xl bg-[#0D3B14] p-8 text-center text-white sm:p-12">
+          <div
+            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_90%_at_85%_0%,rgba(46,125,50,0.5),transparent_65%)]"
+            aria-hidden
+          />
+          <div
+            className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+            aria-hidden
+          />
+          <h2 className={`${DISPLAY_XL} text-3xl font-bold sm:text-4xl`}>
+            Already approved to contribute?
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-white/80">
             {canUpload
               ? "Your development partner account can submit datasets from the dashboard."
               : "If NSPHCDA has already invited your development partner, sign in with that account to open the upload wizard."}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            {canUpload ? (
-              <Link href="/upload">
-                <Button size="lg">
-                  Submit a Dataset
-                  <Upload className="size-4 ml-1.5" />
-                </Button>
-              </Link>
-            ) : (
-              <Link href={`/login?returnTo=${encodeURIComponent("/upload")}`}>
-                <Button size="lg">
-                  Sign in to submit data
-                  <Upload className="size-4 ml-1.5" />
-                </Button>
-              </Link>
-            )}
+          <div className="mt-6 flex justify-center">
+            <Link
+              href={canUpload ? "/upload" : `/login?returnTo=${encodeURIComponent("/upload")}`}
+              className="inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-6 text-sm font-semibold text-[#0D3B14] transition-colors hover:bg-white/90"
+            >
+              {canUpload ? "Submit a dataset" : "Sign in to submit data"}
+              <Upload className="size-4" aria-hidden />
+            </Link>
           </div>
         </section>
       </Container>

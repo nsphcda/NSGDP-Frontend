@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search, Database, Building2 } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { PageBand } from "@/components/layout/page-band";
 import { DatasetCard } from "@/components/data/dataset-card";
 import { DevelopmentPartnerCard } from "@/components/data/development-partner-card";
 import { EmptyState } from "@/components/feedback/empty-state";
@@ -87,35 +88,39 @@ function SearchContent() {
 
   return (
     <main className="flex-1">
-      <div className="border-b bg-muted/40">
-        <Container size="wide" className="py-8">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-bold">Search Results</h1>
-              <p className="mt-2 text-muted-foreground">
-                {q ? `Results for "${q}"` : "Enter a search term to find datasets and development partners"}
-              </p>
-            </div>
-            <form onSubmit={handleSearch} className="flex w-full gap-2 sm:w-auto sm:min-w-80">
-              <div className="relative flex-1">
-                <Search
-                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                  aria-hidden
-                />
-                <Input
-                  type="search"
-                  value={queryInput}
-                  onChange={(e) => setQueryInput(e.target.value)}
-                  placeholder="Search datasets and development partners..."
-                  className="pl-10"
-                  aria-label="Search datasets and development partners"
-                />
-              </div>
-              <Button type="submit">Search</Button>
-            </form>
+      <PageBand
+        size="wide"
+        eyebrow="Search"
+        title="Search results"
+        description={
+          q
+            ? `Results for "${q}"`
+            : "Enter a search term to find datasets and development partners"
+        }
+      >
+        <form onSubmit={handleSearch} className="mt-7 flex w-full max-w-xl gap-2">
+          <div className="relative flex-1">
+            <Search
+              className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden
+            />
+            <Input
+              type="search"
+              value={queryInput}
+              onChange={(e) => setQueryInput(e.target.value)}
+              placeholder="Search datasets and development partners..."
+              className="h-12 rounded-full border-0 bg-white pl-11 text-base text-foreground shadow-sm placeholder:text-muted-foreground"
+              aria-label="Search datasets and development partners"
+            />
           </div>
-        </Container>
-      </div>
+          <Button
+            type="submit"
+            className="h-12 rounded-full bg-white px-6 text-[#0D3B14] hover:bg-white/90"
+          >
+            Search
+          </Button>
+        </form>
+      </PageBand>
 
       <Container size="wide" className="py-8">
         {!q.trim() ? (

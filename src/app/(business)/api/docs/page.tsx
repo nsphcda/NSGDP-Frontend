@@ -1,18 +1,16 @@
 import { Container } from "@/components/layout/container";
+import { PageBand } from "@/components/layout/page-band";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export default function ApiDocsPage() {
   return (
     <main className="flex-1">
-      <div className="border-b bg-muted/40">
-        <Container className="py-8">
-          <h1 className="text-3xl font-bold">API Documentation</h1>
-          <p className="mt-2 text-muted-foreground">
-            Programmatic access to Niger State Open Data
-          </p>
-        </Container>
-      </div>
+      <PageBand
+        eyebrow="Developers"
+        title="API Documentation"
+        description="Programmatic access to Niger State Open Data"
+      />
 
       <Container className="py-12">
         <div className="space-y-8">

@@ -60,17 +60,17 @@ export function DocumentCard({ doc, className, onDownload }: DocumentCardProps) 
   return (
     <div
       className={cn(
-        "flex gap-4 rounded-lg border bg-card p-4 transition-shadow hover:shadow-md",
+        "flex flex-col gap-4 rounded-2xl border bg-card p-4 transition-shadow hover:shadow-md sm:flex-row sm:p-5",
         className
       )}
     >
-      <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-muted">
+      <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-muted">
         <FormatIcon format={doc.fileFormat} />
       </div>
 
       <div className="flex-1 min-w-0">
         <div className="flex flex-wrap items-start gap-2 mb-1">
-          <h3 className="text-sm font-semibold leading-snug flex-1">{doc.title}</h3>
+          <h3 className="flex-1 text-base font-semibold leading-snug tracking-[-0.01em]">{doc.title}</h3>
           {doc.restricted && (
             <span className={cn("inline-flex items-center gap-1 text-xs rounded-full px-2 py-0.5 shrink-0", statusPill.amber)}>
               <Lock className="size-2.5" />
@@ -80,7 +80,7 @@ export function DocumentCard({ doc, className, onDownload }: DocumentCardProps) 
         </div>
 
         {doc.description && (
-          <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{doc.description}</p>
+          <p className="mt-0.5 line-clamp-2 text-sm text-muted-foreground">{doc.description}</p>
         )}
 
         <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -102,9 +102,10 @@ export function DocumentCard({ doc, className, onDownload }: DocumentCardProps) 
         <p className="text-xs text-muted-foreground mt-1">{doc.organisationName}</p>
       </div>
 
-      <div className="shrink-0 flex items-center">
+      <div className="flex shrink-0 items-center">
         <Button
-          size="sm"
+          size="lg"
+          className="max-sm:w-full max-sm:min-h-11"
           variant="outline"
           onClick={handleDownload}
           disabled={doc.restricted}

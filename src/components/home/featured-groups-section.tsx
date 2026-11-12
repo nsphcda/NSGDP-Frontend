@@ -25,7 +25,7 @@ export function FeaturedGroupsSection() {
         </Link>
       }
     >
-      <div className="grid gap-3 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         {groups.map((group) => (
           <Link
             key={group.id}
