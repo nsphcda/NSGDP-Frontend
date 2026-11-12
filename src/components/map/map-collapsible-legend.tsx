@@ -40,15 +40,17 @@ export function MapCollapsibleLegend({
   className,
   extra,
 }: MapCollapsibleLegendProps) {
-  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isMobile = useMediaQuery("(max-width: 1023px)");
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
   // Avoid hydration flash — wait for matchMedia before painting.
   if (isMobile === null) return null;
 
-  // Bottom-left on phones so Leaflet zoom (bottom-right) stays tappable.
-  const positionClass =
-    "absolute bottom-3 left-3 z-[1000] md:bottom-4 md:left-auto md:right-4";
+  // Phones and tablets: collapsed to a button at the bottom left, clear of the chat
+  // bubble (bottom right) and, on phones, the Leaflet zoom control.
+  const positionClass = isMobile
+    ? "absolute bottom-3 left-3 z-[1000]"
+    : "absolute bottom-4 right-4 z-[1000]";
 
   if (isMobile && !mobileExpanded) {
     return (
