@@ -1,8 +1,8 @@
+import { DISPLAY_XL } from "@/components/home/home-fonts";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { CompactFooter } from "@/components/layout/compact-footer";
 import { Container } from "@/components/layout/container";
-import { PageEyebrow } from "@/components/layout/content-panel";
 import { DashboardPage, DashboardPageContent } from "@/components/layout/dashboard-page-header";
 
 export type LearningVariant = "portal" | "dashboard";
@@ -65,14 +65,30 @@ export function LearningShell({
     );
   }
 
+  const EyebrowIcon = eyebrowIcon;
+  // Same dark grid band as the About, Analytics and Programs pages, as a
+  // rounded banner so it also fits inside the docs-style content column.
   const header = (
-    <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div className="min-w-0">
-        <PageEyebrow label={eyebrow} icon={eyebrowIcon} />
-        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-        <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{description}</p>
+    <header className="relative isolate overflow-hidden rounded-2xl bg-[#0D3B14] p-6 text-white sm:p-8">
+      <div
+        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_90%_at_85%_0%,rgba(46,125,50,0.5),transparent_65%)]"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+        aria-hidden
+      />
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="min-w-0">
+          <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-teal">
+            <EyebrowIcon className="size-4" aria-hidden />
+            {eyebrow}
+          </p>
+          <h1 className={`${DISPLAY_XL} mt-3 text-3xl font-bold sm:text-4xl`}>{title}</h1>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/80">{description}</p>
+        </div>
+        {actions ? <div className="shrink-0">{actions}</div> : null}
       </div>
-      {actions ? <div className="shrink-0">{actions}</div> : null}
     </header>
   );
 

@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { Search } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { PageBand } from "@/components/layout/page-band";
 import { DevelopmentPartnerCard } from "@/components/data/development-partner-card";
 import { Input } from "@/components/ui/input";
 import { OrgCardSkeleton } from "@/components/feedback/skeletons";
@@ -64,14 +65,12 @@ export default function DevelopmentPartnersPage() {
 
   return (
     <main className="flex-1">
-      <div className="border-b bg-muted/40">
-        <Container size="wide" className="py-8">
-          <h1 className="text-3xl font-bold">Development Partners</h1>
-          <p className="mt-2 text-muted-foreground">
-            Browse data-contributing ministries, departments, and agencies
-          </p>
-        </Container>
-      </div>
+      <PageBand
+        eyebrow="Directory"
+        title="Development Partners"
+        description="Browse data-contributing ministries, departments, and agencies"
+        size="wide"
+      />
 
       <Container size="wide" className="py-8">
         {/* Search */}

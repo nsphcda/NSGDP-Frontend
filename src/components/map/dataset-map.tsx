@@ -85,13 +85,16 @@ function buildFeaturePopupHtml(properties: Record<string, unknown>): string {
 
 // Niger State coordinates (shifted slightly east to account for left filter panel)
 const NIGER_STATE_CENTER: [number, number] = [9.9319, 6.7470];
+// Where the map opens: a little west of the state's centre, so the state sits clear of the
+// filter drawer on the left instead of tucked under it.
+const MAP_VIEW_CENTER: [number, number] = [9.9319, 5.65];
 const DEFAULT_ZOOM = 8;
 const MIN_ZOOM = 7; // Prevent zooming out too far
 const MAX_ZOOM = 18; // Allow detailed view
 
 // Niger State approximate boundary (simplified polygon)
 const NIGER_STATE_BOUNDS: [[number, number], [number, number]] = [
-  [8.5, 3.5],  // Southwest corner
+  [8.5, 1.5],  // Southwest corner
   [11.5, 8.5], // Northeast corner
 ];
 
@@ -214,7 +217,7 @@ export function DatasetMap({
 
         {/* Map */}
         <MapContainer
-          center={NIGER_STATE_CENTER}
+          center={MAP_VIEW_CENTER}
           zoom={DEFAULT_ZOOM}
           minZoom={MIN_ZOOM}
           maxZoom={MAX_ZOOM}

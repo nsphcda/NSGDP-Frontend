@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CheckSquare, Database, Download, Loader2, Search, X } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { DISPLAY_XL } from "@/components/home/home-fonts";
 import { GeoHealthDatasetCard } from "@/components/data/geohealth-dataset-card";
 import { DatasetDetailModal } from "@/components/data/dataset-detail-modal";
 import {
@@ -281,18 +282,27 @@ function DataportalContent() {
 
   return (
     <main className="flex-1">
-      <div className="border-b bg-muted/40">
-        <Container size="wide" className="py-8">
-          <h1 className="text-3xl font-bold">Health Data Portal</h1>
-          <p className="mt-2 text-muted-foreground">
-            Browse {total} health datasets from NSPHCDA and development partners
+      <section className="relative isolate overflow-hidden bg-[#0D3B14] text-white">
+        <div
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_90%_at_85%_0%,rgba(46,125,50,0.5),transparent_65%)]"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+          aria-hidden
+        />
+        <Container size="wide" className="px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <p className="text-sm font-semibold uppercase tracking-widest text-teal">Explore data</p>
+          <h1 className={`${DISPLAY_XL} mt-3 text-4xl font-bold sm:text-5xl`}>Health data portal</h1>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">
+            Browse {total} health datasets from NSPHCDA and development partners.
           </p>
         </Container>
-      </div>
+      </section>
 
       <Container
         size="wide"
-        className={cn("py-8", selectionMode && selectedSlugs.length > 0 && "pb-28")}
+        className={cn("max-w-[96rem] px-4 sm:px-8 lg:px-14 2xl:px-20 py-8", selectionMode && selectedSlugs.length > 0 && "pb-28")}
       >
         <div className="flex flex-col gap-8 lg:flex-row">
           <aside className="hidden w-64 shrink-0 lg:block">
@@ -447,7 +457,7 @@ function DataportalContent() {
 
       {selectionMode && selectedSlugs.length > 0 && (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-          <Container size="wide" className="flex items-center justify-between gap-4 py-3">
+          <Container size="wide" className="max-w-[96rem] px-4 sm:px-8 lg:px-14 2xl:px-20 flex items-center justify-between gap-4 py-3">
             <p className="text-sm font-medium">
               {selectedSlugs.length} selected
               <span className="font-normal text-muted-foreground">
@@ -504,7 +514,7 @@ export default function DataportalPage() {
     <Suspense
       fallback={
         <main className="flex-1">
-          <Container size="wide" className="py-8">
+          <Container size="wide" className="max-w-[96rem] px-4 sm:px-8 lg:px-14 2xl:px-20 py-8">
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {[...Array(6)].map((_, i) => (
                 <DatasetCardSkeleton key={i} />

@@ -15,10 +15,8 @@ import {
   MoreHorizontal,
   ClipboardList,
   Tag,
-  CheckCircle2,
-  CircleDot,
-  Circle,
   Clock,
+  ImageIcon,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -46,6 +44,8 @@ import { useDownloadDocument } from "@/lib/hooks/useDocuments";
 import { useAuth } from "@/lib/auth";
 import { useProgramPermissions } from "@/lib/hooks/useProgramPermissions";
 import { RichHtmlContent } from "@/components/programs/rich-html-content";
+import { ProgramGallery } from "@/components/programs/program-gallery";
+import { ProgramImageManager } from "@/components/programs/program-image-manager";
 import { objectivesToEditorHtml } from "@/lib/api/programs";
 import { typeChip } from "@/lib/constants/status-surfaces";
 import {
@@ -68,12 +68,6 @@ import { cn } from "@/lib/utils";
 import type { ProgramStatus, ProgramType } from "@/types";
 
 // ── helpers ──────────────────────────────────────────────────────────────────
-
-function statusIcon(status: ProgramStatus) {
-  if (status === "completed") return <CheckCircle2 className="size-5 shrink-0 text-white/90" />;
-  if (status === "ongoing")   return <CircleDot className="size-5 shrink-0 text-white/90" />;
-  return <Circle className="size-5 shrink-0 text-white/70" />;
-}
 
 const TYPE_LABELS: Record<ProgramType, string> = {
   campaign:       "Campaign",
@@ -142,9 +136,16 @@ export function ProgramDetailView({ slug, orgScope = false }: ProgramDetailViewP
     return (
       <TooltipProvider delay={200}>
         <main className="flex-1">
-          <section className="relative overflow-hidden border-b">
-            <div className="absolute inset-0 bg-gradient-to-r from-accent/90 via-primary to-primary/95" />
-            <Container className="relative py-10 sm:py-16">
+          <section className="relative isolate overflow-hidden bg-[#0D3B14] text-white">
+            <div
+              className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_90%_at_85%_0%,rgba(46,125,50,0.5),transparent_65%)]"
+              aria-hidden
+            />
+            <div
+              className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+              aria-hidden
+            />
+            <Container size="wide" className="px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
               <Skeleton className="h-12 w-3/4 bg-white/20" />
               <Skeleton className="mt-4 h-4 w-1/2 bg-white/15" />
             </Container>
@@ -202,9 +203,16 @@ export function ProgramDetailView({ slug, orgScope = false }: ProgramDetailViewP
       <main className="flex-1">
 
         {/* ── Hero ────────────────────────────────────────────────────────────── */}
-        <section className="relative overflow-hidden border-b">
-          <div className="absolute inset-0 bg-gradient-to-r from-accent/90 via-primary to-primary/95" />
-          <Container className="relative py-10 sm:py-16">
+        <section className="relative isolate overflow-hidden bg-[#0D3B14] text-white">
+          <div
+            className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_90%_at_85%_0%,rgba(46,125,50,0.5),transparent_65%)]"
+            aria-hidden
+          />
+          <div
+            className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+            aria-hidden
+          />
+          <Container size="wide" className="px-4 pb-8 pt-8 sm:px-6 sm:pb-10 sm:pt-10 lg:px-8">
 
             {/* Back button - outside main content */}
             <Link
@@ -218,7 +226,6 @@ export function ProgramDetailView({ slug, orgScope = false }: ProgramDetailViewP
             {/* Title row */}
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="flex items-start gap-3 flex-1 min-w-0">
-                {statusIcon(program.status)}
                 <div className="text-primary-foreground min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-2">
                     <span
@@ -249,7 +256,7 @@ export function ProgramDetailView({ slug, orgScope = false }: ProgramDetailViewP
                       </span>
                     ))}
                   </div>
-                  <h1 className="text-3xl font-bold sm:text-5xl flex items-start gap-2">
+                  <h1 className="flex items-start gap-2 text-3xl font-bold tracking-[-0.04em] leading-[1.05] sm:text-5xl">
                     <span className="min-w-0">{program.name}</span>
                     <HelpTip
                       content={PORTAL_PROGRAM_DETAIL_PAGE_TIP}
@@ -357,7 +364,7 @@ export function ProgramDetailView({ slug, orgScope = false }: ProgramDetailViewP
             <div className="mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3 max-w-4xl">
               {/* Progress */}
               {headline.percent != null && (
-                <div className="rounded-lg bg-white/20 px-3 py-2.5 sm:px-4 sm:py-3 text-primary-foreground">
+                <div className="rounded-xl border border-white/15 bg-white/5 px-3 py-3 sm:px-4 sm:py-3.5 text-primary-foreground">
                   <p className="text-2xl font-bold tabular-nums leading-none sm:text-3xl">{headline.percent}%</p>
                   <p className="mt-1 text-xs text-primary-foreground/80 sm:text-sm">
                     {headline.basis || "Progress"}
@@ -367,7 +374,7 @@ export function ProgramDetailView({ slug, orgScope = false }: ProgramDetailViewP
 
               {/* LGA Coverage */}
               {tracksLgaCoverage(mode) && lga.target > 0 && (
-                <div className="rounded-lg bg-emerald-400/30 px-3 py-2.5 sm:px-4 sm:py-3 text-primary-foreground">
+                <div className="rounded-xl border border-white/15 bg-white/5 px-3 py-3 sm:px-4 sm:py-3.5 text-primary-foreground">
                   <p className="text-2xl font-bold tabular-nums leading-none sm:text-3xl">
                     {lga.reach}/{lga.target}
                   </p>
@@ -377,7 +384,7 @@ export function ProgramDetailView({ slug, orgScope = false }: ProgramDetailViewP
 
               {/* Outcome metric */}
               {tracksOutcomeMetric(mode) && program.targetCount > 0 && (
-                <div className="rounded-lg bg-white/20 px-3 py-2.5 sm:px-4 sm:py-3 text-primary-foreground">
+                <div className="rounded-xl border border-white/15 bg-white/5 px-3 py-3 sm:px-4 sm:py-3.5 text-primary-foreground">
                   <p className="text-2xl font-bold tabular-nums leading-none sm:text-3xl">
                     {program.reachCount >= 1000
                       ? `${(program.reachCount / 1000).toFixed(0)}K`
@@ -394,13 +401,46 @@ export function ProgramDetailView({ slug, orgScope = false }: ProgramDetailViewP
               )}
 
               {/* Timeline */}
-              <div className="rounded-lg bg-white/10 px-3 py-2.5 sm:px-4 sm:py-3 text-primary-foreground">
+              <div className="rounded-xl border border-white/15 bg-white/5 px-3 py-3 sm:px-4 sm:py-3.5 text-primary-foreground">
                 <p className="text-2xl font-bold tabular-nums leading-none sm:text-3xl">{timelineValue}</p>
                 <p className="mt-1 text-xs text-primary-foreground/80 sm:text-sm">{timelineLabel}</p>
               </div>
             </div>
           </Container>
         </section>
+
+        {/* ── Photos ──────────────────────────────────────────────────────────── */}
+        {(program.images && program.images.length > 0) || (orgScope && canEdit) ? (
+          <section id="photos" className="scroll-mt-24 border-b bg-muted/30 py-8 sm:py-12">
+            <Container size="wide" className="space-y-6">
+              {program.images && program.images.length > 0 ? (
+                <div>
+                  <div className="mb-4 flex items-baseline justify-between gap-3">
+                    <h2 className="text-xl font-semibold tracking-[-0.02em] sm:text-2xl">Photos</h2>
+                    <span className="text-sm text-muted-foreground">
+                      {program.images.length} in the gallery
+                    </span>
+                  </div>
+                  <ProgramGallery images={program.images} programName={program.name} />
+                </div>
+              ) : null}
+
+              {orgScope && canEdit ? (
+                <div className="rounded-xl border bg-card p-4 sm:p-6">
+                  <h2 className="flex items-center gap-2 text-lg font-semibold">
+                    <ImageIcon className="size-5 text-primary" aria-hidden />
+                    {program.images && program.images.length > 0 ? "Manage photos" : "Add photos"}
+                  </h2>
+                  <p className="mb-4 mt-1 text-sm text-muted-foreground">
+                    Pictures from this programme appear on the public Programs page. The cover
+                    photo leads the card.
+                  </p>
+                  <ProgramImageManager slug={program.slug} images={program.images ?? []} />
+                </div>
+              ) : null}
+            </Container>
+          </section>
+        ) : null}
 
         {/* ── Content ─────────────────────────────────────────────────────────── */}
         <section className="py-8 sm:py-12 lg:py-16">

@@ -236,6 +236,21 @@ export interface ProgramReport {
   url: string;
 }
 
+/** A photo in a programme's gallery. URLs are absolute and ready to use in <img>. */
+export interface ProgramImage {
+  id: string;
+  caption: string | null;
+  alt: string | null;
+  width: number;
+  height: number;
+  isCover: boolean;
+  sortOrder: number;
+  /** Large version, for the lightbox. */
+  url: string;
+  /** Small version, for cards and grids. */
+  thumbUrl: string;
+}
+
 export interface Program {
   id: string;
   slug: string;
@@ -266,6 +281,11 @@ export interface Program {
   /** Reports are only visible when completionPercent === 100 */
   reports?: ProgramReport[];
   linkedDatasetIds?: string[];
+  /** Cover photo, when the programme has photos. */
+  coverImage?: ProgramImage | null;
+  imageCount?: number;
+  /** The whole gallery in display order. Only on single-programme responses. */
+  images?: ProgramImage[];
 }
 
 /** @deprecated use Program */

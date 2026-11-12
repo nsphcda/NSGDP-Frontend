@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight, Database, FileText, Loader2 } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { PageBand } from "@/components/layout/page-band";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useGroupBySlug } from "@/lib/hooks/useGroups";
@@ -12,19 +13,6 @@ import { useGroupBySlug } from "@/lib/hooks/useGroups";
 interface GroupPageProps {
   params: Promise<{ slug: string }>;
 }
-
-const GRADIENT_COLORS = [
-  "from-blue-500 to-cyan-500",
-  "from-green-500 to-teal-500",
-  "from-purple-500 to-pink-500",
-  "from-orange-500 to-red-500",
-  "from-indigo-500 to-blue-500",
-  "from-teal-500 to-green-500",
-  "from-pink-500 to-rose-500",
-  "from-amber-500 to-orange-500",
-  "from-violet-500 to-purple-500",
-  "from-emerald-500 to-green-500",
-];
 
 export default function GroupPage({ params }: GroupPageProps) {
   const { slug } = use(params);
@@ -44,8 +32,6 @@ export default function GroupPage({ params }: GroupPageProps) {
 
   if (!group) return null;
 
-  const gradientIndex = parseInt(group.id.replace(/\D/g, "")) % GRADIENT_COLORS.length;
-  const gradientClass = GRADIENT_COLORS[gradientIndex] ?? GRADIENT_COLORS[0];
 
   return (
     <main className="flex-1">
@@ -65,16 +51,12 @@ export default function GroupPage({ params }: GroupPageProps) {
         </Container>
       </div>
 
-      <div className="relative h-48 overflow-hidden border-b">
-        <div className={`h-full w-full bg-gradient-to-br ${gradientClass}`} />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-        <Container size="wide" className="absolute inset-0 flex flex-col justify-end pb-8">
-          <h1 className="text-4xl font-bold text-white">{group.name}</h1>
-          {group.description && (
-            <p className="mt-2 max-w-2xl text-white/90">{group.description}</p>
-          )}
-        </Container>
-      </div>
+      <PageBand
+        size="wide"
+        eyebrow="Topic"
+        title={group.name}
+        description={group.description || undefined}
+      />
 
       <div className="border-b bg-muted/40">
         <Container size="wide" className="flex flex-wrap gap-8 py-6">

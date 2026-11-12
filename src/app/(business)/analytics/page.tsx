@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, Suspense, type ReactNode } from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   Activity,
@@ -44,7 +43,6 @@ import { useDiseaseIndicators } from "@/lib/hooks/useDiseaseIndicators";
 import { useDiseaseBurdenAnalytics } from "@/lib/hooks/useDiseaseBurdenAnalytics";
 import { useAnalyticsDataSources } from "@/lib/hooks/useAnalyticsDataSources";
 import { useWardBurden } from "@/lib/hooks/useWardBurden";
-import { usePrograms } from "@/lib/hooks/usePrograms";
 import { downloadAnalyticsCsv } from "@/lib/api/analytics";
 import {
   MEASURE_KIND_MODES,
@@ -76,7 +74,6 @@ import {
   ANALYTICS_PAGE_TIP,
   ANALYTICS_PLATFORM_CONTEXT_TIP,
   ANALYTICS_PLATFORM_DOWNLOADS_TIP,
-  ANALYTICS_PROGRAMMES_TIP,
   ANALYTICS_PUBLISHED_DATASETS_TIP,
   ANALYTICS_STATE_FACILITIES_TIP,
   ANALYTICS_TOP_LGA_TIP,
@@ -85,13 +82,12 @@ import {
   ANALYTICS_WARD_BURDEN_TIP,
   ANALYTICS_WARD_INCIDENCE_TIP,
 } from "@/lib/constants/analytics-tooltips";
-import { formatDate } from "@/lib/utils/date";
+import { DISPLAY_SM, DISPLAY_XL } from "@/components/home/home-fonts";
 import type { LGABurden } from "@/types";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 
 type TrendMode = "annual" | "seasonal";
-type AnalyticsTab = "indicators" | "ward" | "programmes";
+type AnalyticsTab = "indicators" | "ward";
 type SortKey = keyof Pick<
   LGABurden,
   "rank" | "lga" | "totalCases" | "missingRows" | "facilities" | "population" | "incidencePer1000"
@@ -100,11 +96,10 @@ type SortKey = keyof Pick<
 const TAB_LABELS: Record<AnalyticsTab, string> = {
   indicators: "Health Indicators",
   ward: "Ward-level",
-  programmes: "Programmes",
 };
 
 function formatCompleteness(value: number | null | undefined): string {
-  if (value == null) return "—";
+  if (value == null) return "n/a";
   return `${Math.round(value * 100)}%`;
 }
 
@@ -128,42 +123,44 @@ type MetricTone =
   | "destructive"
   | "muted";
 
+// The tone now colours only the icon well and icon, so a status colour still
+// carries meaning. Card surfaces are neutral: they sit in a joined strip.
 const METRIC_TONE: Record<
   MetricTone,
   { card: string; well: string; icon: string; value: string }
 > = {
   primary: {
-    card: "border-primary/20 bg-primary/[0.04]",
+    card: "",
     well: "border-primary/20 bg-primary/10",
     icon: "text-primary",
     value: "text-foreground",
   },
   success: {
-    card: "border-success/25 bg-success/[0.06]",
+    card: "",
     well: "border-success/25 bg-success/15",
     icon: "text-success",
     value: "text-foreground",
   },
   info: {
-    card: "border-info/25 bg-info/[0.06]",
+    card: "",
     well: "border-info/25 bg-info/15",
     icon: "text-info",
     value: "text-foreground",
   },
   warning: {
-    card: "border-warning/30 bg-warning/[0.08]",
+    card: "",
     well: "border-warning/30 bg-warning/20",
     icon: "text-amber-700 dark:text-warning",
     value: "text-foreground",
   },
   destructive: {
-    card: "border-destructive/20 bg-destructive/[0.05]",
+    card: "",
     well: "border-destructive/20 bg-destructive/10",
     icon: "text-destructive",
     value: "text-foreground",
   },
   muted: {
-    card: "border-dashed bg-muted/20",
+    card: "bg-muted/30",
     well: "border-border bg-muted/50",
     icon: "text-muted-foreground",
     value: "text-foreground",
@@ -193,9 +190,9 @@ function MetricCard({
 }) {
   const t = METRIC_TONE[tone];
   return (
-    <div className={cn("rounded-2xl border p-4", t.card)}>
+    <div className={cn("bg-card p-5 sm:p-6", t.card)}>
       <div className="flex items-start justify-between gap-3">
-        <p className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        <p className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground">
           {label}
           {tip ? <HelpTooltip content={tip} /> : null}
         </p>
@@ -216,7 +213,8 @@ function MetricCard({
         <p
           key={valueKey}
           className={cn(
-            "mt-2 text-xl font-bold tabular-nums tracking-tight animate-in fade-in-0 duration-300 sm:text-2xl",
+            DISPLAY_XL,
+            "mt-3 text-3xl font-bold tabular-nums animate-in fade-in-0 duration-300 sm:text-4xl",
             t.value,
           )}
         >
@@ -232,7 +230,7 @@ function MetricCard({
 
 function MetricCardSkeleton({ tone = "primary" }: { tone?: MetricTone }) {
   return (
-    <div className={cn("rounded-2xl border p-4", METRIC_TONE[tone].card)}>
+    <div className={cn("bg-card p-5 sm:p-6", METRIC_TONE[tone].card)}>
       <Skeleton className="h-3 w-24" />
       <Skeleton className="mt-3 h-8 w-20" />
       <Skeleton className="mt-2 h-3 w-32" />
@@ -270,16 +268,16 @@ function Panel({
 }) {
   return (
     <section className={cn("rounded-2xl border bg-card", className)}>
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b px-4 py-4 sm:px-5">
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-border/70 px-5 py-5 sm:px-6">
         <div className="min-w-0 space-y-1">
-          <h2 className="text-base font-semibold leading-6">{title}</h2>
+          <h2 className={`${DISPLAY_SM} text-lg font-semibold leading-6`}>{title}</h2>
           {description ? (
             <p className="text-[13px] text-muted-foreground">{description}</p>
           ) : null}
         </div>
         {action ? <div className="flex shrink-0 items-center gap-2">{action}</div> : null}
       </div>
-      <div className="p-4 sm:p-5">{children}</div>
+      <div className="p-5 sm:p-6">{children}</div>
     </section>
   );
 }
@@ -367,23 +365,6 @@ function HealthAnalyticsContent() {
     { developmentPartnerId: orgFilterId, year: selectedYear }
   );
 
-  const { data: programmesPage, isLoading: programmesLoading } = usePrograms(
-    {
-      status: "active",
-      developmentPartnerId: orgFilterId,
-      limit: 50,
-    },
-    { enabled: analyticsTab === "programmes" }
-  );
-
-  const monitoringProgrammes = useMemo(
-    () =>
-      (programmesPage?.data ?? []).filter(
-        (p) => p.status === "ongoing" || p.status === "planned"
-      ),
-    [programmesPage?.data]
-  );
-
   useEffect(() => {
     if (!wardLga && NIGER_STATE_LGAS.length) {
       setWardLga(NIGER_STATE_LGAS[0]);
@@ -451,14 +432,6 @@ function HealthAnalyticsContent() {
     if (isNonCasesMeasure) return null;
     return 15;
   }, [isNonCasesMeasure]);
-
-  const orgNameById = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const s of dataSources) {
-      map.set(s.id, s.acronym ? `${s.acronym} — ${s.name}` : s.name);
-    }
-    return map;
-  }, [dataSources]);
 
   const trendData = useMemo(() => {
     if (!burdenData) return [];
@@ -558,53 +531,77 @@ function HealthAnalyticsContent() {
   const burdenValueKey = `${resolvedIndicator}-${selectedYear}`;
 
   return (
-    <main className="flex-1 py-6">
-      <Container size="wide" className="space-y-6">
-        {/* Page header */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="space-y-1">
-            <div className="mb-1 inline-flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/10 px-2.5 py-1">
-              <Activity className="size-3.5 text-primary" aria-hidden />
-              <span className="text-xs font-semibold uppercase tracking-wide text-primary">
+    <main className="flex-1">
+      {/* Page header band */}
+      <section className="relative isolate overflow-hidden bg-[#0D3B14] text-white">
+        <div
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_90%_at_85%_0%,rgba(46,125,50,0.5),transparent_65%)]"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+          aria-hidden
+        />
+        <Container size="wide" className="px-4 pt-12 sm:px-6 sm:pt-14 lg:px-8">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-widest text-teal">
                 Surveillance
-              </span>
+              </p>
+              <h1
+                className={`${DISPLAY_XL} mt-3 flex items-center gap-3 text-4xl font-bold sm:text-5xl`}
+              >
+                Health analytics
+                <span className="[&_button]:text-white/70 [&_button:hover]:text-white">
+                  <HelpTooltip content={ANALYTICS_PAGE_TIP} />
+                </span>
+              </h1>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">
+                Published disease-burden insights across Niger State. Platform GIS
+                figures are state-wide context, not tied to the selected indicator.
+              </p>
             </div>
-            <h1 className="flex items-center gap-2 text-2xl font-bold leading-8 tracking-tight">
-              Health analytics
-              <HelpTooltip content={ANALYTICS_PAGE_TIP} />
-            </h1>
-            <p className="max-w-2xl text-sm text-muted-foreground">
-              Published disease-burden insights across Niger State. Platform GIS
-              figures are state-wide context, not tied to the selected indicator.
-            </p>
+            {analyticsTab === "indicators" && burdenHasData ? (
+              <Button
+                variant="onDark"
+                size="sm"
+                className="h-10 px-4"
+                onClick={downloadAnalyticsCsv}
+              >
+                <Download className="size-4" />
+                Export CSV
+              </Button>
+            ) : null}
           </div>
-          {analyticsTab === "indicators" && burdenHasData ? (
-            <Button variant="outline" size="sm" className="h-9" onClick={downloadAnalyticsCsv}>
-              <Download className="size-4" />
-              Export CSV
-            </Button>
-          ) : null}
-        </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 overflow-x-auto rounded-xl border bg-muted/30 p-1">
-          {(["indicators", "ward", "programmes"] as AnalyticsTab[]).map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => setAnalyticsTab(t)}
-              className={cn(
-                "h-9 shrink-0 rounded-lg px-3 text-sm font-medium transition-colors sm:px-4",
-                analyticsTab === t
-                  ? "bg-primary text-primary-foreground shadow-none"
-                  : "text-muted-foreground hover:bg-background/80 hover:text-foreground"
-              )}
-            >
-              {TAB_LABELS[t]}
-            </button>
-          ))}
-        </div>
+          {/* Tabs: underlined text, the active one marked with an amber bar */}
+          <div
+            role="tablist"
+            aria-label="Analytics views"
+            className="mt-10 flex gap-1 overflow-x-auto"
+          >
+            {(["indicators", "ward"] as AnalyticsTab[]).map((t) => (
+              <button
+                key={t}
+                type="button"
+                role="tab"
+                aria-selected={analyticsTab === t}
+                onClick={() => setAnalyticsTab(t)}
+                className={cn(
+                  "relative h-12 shrink-0 px-4 text-sm font-medium transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:rounded-full after:bg-teal after:transition-opacity",
+                  analyticsTab === t
+                    ? "text-white after:opacity-100"
+                    : "text-white/65 after:opacity-0 hover:text-white hover:after:opacity-40"
+                )}
+              >
+                {TAB_LABELS[t]}
+              </button>
+            ))}
+          </div>
+        </Container>
+      </section>
 
+      <Container size="wide" className="space-y-6 px-4 py-8 sm:px-6 lg:px-8">
         {/* Development Partner filter */}
         <div className="flex flex-col gap-3 rounded-2xl border bg-card p-4 sm:flex-row sm:items-end sm:justify-between sm:p-5">
             <div className="space-y-1">
@@ -615,9 +612,7 @@ function HealthAnalyticsContent() {
               <p className="text-xs text-muted-foreground">
                 {analyticsTab === "ward"
                   ? "Limit ward burden to datasets published by one development partner."
-                  : analyticsTab === "programmes"
-                    ? "Show programmes owned by one development partner."
-                    : "Limit indicator selection and charts to datasets published by one development partner."}
+                  : "Limit indicator selection and charts to datasets published by one development partner."}
               </p>
             </div>
             <Select
@@ -631,7 +626,7 @@ function HealthAnalyticsContent() {
                 <SelectItem value={ALL_SOURCES_ID}>All development partners</SelectItem>
                 {dataSources.map((source) => (
                   <SelectItem key={source.id} value={source.id}>
-                    {source.acronym} — {source.name}
+                    {source.acronym}: {source.name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -642,115 +637,6 @@ function HealthAnalyticsContent() {
           <p className="text-xs text-muted-foreground">
             Filtered to <span className="font-medium text-foreground">{sourceLabel}</span>
           </p>
-        )}
-
-        {analyticsTab === "programmes" && (
-          <div className="space-y-4">
-            <p className="inline-flex flex-wrap items-center gap-1.5 text-[13px] text-muted-foreground">
-              Self-reported programme progress (reach / target from programme owners).
-              <HelpTooltip content={ANALYTICS_PROGRAMMES_TIP} />
-              {dataSource === ALL_SOURCES_ID
-                ? " Showing active programmes across development partners."
-                : ` Filtered to programmes owned by ${sourceLabel}.`}
-            </p>
-            {programmesLoading ? (
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {[...Array(3)].map((_, i) => (
-                  <Skeleton key={i} className="h-48 rounded-2xl" />
-                ))}
-              </div>
-            ) : monitoringProgrammes.length === 0 ? (
-              <div className="rounded-2xl border bg-card px-6 py-12 text-center">
-                <p className="text-sm text-muted-foreground">
-                  {dataSource === ALL_SOURCES_ID
-                    ? "No active programmes to monitor yet."
-                    : `No active programmes owned by ${sourceLabel}.`}
-                </p>
-                {dataSource !== ALL_SOURCES_ID && (
-                  <Button
-                    type="button"
-                    variant="link"
-                    className="mt-2 h-auto p-0"
-                    onClick={() => setDataSource(ALL_SOURCES_ID)}
-                  >
-                    Show all development partners
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {monitoringProgrammes.map((p) => {
-                  const orgLabel =
-                    (p.developmentPartnerId && orgNameById.get(p.developmentPartnerId)) ||
-                    p.organisationName ||
-                    null;
-                  return (
-                    <article
-                      key={p.slug}
-                      className="flex flex-col gap-3 rounded-2xl border bg-card p-4 sm:p-5"
-                    >
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Badge
-                          variant={p.status === "ongoing" ? "default" : "secondary"}
-                          className="capitalize"
-                        >
-                          {p.status}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground capitalize">
-                          {(p.type || "other").replace(/_/g, " ")}
-                        </span>
-                      </div>
-                      <div className="space-y-1">
-                        <Link
-                          href={`/programs/${p.slug}`}
-                          className="text-base font-semibold leading-snug hover:underline"
-                        >
-                          {p.name}
-                        </Link>
-                        {orgLabel ? (
-                          <p className="text-xs text-muted-foreground">{orgLabel}</p>
-                        ) : null}
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-[13px]">
-                          <span className="text-muted-foreground">
-                            {p.primaryMetric || "Progress"}
-                          </span>
-                          <span className="font-semibold tabular-nums">
-                            {p.targetCount > 0 ? `${p.completionPercent}%` : "—"}
-                          </span>
-                        </div>
-                        <div className="h-1.5 overflow-hidden rounded-full bg-muted">
-                          <div
-                            className="h-full rounded-full bg-primary"
-                            style={{
-                              width: `${p.targetCount > 0 ? Math.min(p.completionPercent, 100) : 0}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 border-t pt-3 text-xs text-muted-foreground">
-                        <span className="tabular-nums">
-                          {p.reachCount.toLocaleString()}
-                          {p.targetCount > 0
-                            ? ` / ${p.targetCount.toLocaleString()}`
-                            : " reached"}
-                        </span>
-                        <span>{p.lgasCovered} LGAs</span>
-                        <span>
-                          {formatDate(p.startDate)}
-                          {p.endDate ? ` → ${formatDate(p.endDate)}` : ""}
-                        </span>
-                        <span>
-                          {p.activeDays > 0 ? `${p.activeDays} days active` : "Not started"}
-                        </span>
-                      </div>
-                    </article>
-                  );
-                })}
-              </div>
-            )}
-          </div>
         )}
 
         {analyticsTab === "ward" && (
@@ -822,7 +708,7 @@ function HealthAnalyticsContent() {
                 </div>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-px overflow-hidden rounded-2xl border bg-border sm:grid-cols-3">
                 <MetricCard
                   label="Wards with data"
                   value={wardContent?.length ?? 0}
@@ -938,7 +824,7 @@ function HealthAnalyticsContent() {
                               {row.totalCases.toLocaleString()}
                             </td>
                             <td className="px-4 py-3.5 text-right tabular-nums">
-                              {row.population ? row.population.toLocaleString() : "—"}
+                              {row.population ? row.population.toLocaleString() : "n/a"}
                             </td>
                             <td className="px-4 py-3.5 text-right tabular-nums">
                               {Math.round(row.incidencePer1000 * 10) / 10}
@@ -1064,13 +950,13 @@ function HealthAnalyticsContent() {
               Indicator summary
               <HelpTooltip content={ANALYTICS_INDICATOR_KPIS_TIP} />
             </p>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-px overflow-hidden rounded-2xl border bg-border sm:grid-cols-2 lg:grid-cols-4">
               <MetricCard
                 label={measureKindTotalLabel(
                   activeMeasureKind,
                   selectedIndicatorMeta?.unit
                 )}
-                value={burdenContent?.kpis.totalCases.toLocaleString() ?? "—"}
+                value={burdenContent?.kpis.totalCases.toLocaleString() ?? "n/a"}
                 hint={
                   burdenContent
                     ? `${burdenContent.kpis.year}${isPartialYear ? " · year-to-date" : ""}`
@@ -1084,7 +970,7 @@ function HealthAnalyticsContent() {
               />
               <MetricCard
                 label="LGAs reporting"
-                value={burdenContent?.kpis.lgasReporting ?? "—"}
+                value={burdenContent?.kpis.lgasReporting ?? "n/a"}
                 tip={ANALYTICS_LGAS_REPORTING_TIP}
                 icon={BarChart3}
                 tone="success"
@@ -1096,7 +982,7 @@ function HealthAnalyticsContent() {
                 value={
                   burdenContent
                     ? formatCompleteness(burdenContent.kpis.completeness)
-                    : "—"
+                    : "n/a"
                 }
                 hint={
                   burdenContent && isPartialYear
@@ -1114,9 +1000,9 @@ function HealthAnalyticsContent() {
                 value={
                   burdenContent
                     ? isNonCasesMeasure
-                      ? "—"
+                      ? "n/a"
                       : burdenContent.outliers.length
-                    : "—"
+                    : "n/a"
                 }
                 hint={
                   isNonCasesMeasure
@@ -1135,10 +1021,10 @@ function HealthAnalyticsContent() {
               Platform context
               <HelpTooltip content={ANALYTICS_PLATFORM_CONTEXT_TIP} />
             </p>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-px overflow-hidden rounded-2xl border bg-border sm:grid-cols-2 lg:grid-cols-4">
               <MetricCard
                 label="State health facilities"
-                value={stateHealthFacilities?.toLocaleString() ?? "—"}
+                value={stateHealthFacilities?.toLocaleString() ?? "n/a"}
                 hint="Platform GIS registry"
                 tip={ANALYTICS_STATE_FACILITIES_TIP}
                 icon={Hospital}
@@ -1147,7 +1033,7 @@ function HealthAnalyticsContent() {
               />
               <MetricCard
                 label="Published datasets"
-                value={dashboard?.platformStats.totalDatasets.toLocaleString() ?? "—"}
+                value={dashboard?.platformStats.totalDatasets.toLocaleString() ?? "n/a"}
                 hint="Contributing to analytics"
                 tip={ANALYTICS_PUBLISHED_DATASETS_TIP}
                 icon={Database}
@@ -1156,7 +1042,7 @@ function HealthAnalyticsContent() {
               />
               <MetricCard
                 label="LGAs with map coverage"
-                value={dashboard?.platformStats.lgasCovered ?? "—"}
+                value={dashboard?.platformStats.lgasCovered ?? "n/a"}
                 hint="Population & facility layers"
                 tip={ANALYTICS_MAP_COVERAGE_TIP}
                 icon={Globe2}
@@ -1165,7 +1051,7 @@ function HealthAnalyticsContent() {
               />
               <MetricCard
                 label="Platform downloads"
-                value={dashboard?.platformStats.totalDownloads.toLocaleString() ?? "—"}
+                value={dashboard?.platformStats.totalDownloads.toLocaleString() ?? "n/a"}
                 hint="All-time downloads"
                 tip={ANALYTICS_PLATFORM_DOWNLOADS_TIP}
                 icon={Download}
@@ -1385,11 +1271,11 @@ function HealthAnalyticsContent() {
                             {row.missingRows}
                           </td>
                           <td className="px-4 py-3.5 text-right tabular-nums">
-                            {row.population != null ? row.population.toLocaleString() : "—"}
+                            {row.population != null ? row.population.toLocaleString() : "n/a"}
                           </td>
                           <td className="px-4 py-3.5 text-right tabular-nums">
                             {isNonCasesMeasure
-                              ? "—"
+                              ? "n/a"
                               : Math.round(row.incidencePer1000 * 10) / 10}
                           </td>
                           <td className="px-4 py-3.5 text-right tabular-nums text-muted-foreground">

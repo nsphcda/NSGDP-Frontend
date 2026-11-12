@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { Search, BookOpen, Loader2 } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { DISPLAY_XL } from "@/components/home/home-fonts";
 import { Input } from "@/components/ui/input";
 import { DocumentCard } from "@/components/data/document-card";
 import { useDocuments, useDownloadDocument } from "@/lib/hooks/useDocuments";
@@ -45,52 +46,62 @@ export default function DocumentsPage() {
 
   return (
     <main className="flex-1">
-      <div className="border-b bg-muted/40">
-        <Container className="py-8">
-          <div className="flex items-center gap-3 mb-2">
-            <BookOpen className="size-7 text-primary" />
-            <h1 className="text-3xl font-bold">Document Repository</h1>
-          </div>
-          <p className="text-muted-foreground">
-            Policies, SOPs, research reports, evaluation findings, and historical archives for Niger State health data governance.
+      <section className="relative isolate overflow-hidden bg-[#0D3B14] text-white">
+        <div
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_90%_at_85%_0%,rgba(46,125,50,0.5),transparent_65%)]"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+          aria-hidden
+        />
+        <Container size="wide" className="px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <p className="text-sm font-semibold uppercase tracking-widest text-teal">Library</p>
+          <h1 className={`${DISPLAY_XL} mt-3 text-4xl font-bold sm:text-5xl`}>Document library</h1>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80">
+            Policies, SOPs, research reports, evaluation findings and historical archives for Niger
+            State health data governance.
           </p>
-        </Container>
-      </div>
 
-      <Container className="py-8">
-        <div className="flex flex-col gap-5">
-          {/* Search */}
-          <div className="flex flex-wrap gap-3 items-center">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+          <div className="mt-8 space-y-4">
+            <div className="relative max-w-xl">
+              <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search documents…"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="pl-9"
+                aria-label="Search documents"
+                className="h-12 rounded-full border-0 bg-white pl-11 text-base text-foreground shadow-sm placeholder:text-muted-foreground"
               />
             </div>
+            <div
+              role="group"
+              aria-label="Filter by type"
+              className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+            >
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setCategory(cat.id)}
+                  aria-pressed={category === cat.id}
+                  className={cn(
+                    "min-h-10 shrink-0 whitespace-nowrap rounded-full border px-4 text-sm font-medium transition-colors",
+                    category === cat.id
+                      ? "border-white bg-white text-[#0D3B14]"
+                      : "border-white/20 bg-white/5 text-white/85 hover:bg-white/15"
+                  )}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
+        </Container>
+      </section>
 
-          {/* Category tabs */}
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setCategory(cat.id)}
-                className={cn(
-                  "rounded-full px-4 py-1.5 text-sm font-medium border transition-colors",
-                  category === cat.id
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background hover:bg-muted border-border"
-                )}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
+      <Container size="wide" className="px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        <div className="flex flex-col gap-5">
           {/* Results */}
           {isLoading ? (
             <div className="flex items-center justify-center py-16 text-muted-foreground gap-2">
@@ -116,7 +127,7 @@ export default function DocumentsPage() {
                   <p className="text-sm">Try changing your search or category filter</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                   {documents.map((doc) => (
                     <DocumentCard key={doc.id} doc={doc} onDownload={handleDownload} />
                   ))}
