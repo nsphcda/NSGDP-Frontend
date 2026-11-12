@@ -87,10 +87,14 @@ export default function DevelopmentPartnerPage({ params }: DevelopmentPartnerPag
 
       {/* Header with Brand Color */}
       <div
-        className="border-b"
+        className="relative isolate overflow-hidden border-b"
         style={{ backgroundColor: organisation.brandColor || "#6366F1" }}
       >
-        <Container size="wide" className="py-12 text-white">
+        <div
+          className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.07)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+          aria-hidden
+        />
+        <Container size="wide" className="px-4 py-12 text-white sm:px-6 lg:px-8">
           <div className="flex items-start gap-6">
             {organisation.logoUrl ? (
               <Image
@@ -109,7 +113,9 @@ export default function DevelopmentPartnerPage({ params }: DevelopmentPartnerPag
               </div>
             )}
             <div className="flex-1">
-              <h1 className="text-3xl font-bold">{organisation.name}</h1>
+              <h1 className="text-3xl font-bold tracking-[-0.04em] leading-[1.05] sm:text-4xl">
+                {organisation.name}
+              </h1>
               {organisation.acronym && (
                 <p className="mt-1 text-lg opacity-90">{organisation.acronym}</p>
               )}

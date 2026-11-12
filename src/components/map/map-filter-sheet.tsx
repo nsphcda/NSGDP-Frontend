@@ -39,7 +39,7 @@ export function MapFilterSheet({
       {!open && (
         <Button
           size="sm"
-          className="absolute left-3 top-3 z-[1000] shadow-lg md:left-4 md:top-4"
+          className="absolute left-3 top-3 z-[1000] rounded-full px-4 shadow-lg md:left-4 md:top-4"
           onClick={() => onOpenChange(true)}
         >
           <Filter className="size-4 mr-1.5" />
@@ -67,11 +67,11 @@ export function MapFilterSheet({
           "w-full",
           widthClassName,
           // Desktop left drawer
-          "md:absolute md:left-0 md:top-0 md:h-full md:max-w-[90vw] md:border-r",
-          open ? "md:translate-x-0" : "md:-translate-x-full",
+          "md:absolute md:left-3 md:top-3 md:h-[calc(100%-1.5rem)] md:max-w-[90vw] md:overflow-hidden md:rounded-2xl md:border",
+          open ? "md:translate-x-0" : "md:-translate-x-[calc(100%+1rem)]",
           // Mobile bottom sheet
           "absolute inset-x-0 bottom-0 h-[min(70dvh,100%)] rounded-t-2xl border-t",
-          "md:inset-x-auto md:bottom-auto md:h-full md:rounded-none md:border-t-0",
+          "md:inset-x-auto md:bottom-auto md:border-t",
           "pb-[env(safe-area-inset-bottom)]",
           open ? "translate-y-0" : "translate-y-full md:translate-y-0",
           !open && "pointer-events-none",
@@ -86,9 +86,11 @@ export function MapFilterSheet({
 
         <div className="flex shrink-0 items-start justify-between gap-2 border-b px-4 py-3 md:p-4">
           <div className="min-w-0">
-            <h2 className="font-semibold leading-snug">{title}</h2>
+            <h2 className="text-lg font-semibold leading-snug tracking-[-0.02em]">{title}</h2>
             {subtitle ? (
-              <div className="mt-0.5 text-xs text-muted-foreground">{subtitle}</div>
+              <div className="mt-1 inline-flex rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                {subtitle}
+              </div>
             ) : null}
           </div>
           <Button

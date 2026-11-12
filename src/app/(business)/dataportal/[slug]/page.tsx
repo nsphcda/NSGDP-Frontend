@@ -328,8 +328,16 @@ export default function DatasetPage({ params }: DatasetPageProps) {
       </div>
 
       {/* Header */}
-      <div className="border-b bg-background">
-        <Container size="wide" className="py-8">
+      <div className="relative isolate overflow-hidden bg-[#0D3B14] text-white">
+        <div
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_90%_at_85%_0%,rgba(46,125,50,0.5),transparent_65%)]"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
+          aria-hidden
+        />
+        <Container size="wide" className="px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
           <div className="flex items-start gap-4">
             {/* Development Partner Logo */}
             {dataset.organisation.logoUrl ? (
@@ -338,10 +346,10 @@ export default function DatasetPage({ params }: DatasetPageProps) {
                 alt=""
                 width={64}
                 height={64}
-                className="rounded-lg object-cover"
+                className="rounded-xl bg-white object-cover p-1.5"
               />
             ) : (
-              <div className="flex size-16 items-center justify-center rounded-lg bg-primary/10 text-primary text-2xl font-bold">
+              <div className="flex size-16 items-center justify-center rounded-xl bg-white/15 text-2xl font-bold text-white">
                 {dataset.organisation.name.charAt(0)}
               </div>
             )}
@@ -349,10 +357,12 @@ export default function DatasetPage({ params }: DatasetPageProps) {
             <div className="flex-1">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-bold">{dataset.title}</h1>
+                  <h1 className="text-3xl font-bold tracking-[-0.04em] leading-[1.05] sm:text-4xl">
+                    {dataset.title}
+                  </h1>
                   <Link
                     href={`/development-partners/${dataset.organisation.slug}`}
-                    className="mt-2 inline-block text-sm text-muted-foreground hover:text-primary"
+                    className="mt-3 inline-block text-sm text-white/80 underline-offset-4 hover:text-white hover:underline"
                   >
                     {dataset.organisation.name}
                   </Link>
@@ -365,7 +375,7 @@ export default function DatasetPage({ params }: DatasetPageProps) {
                 {dataset.status !== "approved" && <StatusBadge status={dataset.status} />}
                 {dataset.groups.map((group) => (
                   <Link key={group.id} href={`/groups/${group.slug}`}>
-                    <Badge variant="secondary" className="hover:bg-secondary/80">
+                    <Badge variant="secondary" className="border-0 bg-white/15 text-white hover:bg-white/25">
                       {group.name}
                     </Badge>
                   </Link>

@@ -11,7 +11,9 @@ interface ApiResponse<T> {
 
 export interface PlatformStatistics {
   datasets: number;
-  organisations: number;
+  /** The backend now sends `developmentPartners`; `organisations` is the old name. */
+  developmentPartners?: number;
+  organisations?: number;
   downloads: number;
   users: number;
   lgasCovered: number;

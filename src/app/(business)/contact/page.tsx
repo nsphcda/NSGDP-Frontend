@@ -2,6 +2,7 @@
 
 import { Mail, Phone, MapPin } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { PageBand } from "@/components/layout/page-band";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,14 +62,11 @@ export default function ContactPage() {
 
   return (
     <main className="flex-1">
-      <div className="border-b bg-muted/40">
-        <Container className="py-8">
-          <h1 className="text-3xl font-bold">Contact Us</h1>
-          <p className="mt-2 text-muted-foreground">
-            Get in touch with the NSPHCDA Data Portal team
-          </p>
-        </Container>
-      </div>
+      <PageBand
+        eyebrow="Get in touch"
+        title="Contact Us"
+        description="Get in touch with the NSPHCDA Data Portal team"
+      />
 
       <Container className="py-12">
         <div className="grid gap-8 lg:grid-cols-3">

@@ -1,17 +1,15 @@
 import { Container } from "@/components/layout/container";
+import { PageBand } from "@/components/layout/page-band";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function PrivacyPage() {
   return (
     <main className="flex-1">
-      <div className="border-b bg-muted/40">
-        <Container className="py-8">
-          <h1 className="text-3xl font-bold">Privacy Policy</h1>
-          <p className="mt-2 text-muted-foreground">
-            Last updated: June 2026
-          </p>
-        </Container>
-      </div>
+      <PageBand
+        eyebrow="Legal"
+        title="Privacy Policy"
+        description="Last updated: June 2026"
+      />
 
       <Container className="py-12">
         <Card>

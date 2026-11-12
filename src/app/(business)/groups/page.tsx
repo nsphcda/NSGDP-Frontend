@@ -1,6 +1,7 @@
 "use client";
 
 import { Container } from "@/components/layout/container";
+import { PageBand } from "@/components/layout/page-band";
 import { GroupTile } from "@/components/data/group-tile";
 import { GroupTileSkeleton } from "@/components/feedback/skeletons";
 import { useGroups } from "@/lib/hooks/useGroups";
@@ -11,14 +12,12 @@ export default function GroupsPage() {
 
   return (
     <main className="flex-1">
-      <div className="border-b bg-muted/40">
-        <Container size="wide" className="py-8">
-          <h1 className="text-3xl font-bold">Topics</h1>
-          <p className="mt-2 text-muted-foreground">
-            Explore datasets organized by thematic areas
-          </p>
-        </Container>
-      </div>
+      <PageBand
+        eyebrow="Explore data"
+        title="Topics"
+        description="Explore datasets organized by thematic areas"
+        size="wide"
+      />
 
       <Container size="wide" className="py-12">
         {isLoading ? (
