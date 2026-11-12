@@ -77,6 +77,8 @@ const NIGER_STATE_CENTER: [number, number] = [9.9319, 6.747];
 // Where the map opens: a little west of the state's centre, so the state sits clear of the
 // filter drawer on the left instead of tucked under it.
 const MAP_VIEW_CENTER: [number, number] = [9.9319, 5.65];
+// One zoom level out on phones, so the whole state fits a narrow screen (the map is client-only).
+const MAP_VIEW_ZOOM = typeof window !== "undefined" && window.innerWidth < 768 ? 7 : 8;
 const NIGER_STATE_BOUNDS: [[number, number], [number, number]] = [
   [8.5, 1.5],
   [11.5, 8.5],
@@ -276,7 +278,7 @@ export default function SettlementsPage() {
     <div className={MAP_VIEWPORT_CLASS}>
       <MapContainer
         center={MAP_VIEW_CENTER}
-        zoom={8}
+        zoom={MAP_VIEW_ZOOM}
         minZoom={7}
         maxZoom={18}
         maxBounds={NIGER_STATE_BOUNDS}
@@ -296,7 +298,7 @@ export default function SettlementsPage() {
             flyKey={mapFlyKey}
             positions={flyToPositions}
             fallbackCenter={MAP_VIEW_CENTER}
-            fallbackZoom={8}
+            fallbackZoom={MAP_VIEW_ZOOM}
           />
         )}
 

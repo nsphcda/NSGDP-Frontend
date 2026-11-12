@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@/lib/hooks/useMediaQuery";
 
 /**
- * Overlay open state that defaults open on desktop and closed on mobile.
+ * Overlay open state that defaults open on desktop and closed on phones and
+ * tablets (a 384px drawer would cover half of a tablet screen).
  * Waits for the first media-query resolution so SSR/hydration stay stable.
  */
 export function useMapOverlayOpen(desktopDefault = true): [boolean, (open: boolean) => void] {
-  const isMobile = useMediaQuery("(max-width: 767px)");
+  const isMobile = useMediaQuery("(max-width: 1023px)");
   const applied = useRef(false);
   const [open, setOpen] = useState(false);
 
