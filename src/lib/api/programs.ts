@@ -1,6 +1,13 @@
-import { apiClient } from './client';
+import { apiClient, API_BASE_URL } from './client';
 import type { ApiResponse, PaginatedResponse } from '../types/common';
-import type { Program, ProgramType, ProgramStatus, ProgramReport, ProgrammeProgressMode } from '@/types';
+import type {
+  Program,
+  ProgramType,
+  ProgramStatus,
+  ProgramReport,
+  ProgramImage,
+  ProgrammeProgressMode,
+} from '@/types';
 import type { ProgramFormData, ProgramProgressUpdateData } from '@/lib/schemas/program';
 import { headlineProgressPercent } from '@/lib/constants/program-progress';
 import { objectivesFromEditorHtml, objectivesToEditorHtml } from '@/lib/objectives-html';
@@ -15,6 +22,18 @@ export interface GetProgramsParams {
   developmentPartnerId?: string;
   q?: string;
   sort?: 'recent' | 'alphabetical';
+}
+
+interface ProgrammeImagePayload {
+  id: string;
+  caption: string | null;
+  alt: string | null;
+  width: number;
+  height: number;
+  is_cover: boolean;
+  sort_order: number;
+  url: string;
+  thumb_url: string;
 }
 
 interface ProgrammeApiPayload {
@@ -38,6 +57,9 @@ interface ProgrammeApiPayload {
   target_count: number | null;
   reach_count: number | null;
   lgas_covered_count: number | null;
+  cover_image?: ProgrammeImagePayload | null;
+  image_count?: number;
+  images?: ProgrammeImagePayload[];
   created_at: string;
   updated_at: string;
 }
@@ -68,6 +90,25 @@ function parseOptionalCount(raw: string | undefined): number | undefined {
   if (trimmed === '') return undefined;
   const n = Number.parseInt(trimmed, 10);
   return Number.isFinite(n) ? n : undefined;
+}
+
+/** The API sends paths relative to its base; <img> needs a full URL. */
+function absoluteMediaUrl(path: string): string {
+  return /^https?:\/\//i.test(path) ? path : `${API_BASE_URL}${path}`;
+}
+
+function mapImage(raw: ProgrammeImagePayload): ProgramImage {
+  return {
+    id: raw.id,
+    caption: raw.caption,
+    alt: raw.alt,
+    width: raw.width,
+    height: raw.height,
+    isCover: raw.is_cover,
+    sortOrder: raw.sort_order,
+    url: absoluteMediaUrl(raw.url),
+    thumbUrl: absoluteMediaUrl(raw.thumb_url),
+  };
 }
 
 function mapProgramme(raw: ProgrammeApiPayload): Program {
@@ -110,6 +151,9 @@ function mapProgramme(raw: ProgrammeApiPayload): Program {
     developmentPartnerId: raw.development_partner_id ?? undefined,
     partners: raw.partners ?? [],
     updatedAt: raw.updated_at,
+    coverImage: raw.cover_image ? mapImage(raw.cover_image) : null,
+    imageCount: raw.image_count ?? 0,
+    images: raw.images?.map(mapImage),
   };
 }
 
@@ -284,6 +328,51 @@ export async function createProgramReport(
 
 export async function deleteProgramReportApi(slug: string, reportId: string): Promise<void> {
   await apiClient.delete(`/programs/${slug}/reports/${reportId}`);
+}
+
+// ── Photo gallery ────────────────────────────────────────────────────────────
+
+export async function uploadProgramImage(
+  slug: string,
+  file: File,
+  meta?: { caption?: string; alt?: string }
+): Promise<ProgramImage> {
+  const form = new FormData();
+  form.append('file', file);
+  if (meta?.caption) form.append('caption', meta.caption);
+  if (meta?.alt) form.append('alt', meta.alt);
+  const response = await apiClient.post<ApiResponse<ProgrammeImagePayload>>(
+    `/programs/${slug}/images`,
+    form
+  );
+  return mapImage(response.data.data);
+}
+
+export async function updateProgramImage(
+  slug: string,
+  imageId: string,
+  data: { caption?: string; alt?: string; isCover?: boolean }
+): Promise<ProgramImage> {
+  const response = await apiClient.patch<ApiResponse<ProgrammeImagePayload>>(
+    `/programs/${slug}/images/${imageId}`,
+    data
+  );
+  return mapImage(response.data.data);
+}
+
+export async function reorderProgramImages(
+  slug: string,
+  ids: string[]
+): Promise<ProgramImage[]> {
+  const response = await apiClient.put<ApiResponse<ProgrammeImagePayload[]>>(
+    `/programs/${slug}/images/order`,
+    { ids }
+  );
+  return response.data.data.map(mapImage);
+}
+
+export async function deleteProgramImage(slug: string, imageId: string): Promise<void> {
+  await apiClient.delete(`/programs/${slug}/images/${imageId}`);
 }
 
 export { objectivesToEditorHtml };

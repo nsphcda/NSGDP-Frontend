@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
+import { ImageIcon,
   ClipboardList,
   Plus,
   Edit,
@@ -430,6 +430,18 @@ export default function MyProgrammesPage() {
                                           title="Upload report"
                                         >
                                           <Upload className="size-4" />
+                                        </Button>
+                                      </Link>
+                                    ) : null}
+                                    {canEdit ? (
+                                      <Link href={`/my-programs/${programme.slug}#photos`}>
+                                        <Button
+                                          size="icon"
+                                          variant="ghost"
+                                          className="size-9"
+                                          title="Add or manage photos"
+                                        >
+                                          <ImageIcon className="size-4" />
                                         </Button>
                                       </Link>
                                     ) : null}

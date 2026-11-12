@@ -11,6 +11,10 @@ import {
   getProgramReports,
   createProgramReport,
   deleteProgramReportApi,
+  uploadProgramImage,
+  updateProgramImage,
+  reorderProgramImages,
+  deleteProgramImage,
   type GetProgramsParams,
 } from '../api/programs';
 import type { ProgramFormData, ProgramProgressUpdateData } from '@/lib/schemas/program';
@@ -123,6 +127,42 @@ export function useDeleteProgram() {
       queryClient.invalidateQueries({ queryKey: ['organization-programs'] });
     },
   });
+}
+
+/**
+ * Photo gallery actions for one programme. Every change refreshes the
+ * programme (cover and count live on it) and both lists.
+ */
+export function useProgramImageActions(slug: string) {
+  const queryClient = useQueryClient();
+  const refresh = () => {
+    queryClient.invalidateQueries({ queryKey: ['program', slug] });
+    queryClient.invalidateQueries({ queryKey: ['organization-program', slug] });
+    queryClient.invalidateQueries({ queryKey: ['programs'] });
+    queryClient.invalidateQueries({ queryKey: ['organization-programs'] });
+  };
+  return {
+    upload: useMutation({
+      mutationFn: (v: { file: File; caption?: string; alt?: string }) =>
+        uploadProgramImage(slug, v.file, { caption: v.caption, alt: v.alt }),
+      onSuccess: refresh,
+    }),
+    update: useMutation({
+      mutationFn: (v: {
+        imageId: string;
+        data: { caption?: string; alt?: string; isCover?: boolean };
+      }) => updateProgramImage(slug, v.imageId, v.data),
+      onSuccess: refresh,
+    }),
+    reorder: useMutation({
+      mutationFn: (ids: string[]) => reorderProgramImages(slug, ids),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (imageId: string) => deleteProgramImage(slug, imageId),
+      onSuccess: refresh,
+    }),
+  };
 }
 
 export function useCreateProgramReport() {
