@@ -1,17 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, Database, Map, Shield, Quote, Flag, Server, Lock, FileCheck } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { NIGER_STATE_LGAS } from "@/lib/constants/core";
 
-const partners = [
+const partners: { name: string; role: string; logo?: string }[] = [
   { name: "NSPHCDA", role: "Project Lead & Data Governance" },
   { name: "Niger State Ministry of Health", role: "Health Data Owner" },
   { name: "Umbrella Fund", role: "Sponsor" },
-  { name: "FACT Foundation", role: "Implementation Partner" },
+  {
+    name: "FACT Foundation",
+    role: "Implementation Partner",
+    logo: "/images/fact-foundation-logo.svg",
+  },
   { name: "ZeraSage", role: "Technical Partner" },
 ];
 
@@ -181,9 +186,24 @@ export default function AboutPage() {
             {partners.map((partner) => (
               <Card key={partner.name} className="text-center">
                 <CardHeader className="items-center">
-                  <div className="mb-2 flex size-14 items-center justify-center rounded-full bg-muted text-lg font-bold text-primary">
-                    {partner.name.slice(0, 2).toUpperCase()}
-                  </div>
+                  {partner.logo ? (
+                    // Wordmark logos are wide, so they get a full-width slot of the
+                    // same height as the initials avatar instead of a round crop.
+                    <div className="mb-2 flex h-14 w-full items-center justify-center">
+                      <Image
+                        src={partner.logo}
+                        alt={`${partner.name} logo`}
+                        width={1960}
+                        height={226}
+                        unoptimized
+                        className="h-auto w-40 max-w-full"
+                      />
+                    </div>
+                  ) : (
+                    <div className="mb-2 flex size-14 items-center justify-center rounded-full bg-muted text-lg font-bold text-primary">
+                      {partner.name.slice(0, 2).toUpperCase()}
+                    </div>
+                  )}
                   <CardTitle className="text-sm leading-snug">{partner.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
