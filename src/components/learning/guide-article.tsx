@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   Clock,
   ExternalLink,
-  Image as ImageIcon,
   Info,
   Lightbulb,
   ThumbsDown,
@@ -163,18 +162,9 @@ export function GuideArticle({ guide, basePath }: { guide: Guide; basePath: stri
                       </p>
                     ) : null}
 
-                    {step.image ? (
-                      <StepImage image={step.image} />
-                    ) : step.screenshot ? (
-                      <figure className="mt-3">
-                        <div className="flex aspect-[16/7] items-center justify-center rounded-xl border border-dashed bg-muted/30">
-                          <ImageIcon className="size-8 text-muted-foreground/40" aria-hidden />
-                        </div>
-                        <figcaption className="mt-1.5 text-xs text-muted-foreground">
-                          {step.screenshot}
-                        </figcaption>
-                      </figure>
-                    ) : null}
+                    {/* A step without an uploaded screenshot shows nothing: an empty
+                        placeholder box reads as a broken image. */}
+                    {step.image ? <StepImage image={step.image} /> : null}
 
                     {step.link ? (
                       <Link
