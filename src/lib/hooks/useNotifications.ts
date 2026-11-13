@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { playNotificationSound } from '../utils/notification-sound';
 import { getNotifications, getUnreadCount, markNotificationAsRead, markAllNotificationsAsRead } from '../api/notifications';
 
 /**
@@ -20,6 +22,35 @@ export function useUnreadNotificationCount() {
     queryFn: () => getUnreadCount(),
     refetchInterval: 30000, // Refetch every 30 seconds
   });
+}
+
+/**
+ * Plays the chime for a new notification that is marked as worth one (data.chime).
+ *
+ * Every notification still shows in the bell; only the important ones, the ones an admin
+ * may be waiting on or must act on, carry the flag and make a sound. It watches the latest
+ * unread notifications and chimes for any id it has not seen before. The first load only
+ * records what is already there, so opening the app with unread notifications stays silent.
+ */
+export function useNotificationChime() {
+  const { data } = useQuery({
+    queryKey: ['notifications', 'chime-watch'],
+    queryFn: () => getNotifications(1, 20, true),
+    refetchInterval: 30_000,
+  });
+  const seen = useRef<Set<string> | null>(null);
+
+  useEffect(() => {
+    if (!data) return;
+    const latest = data.data ?? [];
+    if (seen.current === null) {
+      seen.current = new Set(latest.map((n) => n.id));
+      return;
+    }
+    const fresh = latest.filter((n) => !seen.current!.has(n.id));
+    if (fresh.some((n) => n.data?.chime === true)) playNotificationSound();
+    fresh.forEach((n) => seen.current!.add(n.id));
+  }, [data]);
 }
 
 /**
