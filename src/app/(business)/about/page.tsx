@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { AboutHero } from "@/components/about/about-hero";
 import {
   Overview,
@@ -10,6 +11,8 @@ import {
 import { Testimonials } from "@/components/about/testimonials";
 import { HomeStats } from "@/components/home/home-hero";
 import { ClosingCta } from "@/components/home/closing-cta";
+
+export const metadata: Metadata = { title: "About us" };
 
 /**
  * About page. Section order and the layout family of each:

@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/layout/container";
 import { PageBand } from "@/components/layout/page-band";
 import { Card, CardContent } from "@/components/ui/card";
+
+export const metadata: Metadata = { title: "Privacy policy" };
 
 export default function PrivacyPage() {
   return (
