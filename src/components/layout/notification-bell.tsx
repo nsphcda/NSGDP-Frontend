@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Bell, CheckCheck } from "lucide-react";
-import { useNotifications, useUnreadNotificationCount, useMarkNotificationAsRead, useMarkAllNotificationsAsRead } from "@/lib/hooks/useNotifications";
+import { useNotifications, useNotificationChime, useUnreadNotificationCount, useMarkNotificationAsRead, useMarkAllNotificationsAsRead } from "@/lib/hooks/useNotifications";
 import { getDisplayType } from "@/lib/api/notifications";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
-import { playNotificationSound } from "@/lib/utils/notification-sound";
 
 const TYPE_COLORS: Record<string, string> = {
   info: "bg-blue-500",
@@ -25,25 +24,14 @@ export function NotificationBell() {
   // Fetch total unread count
   const { data: unreadData } = useUnreadNotificationCount();
   const unreadCount = unreadData ?? 0;
-  const countLoaded = unreadData !== undefined;
   
   const markAsReadMutation = useMarkNotificationAsRead();
   const markAllAsReadMutation = useMarkAllNotificationsAsRead();
 
   const notifications = data?.data || [];
 
-  // Chime when unread count rises, never for the first real value, so opening the
-  // app with existing unread notifications stays silent. Until the count has loaded
-  // it reads as 0, which must not count as the first value (the real number would
-  // then look like a rise).
-  const previousUnread = useRef<number | null>(null);
-  useEffect(() => {
-    if (!countLoaded) return;
-    if (previousUnread.current !== null && unreadCount > previousUnread.current) {
-      playNotificationSound();
-    }
-    previousUnread.current = unreadCount;
-  }, [countLoaded, unreadCount]);
+  // Chime only for notifications flagged as important (see useNotificationChime).
+  useNotificationChime();
 
   const handleMarkAllRead = () => {
     markAllAsReadMutation.mutate();
