@@ -23,22 +23,27 @@ export function NotificationBell() {
   const { data, isLoading } = useNotifications(1, 6, false);
   
   // Fetch total unread count
-  const { data: unreadCount = 0 } = useUnreadNotificationCount();
+  const { data: unreadData } = useUnreadNotificationCount();
+  const unreadCount = unreadData ?? 0;
+  const countLoaded = unreadData !== undefined;
   
   const markAsReadMutation = useMarkNotificationAsRead();
   const markAllAsReadMutation = useMarkAllNotificationsAsRead();
 
   const notifications = data?.data || [];
 
-  // Chime when unread count rises — never on the first render, so opening
-  // the app with existing unread notifications stays silent.
+  // Chime when unread count rises, never for the first real value, so opening the
+  // app with existing unread notifications stays silent. Until the count has loaded
+  // it reads as 0, which must not count as the first value (the real number would
+  // then look like a rise).
   const previousUnread = useRef<number | null>(null);
   useEffect(() => {
+    if (!countLoaded) return;
     if (previousUnread.current !== null && unreadCount > previousUnread.current) {
       playNotificationSound();
     }
     previousUnread.current = unreadCount;
-  }, [unreadCount]);
+  }, [countLoaded, unreadCount]);
 
   const handleMarkAllRead = () => {
     markAllAsReadMutation.mutate();
