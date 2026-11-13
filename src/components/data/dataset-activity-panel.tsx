@@ -38,7 +38,7 @@ export function DatasetActivityPanel({ views, downloads }: DatasetActivityPanelP
           </div>
         </dl>
       ) : (
-        <EmptyPanelState icon={BarChart3} message="Activity tracking coming soon." />
+        <EmptyPanelState icon={BarChart3} message="No views or downloads recorded yet." />
       )}
     </DashboardPanel>
   );

@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import { Container } from "@/components/layout/container";
 import { PageBand } from "@/components/layout/page-band";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+
+export const metadata: Metadata = { title: "API documentation" };
 
 export default function ApiDocsPage() {
   return (

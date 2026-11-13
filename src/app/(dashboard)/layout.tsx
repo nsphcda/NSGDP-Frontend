@@ -25,7 +25,8 @@ export default function DashboardLayout({
   // organisation-scoped functionality here. The backend already rejects
   // their login at /auth/login; this covers stale sessions from before that
   // guard existed, or tokens issued directly against the admin-auth system.
-  const isAdminPortalOnly = user?.role === "staff" || user?.role === "super_admin";
+  const isAdminPortalOnly =
+    user?.role === "staff" || user?.role === "super_admin";
 
   // Auth guard - redirect to login if not authenticated, or to the admin
   // portal if authenticated as a principal that doesn't belong here
@@ -36,11 +37,21 @@ export default function DashboardLayout({
         typeof window !== "undefined"
           ? `${window.location.pathname}${window.location.search}`
           : "/dashboard";
-      router.push(`/login?returnTo=${encodeURIComponent(returnTo || "/dashboard")}`);
+      router.push(
+        `/login?returnTo=${encodeURIComponent(returnTo || "/dashboard")}`,
+      );
       return;
     }
     if (isAdminPortalOnly) {
-      const adminUrl = process.env.NEXT_PUBLIC_ADMIN_URL ?? "http://localhost:3003";
+      // Prefer the configured URL. Without it, derive the admin host from this one
+      // (nsphcda-data.example -> nsphcda-admin.example) rather than sending a live
+      // user to localhost.
+      const { hostname, protocol } = window.location;
+      const derived = hostname.includes("-data.")
+        ? `${protocol}//${hostname.replace("-data.", "-admin.")}`
+        : null;
+      const adminUrl =
+        process.env.NEXT_PUBLIC_ADMIN_URL ?? derived ?? "http://localhost:3003";
       window.location.href = `${adminUrl}/login`;
     }
   }, [isAuthenticated, isLoading, isAdminPortalOnly, router]);
@@ -66,7 +77,7 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen flex-col">
       <Navbar />
-      
+
       <div className="flex flex-1 overflow-hidden">
         {/* Desktop Sidebar - Fixed */}
         <DashboardSidebar className="hidden lg:flex" />
