@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { preconnect } from "react-dom";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
@@ -51,6 +52,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Open the connection to the API (DNS, TCP and TLS) while the page is still loading,
+  // so the first data request does not pay for the handshake (about a second on a
+  // phone connection). Requests use credentials, so the preconnect must too.
+  const apiOrigin = /^https?:\/\//.test(process.env.NEXT_PUBLIC_API_URL ?? "")
+    ? new URL(process.env.NEXT_PUBLIC_API_URL as string).origin
+    : null;
+  if (apiOrigin) preconnect(apiOrigin, { crossOrigin: "use-credentials" });
+
   return (
     <html
       lang="en"
