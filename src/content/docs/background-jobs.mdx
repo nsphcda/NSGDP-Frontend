@@ -13,7 +13,6 @@ description: The worker process, the Redis queues, retries, dead-letter handling
     subgraph API process
       P1["Uploads"]
       P2["Notifications"]
-      P3["SMS"]
       P4["AI assistant"]
       P5["GIS reference"]
       P6["Analytics"]
@@ -22,7 +21,6 @@ description: The worker process, the Redis queues, retries, dead-letter handling
       Q1[["validation"]]
       Q2[["upload-processing"]]
       Q3[["notification"]]
-      Q4[["sms"]]
       Q5[["geo-extraction"]]
       Q6[["analytics"]]
       Q7[["ai-inference"]]
@@ -34,7 +32,6 @@ description: The worker process, the Redis queues, retries, dead-letter handling
       W1["Validation processor"]
       W2["Ingestion processor"]
       W3["Notification processor"]
-      W4["SMS processor"]
       W5["Geo processor"]
       W6["Analytics processor"]
       W7["AI processor"]
@@ -47,19 +44,17 @@ description: The worker process, the Redis queues, retries, dead-letter handling
     SCH["Schedulers (worker)"] --> Q8
     SCH --> Q9
     P2 --> Q3
-    P3 --> Q4
     P4 --> Q7
     P5 --> Q5
     P6 --> Q6
     Q2 --> W2
     Q3 --> W3
-    Q4 --> W4
     Q5 --> W5
     Q6 --> W6
     Q7 --> W7
     Q8 --> W8
     Q9 --> W9
-    W1 & W2 & W3 & W4 & W5 & W6 & W7 & W8 & W9 -. "terminal failure" .-> DL`}
+    W1 & W2 & W3 & W5 & W6 & W7 & W8 & W9 -. "terminal failure" .-> DL`}
 />
 
 Queue names, concurrency, priority, and retry settings are generated in [Queues](/docs/reference/queues). That table is the source of truth. This page explains the behaviour behind it.

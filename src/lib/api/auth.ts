@@ -152,8 +152,8 @@ export async function getCurrentUser(): Promise<UserProfile> {
 }
 
 // ─── MFA (two-factor authentication) ───────────────────────────────────
-// Every account controls this independently, off by default. Three
-// enrollment methods; TOTP and SMS/email both end in the same
+// Every account controls this independently, off by default. Two
+// enrollment methods; TOTP and email both end in the same
 // backupCodes response once confirmed.
 
 export interface MfaSetupResponse {
@@ -179,24 +179,6 @@ export async function setupTotpMfa(): Promise<MfaSetupResponse> {
 export async function verifyTotpMfaSetup(code: string): Promise<MfaBackupCodesResponse> {
   const response = await apiFetch<ApiResponse<MfaBackupCodesResponse>>(
     API_ROUTES.auth.mfaVerifySetup,
-    { method: "POST", body: { code } }
-  );
-  return response.data;
-}
-
-/** Sends an OTP via SMS — used both for enrollment and as a login/fallback channel. */
-export async function sendMfaSms(): Promise<{ expiresIn: number }> {
-  const response = await apiFetch<ApiResponse<{ expiresIn: number }>>(
-    API_ROUTES.auth.mfaSendSms,
-    { method: "POST" }
-  );
-  return response.data;
-}
-
-/** Confirms SMS-based MFA enrollment with the code just sent. */
-export async function verifySmsMfaSetup(code: string): Promise<MfaBackupCodesResponse> {
-  const response = await apiFetch<ApiResponse<MfaBackupCodesResponse>>(
-    API_ROUTES.auth.mfaVerifySms,
     { method: "POST", body: { code } }
   );
   return response.data;

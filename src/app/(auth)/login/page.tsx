@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Database, ShieldCheck, Loader2, ArrowLeft, Mail, MessageSquare, Smartphone } from "lucide-react";
+import { Eye, EyeOff, Database, ShieldCheck, Loader2, ArrowLeft, Mail, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,12 +23,6 @@ const MFA_COPY: Record<MfaMethod, { icon: typeof Smartphone; title: string; body
     title: "Enter your authenticator code",
     body: "Open your authenticator app and enter the 6-digit code it's showing.",
     canResend: false,
-  },
-  sms: {
-    icon: MessageSquare,
-    title: "Enter the code we texted you",
-    body: "We sent a code to the phone number on your account. It expires in a few minutes.",
-    canResend: true,
   },
   email: {
     icon: Mail,
