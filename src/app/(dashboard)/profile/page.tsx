@@ -105,7 +105,6 @@ export default function ProfilePage() {
               <MfaSettingsPanel
                 initialEnabled={user.mfaEnabled}
                 initialMethod={user.mfaMethod ?? null}
-                hasPhoneNumber={!!user.phoneNumber}
               />
             </DashboardPanel>
 

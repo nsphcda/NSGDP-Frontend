@@ -18,7 +18,7 @@ description: The security controls in place, where each one lives in the code, a
 | Request | Global rate limiter | `ThrottlerGuard` |
 | Input | Global validation pipe on every request body | `main.ts` |
 | Login | Lockout after repeated failed passwords or MFA codes | `login-lockout.service.ts` |
-| Login | MFA: TOTP, SMS, email codes, backup codes | `auth/`, `admin-auth/` |
+| Login | MFA: TOTP, email codes, backup codes | `auth/`, `admin-auth/` |
 | Tokens | Separate secrets for public and admin tokens. Refresh tokens revoked on logout. | `JWT_ACCESS_SECRET`, `JWT_ADMIN_SECRET` |
 | Upload | File-signature check before storage. Virus scan before the file is kept. | `file-signature.util.ts`, ClamAV |
 | Audit | Admin actions and review steps are logged | `audit_logs`, `admin_audit_logs`, `workflow_actions` |

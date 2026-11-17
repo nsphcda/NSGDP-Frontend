@@ -1,9 +1,9 @@
 ---
-title: Notifications, email, and SMS
-description: How an event becomes an in-app alert, an email, or an SMS, and which provider sends each one.
+title: Notifications and email
+description: How an event becomes an in-app alert or an email, and which provider sends each one.
 ---
 
-**An event writes a notification row, then a worker sends the email or SMS.** The in-app bell reads the same rows. Email and SMS run on their own queues, so a slow provider never delays the request that caused the event.
+**An event writes a notification row, then a worker sends the email.** The in-app bell reads the same rows. Email runs on its own queue, so a slow provider never delays the request that caused the event.
 
 ## Flow
 
@@ -32,7 +32,6 @@ description: How an event becomes an in-app alert, an email, or an SMS, and whic
 | --- | --- | --- | --- |
 | In-app | Any event with a notification type | Stored row, read by the apps | None |
 | Email | Approval, rejection, revision request, staff alerts | Notification processor | `EMAIL_PROVIDER` picks Resend, Brevo, or SMTP |
-| SMS | One-time codes and SMS notifications | SMS processor (`sms` queue) | Termii (`TERMII_API_KEY`, `TERMII_SENDER_ID`) |
 
 ## Notification types
 
@@ -50,12 +49,6 @@ The full list is in `nsgdp-backend/src/modules/notifications/entities/notificati
 - **Submitting organisation.** Gets outcome emails: approved, rejected, revision requested, published.
 - **Staff.** Get alerts for work waiting on their capability. See [Dataset lifecycle](/docs/dataset-review).
 
-## SMS controls
-
-- `SMS_ENABLED` switches the Termii service on or off. The service reads this flag at start-up (`termii.service.ts`).
-- `SMS_OTP_LENGTH` sets the number of digits.
-- `SMS_OTP_EXPIRY` sets how long a code stays valid.
-
 ## Email branding
 
 The logo in email comes from a file in the backend `public` folder, served at `/public/assets/`. Setup steps are in `EMAIL_LOGO_SETUP.md` in the project root. The logo URL must be reachable from the public internet, because email clients fetch it directly.
@@ -65,5 +58,4 @@ The logo in email comes from a file in the backend `public` folder, served at `/
 - `nsgdp-backend/src/modules/notifications/notifications.service.ts`: creates rows and enqueues jobs
 - `nsgdp-backend/src/modules/notifications/providers/`: email provider selection
 - `nsgdp-backend/src/workers/notification.processor.ts`: sends email
-- `nsgdp-backend/src/modules/sms/`: SMS service and processor
 - `nsgdp-frontend/src/lib/hooks/useNotifications.ts`, `nsgdp-admin/lib/hooks/useNotifications.ts`: polling

@@ -59,7 +59,7 @@ description: How the NestJS API is organised, how a request is checked, and how 
 ## Login protection
 
 - **Lockout.** After `LOGIN_LOCKOUT_THRESHOLD` failed attempts, the account stays locked for `LOGIN_LOCKOUT_MINUTES`. Password failures and MFA code failures both count.
-- **MFA methods.** TOTP (authenticator app), SMS (Termii), and email one-time codes. Backup codes use the `XXXX-XXXX` format.
+- **MFA methods.** TOTP (authenticator app) and email one-time codes. Backup codes use the `XXXX-XXXX` format.
 - **Partial login.** When MFA is required, the login response sets `requiresMfa` and `mfaMethod`. The client then sends the code to finish login.
 
 ## Modules
@@ -81,7 +81,6 @@ description: How the NestJS API is organised, how a request is checked, and how 
     end
     subgraph Services
       NOTIF[notifications]
-      SMS[sms]
       AN[analytics]
       AI[ai]
       SEARCH[search]
@@ -94,7 +93,6 @@ description: How the NestJS API is organised, how a request is checked, and how 
     end
     ADMIN --> NOTIF
     DS --> NOTIF
-    AUTH --> SMS
     ING --> AN
     AI --> DS`}
 />
@@ -109,7 +107,7 @@ description: How the NestJS API is organised, how a request is checked, and how 
 | `ingestion` | Spreadsheet to staging to published data | `/datasets/:id/ingestion`, `/admin/governance/ingestion` |
 | `analytics`, `stats`, `search` | Dashboards and search | `/analytics`, `/stats`, `/search` |
 | `gis` | Map layers and boundaries | `/gis`, `/admin/gis-reference-layers` |
-| `notifications`, `sms` | In-app alerts and SMS | `/notifications`, `/sms` |
+| `notifications` | In-app alerts | `/notifications` |
 | `ai` | AI Health Data Assistant | `/ai`, `/admin/ai` |
 | `programs`, `documents`, `partner-data`, `categories`, `departments` | Content and reference lists | As named |
 | `queues`, `admin/system-health` | Queue and health views for operators | `/admin/queues`, `/admin/system-health` |
