@@ -13,6 +13,30 @@ import { toast } from "sonner";
 
 export const dynamic = "force-dynamic";
 
+const RESEND_COOLDOWN_SECONDS = 60;
+
+/** Seconds left on the resend cooldown, kept in localStorage so a page refresh does not reset it. */
+function readCooldown(storageKey: string): number {
+  try {
+    const until = Number(window.localStorage.getItem(storageKey));
+    if (!until) return 0;
+    return Math.max(0, Math.ceil((until - Date.now()) / 1000));
+  } catch {
+    return 0;
+  }
+}
+
+function startCooldown(storageKey: string): void {
+  try {
+    window.localStorage.setItem(
+      storageKey,
+      String(Date.now() + RESEND_COOLDOWN_SECONDS * 1000)
+    );
+  } catch {
+    // Storage blocked: the on-screen timer still runs for this visit.
+  }
+}
+
 function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -22,6 +46,21 @@ function VerifyEmailContent() {
   const [verifyError, setVerifyError] = useState<string | null>(null);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [resending, setResending] = useState(false);
+  const cooldownKey = `nsgdp:resend-verification:${(email ?? "").toLowerCase()}`;
+
+  // The page opens right after sign-up, which has just sent an email, so a first visit
+  // starts the cooldown too. A refresh picks up whatever time is left.
+  useEffect(() => {
+    if (token || !email) return;
+    if (!window.localStorage.getItem(cooldownKey)) startCooldown(cooldownKey);
+    setResendCooldown(readCooldown(cooldownKey));
+  }, [token, email, cooldownKey]);
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const timer = setTimeout(() => setResendCooldown(readCooldown(cooldownKey)), 1000);
+    return () => clearTimeout(timer);
+  }, [resendCooldown, cooldownKey]);
 
   useEffect(() => {
     if (!token) return;
@@ -62,16 +101,8 @@ function VerifyEmailContent() {
       await resendVerification({ email });
       toast.success("Verification email sent! Check your inbox.");
 
-      setResendCooldown(60);
-      const interval = setInterval(() => {
-        setResendCooldown((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+      startCooldown(cooldownKey);
+      setResendCooldown(readCooldown(cooldownKey));
     } catch {
       toast.error("Failed to resend verification email. Please try again.");
     } finally {
