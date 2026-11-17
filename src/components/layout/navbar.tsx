@@ -293,7 +293,7 @@ export function Navbar() {
                     <DropdownMenuItem onClick={() => router.push("/dashboard")}>
                       <LayoutDashboard className="size-4" /> Dashboard
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push("/dashboard/profile")}>
+                    <DropdownMenuItem onClick={() => router.push("/profile")}>
                       <Settings className="size-4" /> Settings
                     </DropdownMenuItem>
                   </DropdownMenuGroup>

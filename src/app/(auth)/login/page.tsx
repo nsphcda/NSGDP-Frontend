@@ -176,9 +176,16 @@ function LoginContent() {
                 Verification code
               </label>
               <Input
+                key="mfa-code-input"
                 id="mfaCode"
+                name="mfaCode"
+                type="text"
                 inputMode="numeric"
                 autoComplete="one-time-code"
+                autoCapitalize="off"
+                spellCheck={false}
+                data-lpignore="true"
+                data-1p-ignore
                 autoFocus
                 placeholder="123456"
                 value={mfaCode}
