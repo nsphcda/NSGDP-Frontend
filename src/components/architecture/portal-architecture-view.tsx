@@ -253,7 +253,6 @@ const sysLayers = [
       "analytics — cache warm / aggregates",
       "notification — in-app + email",
       "ai-inference — LLM assist (ops-gated)",
-      "sms — optional SMS channel",
       "dead-letter — failed job quarantine",
     ],
   },

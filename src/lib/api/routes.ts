@@ -26,8 +26,6 @@ export const API_ROUTES = {
     resendVerification: '/auth/resend-verification',
     mfaSetup: '/auth/mfa/setup',
     mfaVerifySetup: '/auth/mfa/verify-setup',
-    mfaSendSms: '/auth/mfa/send-sms',
-    mfaVerifySms: '/auth/mfa/verify-sms',
     mfaSendEmail: '/auth/mfa/send-email',
     mfaVerifyEmail: '/auth/mfa/verify-email',
     mfaDisable: '/auth/mfa/disable',

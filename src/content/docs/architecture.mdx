@@ -29,7 +29,7 @@ description: The three applications, the API and worker split, the data stores, 
     WK --> PG
     WK --> RD
     WK --> B2
-    WK --> EXT["Email and SMS providers<br/>Sentry"]`}
+    WK --> EXT["Email provider<br/>Sentry"]`}
 />
 
 ## Why the worker is a separate process
@@ -51,7 +51,6 @@ description: The three applications, the API and worker split, the data stores, 
 
 | Service | Purpose | Called from |
 | --- | --- | --- |
-| Termii | SMS one-time codes and SMS notifications | Worker (SMS queue) |
 | Resend, Brevo, or SMTP | Transactional email | Worker (notification queue) |
 | Anthropic API | AI Health Data Assistant | API |
 | Sentry | Error monitoring, when enabled | API and worker |

@@ -33,7 +33,7 @@ export interface UserProfile {
   organisationCapabilities?: string[];
 }
 
-export type MfaMethod = 'totp' | 'sms' | 'email';
+export type MfaMethod = 'totp' | 'email';
 
 export interface AuthResponse {
   tokens: AuthTokens | null; // null for pending users, or when requiresMfa is true
