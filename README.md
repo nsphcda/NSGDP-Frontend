@@ -1,7 +1,7 @@
 # Niger State Open Data Portal — Frontend
 
 Frontend application for the Niger State Government Open Data Portal.
-See [`../docs/Frontend_PRD_v1.0.md`](../docs/Frontend_PRD_v1.0.md) for the full build spec.
+See [`docs/`](./docs/README.md) for the design guide and product requirements, and `OPERATIONS.md` in the backend repository for deployment and operations.
 
 ## Stack
 
